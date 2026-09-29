@@ -57,8 +57,7 @@ export default function TurnstileWidget({
   if (!siteKey)
     return (
       <p className="text-sm text-red-800">
-        Spam protection is not configured. Please email
-        contact@piercewebsolutions.com directly.
+        Spam protection is not configured. Please try again later.
       </p>
     );
   return (
@@ -76,8 +75,7 @@ export default function TurnstileWidget({
       />
       {failed && (
         <p className="text-sm text-red-800">
-          Spam verification could not load. Please refresh or email
-          contact@piercewebsolutions.com directly.
+          Spam verification could not load. Please refresh and try again.
         </p>
       )}
     </>

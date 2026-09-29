@@ -1,6 +1,6 @@
 /**
  * Decorative browser-window chrome that frames the whole viewport.
- * echoing the arched-window motif of the Pierce Web Solutions logo.
+ * echoing the arched-window motif of the Pierce Business Integrations logo.
  * Purely presentational; never intercepts pointer events.
  */
 export default function WindowFrame() {

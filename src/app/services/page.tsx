@@ -16,13 +16,13 @@ export default function ServicesPage() {
   return (
     <>
       <PageHero
-        eyebrow="Services"
+        eyebrow="Solutions"
         title={
           <>
-            Thoughtful technology.
+            Understand the problem.
             <br />
             <span className="italic text-foothill">
-              Practical business value.
+              Deliver a working solution.
             </span>
           </>
         }
@@ -34,8 +34,8 @@ export default function ServicesPage() {
       <section id="service-options" className="section-pad bg-ivory">
         <div className="container-x">
           <SectionHeading
-            eyebrow="Four Ways We Can Help"
-            title="Custom systems lead. Each service follows the problem."
+            eyebrow="Ways We Can Help"
+            title="From operational systems to customer-facing work"
           />
           <div className="mt-14">
             {featuredServices.map((service) => (

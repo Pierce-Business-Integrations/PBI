@@ -2,15 +2,16 @@
 
 ## Required after deployment
 
-1. Confirm the Vercel production domain redirects `https://piercewebsolutions.com` to `https://www.piercewebsolutions.com` with a permanent redirect.
-2. Set `NEXT_PUBLIC_SITE_URL=https://www.piercewebsolutions.com` in Vercel and redeploy.
-3. Create or verify a Google Search Console Domain property for `piercewebsolutions.com` using DNS verification.
-4. Submit `https://www.piercewebsolutions.com/sitemap.xml` in Search Console.
-5. Use URL Inspection on the homepage and each core service URL, confirm the declared canonical is the `www` URL, and request indexing.
+1. Attach `piercebusinessintegrations.com`, `www.piercebusinessintegrations.com`, `piercewebsolutions.com`, and `www.piercewebsolutions.com` to the Vercel project. Confirm both old hosts permanently redirect to the corresponding new-domain path with query parameters preserved. The repository's Next.js redirects work only for hostnames routed to this deployment.
+2. Set `NEXT_PUBLIC_SITE_URL=https://piercebusinessintegrations.com` in Vercel and redeploy. Replace old-domain sender and reply addresses only after the new mail domain and mailbox are verified.
+3. Create or verify Google Search Console Domain properties for both domains, using DNS verification. Use Change of Address if the old domain is eligible.
+4. Submit `https://piercebusinessintegrations.com/sitemap.xml` in Search Console.
+5. Use URL Inspection on the homepage and each core service URL; confirm the declared canonical is the new apex URL and request indexing.
 6. Run PageSpeed Insights for the homepage, services, pricing, and contact pages after the production cache is warm. Review both mobile field data and the lab diagnostics.
 7. Test the homepage and service structured data with Google's Rich Results Test.
 8. Check Search Console weekly for indexing errors, duplicate canonicals, Core Web Vitals, queries, and pages receiving impressions.
 9. Add the site to Bing Webmaster Tools and submit the same sitemap.
+10. Update Google Business Profile, advertising destinations, social profiles, and any important third-party links to the new public name and domain when ready.
 
 ## Ongoing maintenance
 

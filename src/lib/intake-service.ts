@@ -26,7 +26,7 @@ export type IntakeResult =
     };
 
 const genericError =
-  "We couldn’t send the project intake right now. Please try again or contact Pierce Web Solutions directly.";
+  "We couldn’t send the project intake right now. Please try again or contact Pierce Business Integrations directly.";
 
 export async function processIntakeSubmission(
   input: unknown,

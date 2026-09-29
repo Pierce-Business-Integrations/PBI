@@ -61,7 +61,7 @@ export default function PricingLifecycle() {
           id="lifecycle-title"
           className="heading-serif mt-4 text-4xl md:text-5xl"
         >
-          Your Path with Pierce Web Solutions
+          Your Path with Pierce Business Integrations
         </h2>
         <p className="mt-5 max-w-3xl text-charcoal-soft">
           Start with what your business needs now, then add support,
@@ -102,9 +102,9 @@ export default function PricingLifecycle() {
         </div>
         <p className="mt-9 max-w-4xl border-l-2 border-brass pl-5 text-sm text-charcoal-soft">
           Every business enters at a different stage. Some clients begin with a
-          complete website project, while others come to Pierce Web Solutions
-          for tracking repairs, advertising management, automation, or
-          improvements to an existing platform.
+          complete website project, while others come to Pierce Business
+          Integrations for tracking repairs, advertising management, automation,
+          or improvements to an existing platform.
         </p>
       </div>
     </section>

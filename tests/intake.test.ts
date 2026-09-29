@@ -139,14 +139,14 @@ test("email invite grants a Lax cookie before redirecting", () => {
   try {
     const response = grantIntakeAccess(
       new NextRequest(
-        `https://www.piercewebsolutions.com/api/intake/access?token=${token}`,
+        `https://piercebusinessintegrations.com/api/intake/access?token=${token}`,
       ),
     );
     const cookie = response.headers.get("set-cookie") || "";
     assert.equal(response.status, 303);
     assert.equal(
       response.headers.get("location"),
-      "https://www.piercewebsolutions.com/project-intake",
+      "https://piercebusinessintegrations.com/project-intake",
     );
     assert.match(cookie, /SameSite=lax/i);
     assert.match(cookie, /HttpOnly/i);

@@ -26,7 +26,7 @@ export type ContactResult =
     };
 
 const genericError =
-  "We couldn’t send your inquiry right now. Please try again, or email contact@piercewebsolutions.com directly.";
+  "We couldn’t send your inquiry right now. Please try again later.";
 
 export async function processContactSubmission(
   input: unknown,

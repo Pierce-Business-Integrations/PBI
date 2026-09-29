@@ -19,7 +19,7 @@ export default function AboutPage() {
   return (
     <>
       <PageHero
-        eyebrow="About Pierce Web Solutions"
+        eyebrow="About Pierce Business Integrations"
         title={
           <>
             Local perspective.
@@ -28,8 +28,8 @@ export default function AboutPage() {
           </>
         }
       >
-        Pierce Web Solutions helps North Georgia businesses use technology with
-        more clarity, confidence, and practical purpose.
+        Pierce Business Integrations helps North Georgia businesses use
+        technology with more clarity, confidence, and practical purpose.
       </PageHero>
       <section className="section-pad bg-ivory">
         <div className="container-x grid items-center gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
@@ -47,12 +47,11 @@ export default function AboutPage() {
                     experiences those solutions require.
                   </p>
                   <p className="mt-5">
-                    I started Pierce Web Solutions to offer the kind of
-                    partnership businesses deserve: direct communication,
-                    careful work, honest recommendations, and support that
-                    continues after launch. I stay involved from the first
-                    conversation through architecture, implementation, and
-                    ongoing improvement.
+                    I offer the kind of partnership businesses deserve: direct
+                    communication, careful work, honest recommendations, and
+                    support that continues after launch. I stay involved from
+                    the first conversation through architecture, implementation,
+                    and ongoing improvement.
                   </p>
                 </>
               }
@@ -100,7 +99,7 @@ export default function AboutPage() {
               Service, carried into the work
             </h2>
             <p className="mt-5 text-charcoal-soft">
-              Pierce Web Solutions is a service-member-owned business. I
+              Pierce Business Integrations is a service-member-owned business. I
               currently serve in the United States Marine Corps Reserve, and
               that experience reinforces the same qualities I bring to client
               work: preparation, accountability, clear communication, and
@@ -121,8 +120,8 @@ export default function AboutPage() {
               <h2 className="mt-3 font-serif text-3xl">Why North Georgia</h2>
               <p className="mt-3 text-ivory/70">
                 This is home. I understand the businesses, communities, and
-                relationships that keep this area moving, and I built Pierce Web
-                Solutions to provide those businesses with a more direct and
+                relationships that keep this area moving, and I built this
+                practice to provide those businesses with a more direct and
                 capable technology partner.
               </p>
             </div>

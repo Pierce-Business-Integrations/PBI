@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react";
 export default function CTASection({
   title = "Let’s build something useful for your business.",
   copy = "Start with a practical conversation about where you are, what is getting in the way, and what the right next step could look like.",
-  buttonLabel = "Request a Consultation",
+  buttonLabel = "Discuss a Business Problem",
 }: {
   title?: string;
   copy?: string;

@@ -439,8 +439,8 @@ export default function ConsultationForm() {
                   className="mt-1 h-4 w-4 accent-foothill"
                 />
                 <span>
-                  I consent to being contacted by Pierce Web Solutions about
-                  this inquiry. <span aria-hidden="true">*</span>
+                  I consent to being contacted by Pierce Business Integrations
+                  about this inquiry. <span aria-hidden="true">*</span>
                 </span>
               </label>
               {errors.consent && (

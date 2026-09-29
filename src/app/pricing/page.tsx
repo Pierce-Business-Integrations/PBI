@@ -209,7 +209,7 @@ export default function PricingPage() {
 
       <CTASection
         title="Not sure where your project fits?"
-        copy="A brief consultation will help identify the right scope, confirm whether Pierce Web Solutions is a good fit, and establish the expected investment before work begins."
+        copy="A brief consultation will help identify the right scope, confirm whether Pierce Business Integrations is a good fit, and establish the expected investment before work begins."
         buttonLabel="Schedule a Consultation"
       />
       <Footer />

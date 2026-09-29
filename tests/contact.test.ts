@@ -7,6 +7,7 @@ import {
 } from "../src/lib/contact-service";
 import { requestOriginIsAllowed } from "../src/app/api/contact/route";
 import { confirmationEmail, internalEmail } from "../src/lib/contact-emails";
+import { usesPbiMailDomain } from "../src/lib/mail-domain";
 import { processStoredLead } from "../src/lib/lead-conversion";
 
 const now = new Date("2026-07-11T16:00:00.000Z");
@@ -15,7 +16,7 @@ const valid = {
   lastName: "Pierce",
   email: "JACOB@example.com",
   phone: "",
-  business: "Pierce Web Solutions",
+  business: "Pierce Business Integrations",
   website: "https://example.com",
   service: "New Website",
   budget: "$3,000–$5,499",
@@ -214,19 +215,28 @@ test("confirmation email includes the branded Jacob Pierce signature", () => {
   const email = confirmationEmail(valid as never);
   assert.equal(
     email.html.includes(
-      "https://www.piercewebsolutions.com/logos/pws-icon.png",
+      "https://piercebusinessintegrations.com/logos/pbi-icon-color.png",
     ),
     true,
   );
+  assert.equal(email.html.includes("Founder &amp; Solutions Architect"), true);
   assert.equal(
-    email.html.includes("Founder &amp; Web Solutions Architect"),
+    email.html.includes("Modern solutions. Local partnership."),
     true,
   );
+  assert.equal(email.html.includes("@piercebusinessintegrations.com"), false);
+});
+
+test("outbound sender configuration requires the PBI mail domain", () => {
   assert.equal(
-    email.html.includes("mailto:jacob@piercewebsolutions.com"),
+    usesPbiMailDomain(
+      "Pierce Business Integrations <inquiries@pbintegrations.com>",
+    ),
     true,
   );
-  assert.equal(email.text.includes("jacob@piercewebsolutions.com"), true);
+  assert.equal(usesPbiMailDomain("reply@pbintegrations.com"), true);
+  assert.equal(usesPbiMailDomain("contact@piercewebsolutions.com"), false);
+  assert.equal(usesPbiMailDomain("reply@pbintegrations.com.invalid"), false);
 });
 
 test("direct thank-you visits do not send a lead event", () => {

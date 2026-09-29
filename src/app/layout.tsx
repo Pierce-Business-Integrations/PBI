@@ -28,8 +28,9 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: "Pierce Web Solutions | Business Systems & Practical Solutions",
-    template: "%s | Pierce Web Solutions",
+    default:
+      "Pierce Business Integrations | Modern solutions. Local partnership.",
+    template: "%s | Pierce Business Integrations",
   },
   description: site.description,
   applicationName: site.name,
@@ -57,10 +58,10 @@ const structuredData = {
       legalName: "Pierce Business Group LLC",
       url: site.url,
       description: site.description,
-      email: site.email,
+      ...(site.email ? { email: site.email } : {}),
       logo: {
         "@type": "ImageObject",
-        url: `${site.url}/icon.png`,
+        url: `${site.url}/logos/pbi-icon-color.png`,
       },
       areaServed: [
         "North Georgia",
@@ -69,12 +70,16 @@ const structuredData = {
         "Barrow County, Georgia",
         "Forsyth County, Georgia",
       ],
-      contactPoint: {
-        "@type": "ContactPoint",
-        email: site.email,
-        contactType: "sales and customer support",
-        availableLanguage: "English",
-      },
+      ...(site.email
+        ? {
+            contactPoint: {
+              "@type": "ContactPoint",
+              email: site.email,
+              contactType: "sales and customer support",
+              availableLanguage: "English",
+            },
+          }
+        : {}),
     },
     {
       "@type": "WebSite",

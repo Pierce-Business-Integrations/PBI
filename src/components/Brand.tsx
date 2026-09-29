@@ -14,25 +14,25 @@ export default function Brand({
   return (
     <Link
       href="/"
-      aria-label="Pierce Web Solutions home"
+      aria-label="Pierce Business Integrations home"
       className={clsx(
-        "group relative inline-flex h-12 w-[9.75rem] shrink-0 items-center no-underline md:h-14 md:w-[10.75rem]",
+        "group relative inline-flex h-12 w-[10.5rem] shrink-0 items-center no-underline md:h-14 md:w-[12rem]",
         className,
       )}
     >
       <Image
         src={
           light
-            ? "/logos/pws-half-lockup-dark.png"
-            : "/logos/pws-half-lockup.png"
+            ? "/logos/pbi-half-lockup-dark.png"
+            : "/logos/pbi-half-lockup.png"
         }
         alt=""
         aria-hidden="true"
-        width={344}
-        height={107}
+        width={5000}
+        height={1742}
         className={clsx(
           "absolute left-0 top-1/2 w-auto -translate-y-1/2 transition-[height,transform] duration-500 ease-out group-hover:-translate-y-[52%]",
-          compact ? "h-10 md:h-11" : "h-11 md:h-12",
+          compact ? "h-10 md:h-12" : "h-11 md:h-14",
         )}
       />
     </Link>

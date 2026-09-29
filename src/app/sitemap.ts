@@ -1,11 +1,11 @@
 import type { MetadataRoute } from "next";
-import { services, site } from "@/lib/site";
+import { featuredServices, site } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const paths = [
     "",
     "/services",
-    ...services.map((service) => `/services/${service.slug}`),
+    ...featuredServices.map((service) => `/services/${service.slug}`),
     "/pricing",
     "/about",
     "/contact",

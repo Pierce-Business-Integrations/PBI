@@ -1,23 +1,23 @@
 import type { Metadata } from "next";
 import LegalPage from "@/components/LegalPage";
-import { pageMetadata } from "@/lib/site";
+import { pageMetadata, site } from "@/lib/site";
 
 export const metadata: Metadata = pageMetadata(
   "Website Terms",
-  "Website terms governing use of the Pierce Web Solutions public website.",
+  "Website terms governing use of the Pierce Business Integrations public website.",
   "/terms",
 );
 
 export default function TermsPage() {
   return (
-    <LegalPage title="Website Terms" updated="July 11, 2026">
+    <LegalPage title="Website Terms" updated="September 28, 2026">
       <h2>Informational website</h2>
       <p>
-        This website provides general information about Pierce Web Solutions, a
-        brand of Pierce Business Group LLC, and its services. Website content is
-        not a binding proposal, professional legal advice, or a guarantee of
-        project availability, cost, timing, rankings, leads, revenue,
-        advertising performance, or other results.
+        This website provides general information about Pierce Business
+        Integrations, a brand of Pierce Business Group LLC, and its services.
+        Website content is not a binding proposal, professional legal advice, or
+        a guarantee of project availability, cost, timing, rankings, leads,
+        revenue, advertising performance, or other results.
       </p>
       <h2>Project engagements</h2>
       <p>
@@ -42,16 +42,19 @@ export default function TermsPage() {
       <h2>External services</h2>
       <p>
         This website may link to or use services operated by other providers.
-        Pierce Web Solutions does not control third-party services,
+        Pierce Business Integrations does not control third-party services,
         availability, content, or policies.
       </p>
       <h2>Changes and contact</h2>
       <p>
         These terms may be updated as the website and business practices change.
-        Questions may be sent to{" "}
-        <a href="mailto:contact@piercewebsolutions.com">
-          contact@piercewebsolutions.com
-        </a>
+        Questions may be sent through our <a href="/contact">contact page</a>
+        {site.email && (
+          <>
+            {" "}
+            or by email to <a href={`mailto:${site.email}`}>{site.email}</a>
+          </>
+        )}
         .
       </p>
     </LegalPage>

@@ -1,23 +1,25 @@
-# PWS contact form production setup
+# PBI contact form production setup
 
 The custom consultation form posts only to `/api/contact`. The endpoint validates the payload, verifies Cloudflare Turnstile, and sends fixed inquiry and confirmation templates through Resend. It does not store submissions in a database.
 
 ## 1. Resend
 
-1. Create a Resend account and add the PWS sending domain.
+1. Create a Resend account and add the `pbintegrations.com` sending domain.
 2. Add the SPF, DKIM, and any other DNS records Resend displays to the domain’s DNS provider. Use the exact values shown by Resend; record names differ by DNS provider.
 3. Wait for the domain to show as verified in Resend.
 4. Create a restricted API key for this website.
-5. Set `CONTACT_FROM_EMAIL` to a sender on the verified domain, for example `Pierce Web Solutions <inquiries@piercewebsolutions.com>`.
+5. Set `CONTACT_FROM_EMAIL` to a real sender identity on the verified `pbintegrations.com` domain, using the Pierce Business Integrations display name. Do not assume a particular mailbox exists.
 6. Set `CONTACT_NOTIFICATION_EMAIL` to the trusted internal inbox that should receive inquiries.
-7. Set `CONTACT_REPLY_EMAIL` to the normal PWS reply address.
+7. Set `CONTACT_REPLY_EMAIL` to a confirmed `@pbintegrations.com` reply mailbox. Set `NEXT_PUBLIC_CONTACT_EMAIL` to a confirmed public `@pbintegrations.com` mailbox; it appears in the site and email signature. Leave it blank until the mailbox exists.
+
+Both form APIs reject delivery until `CONTACT_FROM_EMAIL` and the confirmation Reply-To use `@pbintegrations.com`. The internal `CONTACT_NOTIFICATION_EMAIL` may be any trusted inbox and remains shared by consultation and private intake.
 
 Resend test mode can be used during development, but it restricts delivery to approved test recipients. The form never reports mock success: the internal message must be accepted by Resend before the visitor reaches the thank-you page.
 
 ## 2. Cloudflare Turnstile
 
 1. In Cloudflare, create a Turnstile widget for the website.
-2. Add `piercewebsolutions.com` and any production hostnames to the widget’s hostname list.
+2. Add `piercebusinessintegrations.com`, its `www` alias if used, and any preview hostnames to the widget’s hostname list. The old domain may remain during migration.
 3. Use the managed widget mode.
 4. Copy the public site key to `NEXT_PUBLIC_TURNSTILE_SITE_KEY`.
 5. Copy the secret key to the server-only `TURNSTILE_SECRET_KEY` variable.
@@ -40,7 +42,8 @@ Add every variable from `.env.example` in the Vercel project’s Environment Var
 
 Required production variables:
 
-- `NEXT_PUBLIC_SITE_URL=https://www.piercewebsolutions.com`
+- `NEXT_PUBLIC_SITE_URL=https://piercebusinessintegrations.com`
+- `NEXT_PUBLIC_CONTACT_EMAIL` (a verified public `@pbintegrations.com` mailbox)
 - `NEXT_PUBLIC_TURNSTILE_SITE_KEY`
 - `TURNSTILE_SECRET_KEY`
 - `RESEND_API_KEY`
@@ -58,6 +61,7 @@ Required production variables:
 6. Confirm the redirect reaches `/thank-you`.
 7. Confirm one `generate_lead` event appears in GA4 DebugView or Realtime, without name, email, phone, business, message, or website values.
 8. Refresh `/thank-you` and confirm no second conversion is recorded.
+9. Confirm the sender, Reply-To, public contact link, and email signature use the intended `@pbintegrations.com` mailbox. The existing `.env.local` may still contain old-domain addresses and must be updated separately.
 
 ## Attribution
 

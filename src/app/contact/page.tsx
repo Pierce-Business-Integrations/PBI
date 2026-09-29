@@ -6,7 +6,7 @@ import { pageMetadata, site } from "@/lib/site";
 
 export const metadata: Metadata = pageMetadata(
   "Discuss a Business Problem or Project",
-  "Tell Pierce Web Solutions about an operational bottleneck, custom-system need, website, website care, or advertising project in North Georgia.",
+  "Tell Pierce Business Integrations about an operational bottleneck, custom-system need, website, website care, or advertising project in North Georgia.",
   "/contact",
 );
 
@@ -14,18 +14,19 @@ export default function ContactPage() {
   return (
     <>
       <PageHero
-        eyebrow="Request a Consultation"
+        eyebrow="Start a Conversation"
         title={
           <>
-            Tell me what your business
+            Tell me where your business
             <br />
-            <span className="italic text-foothill">needs next.</span>
+            <span className="italic text-foothill">gets stuck.</span>
           </>
         }
       >
-        Share where work is getting stuck, what it may be costing, or the
-        website or advertising service you need. You will typically receive an
-        initial response within one business day.
+        Describe the friction or outcome you have in mind. You do not need to
+        know which technology will solve it. Website and advertising inquiries
+        are welcome too. You will typically receive an initial response within
+        one business day.
       </PageHero>
       <section className="section-pad bg-ivory-deep">
         <div className="container-x grid gap-12 lg:grid-cols-[0.65fr_1.35fr] lg:gap-20">
@@ -35,19 +36,21 @@ export default function ContactPage() {
               Start with a straightforward conversation.
             </h2>
             <dl className="mt-8 divide-y divide-charcoal/15 border-y border-charcoal/15">
-              <div className="py-5">
-                <dt className="text-xs uppercase tracking-[0.14em] text-taupe">
-                  Email
-                </dt>
-                <dd className="mt-2">
-                  <a
-                    className="text-charcoal underline decoration-foothill underline-offset-4"
-                    href={`mailto:${site.email}`}
-                  >
-                    {site.email}
-                  </a>
-                </dd>
-              </div>
+              {site.email && (
+                <div className="py-5">
+                  <dt className="text-xs uppercase tracking-[0.14em] text-taupe">
+                    Email
+                  </dt>
+                  <dd className="mt-2">
+                    <a
+                      className="text-charcoal underline decoration-foothill underline-offset-4"
+                      href={`mailto:${site.email}`}
+                    >
+                      {site.email}
+                    </a>
+                  </dd>
+                </div>
+              )}
               <div className="py-5">
                 <dt className="text-xs uppercase tracking-[0.14em] text-taupe">
                   Service area
