@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Private Project Intake",
   description:
-    "Private project intake for invited Pierce Web Solutions clients and prospects.",
+    "Private project intake for invited Pierce Business Integrations clients and prospects.",
   referrer: "no-referrer",
   robots: { index: false, follow: false, nocache: true },
 };

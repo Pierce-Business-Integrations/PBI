@@ -437,8 +437,8 @@ function AdvertisingSection() {
         <div className="mt-8 grid gap-3 text-sm text-ivory/60">
           <p>
             Advertising spend is separate and client accounts remain
-            client-owned. Pierce Web Solutions receives only the access needed
-            to manage them.
+            client-owned. Pierce Business Integrations receives only the access
+            needed to manage them.
           </p>
           <p>
             Results are not guaranteed. Tracking repairs, landing-page

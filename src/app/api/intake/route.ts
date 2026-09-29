@@ -7,22 +7,25 @@ import {
 } from "@/lib/intake-emails";
 import { INTAKE_COOKIE_NAME, intakeSessionIsValid } from "@/lib/intake-access";
 import { processIntakeSubmission } from "@/lib/intake-service";
+import { usesPbiMailDomain } from "@/lib/mail-domain";
 
 export const runtime = "nodejs";
 const MAX_BODY_BYTES = 96 * 1024;
 const genericError =
-  "We couldn’t send the project intake right now. Please try again or contact Pierce Web Solutions directly.";
+  "We couldn’t send the project intake right now. Please try again or contact Pierce Business Integrations directly.";
 
 type TurnstileResponse = { success: boolean; hostname?: string };
 
 function allowedHosts() {
   const hosts = new Set<string>();
-  const configured = process.env.NEXT_PUBLIC_SITE_URL || site.url;
-  try {
-    const host = new URL(configured).host.toLowerCase();
-    hosts.add(host);
-    hosts.add(host.startsWith("www.") ? host.slice(4) : `www.${host}`);
-  } catch {}
+  for (const url of [site.url, process.env.NEXT_PUBLIC_SITE_URL]) {
+    if (!url) continue;
+    try {
+      const host = new URL(url).host.toLowerCase();
+      hosts.add(host);
+      hosts.add(host.startsWith("www.") ? host.slice(4) : `www.${host}`);
+    } catch {}
+  }
   if (process.env.VERCEL_URL) hosts.add(process.env.VERCEL_URL.toLowerCase());
   if (process.env.NODE_ENV !== "production") {
     hosts.add("localhost:3000");
@@ -103,10 +106,14 @@ export async function POST(request: NextRequest) {
   const apiKey = process.env.RESEND_API_KEY;
   const notificationEmail = process.env.CONTACT_NOTIFICATION_EMAIL;
   const fromEmail = process.env.CONTACT_FROM_EMAIL;
+  const replyEmail = process.env.CONTACT_REPLY_EMAIL || site.email;
   if (
     !apiKey ||
     !notificationEmail ||
     !fromEmail ||
+    !replyEmail ||
+    !usesPbiMailDomain(fromEmail) ||
+    !usesPbiMailDomain(replyEmail) ||
     !process.env.TURNSTILE_SECRET_KEY
   )
     return jsonError(503);
@@ -129,7 +136,7 @@ export async function POST(request: NextRequest) {
       const response = await resend.emails.send({
         from: fromEmail,
         to: [submission.email],
-        replyTo: process.env.CONTACT_REPLY_EMAIL || site.email,
+        replyTo: replyEmail,
         ...intakeConfirmationEmail(submission),
       });
       if (response.error)

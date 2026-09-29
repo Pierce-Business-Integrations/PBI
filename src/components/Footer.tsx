@@ -10,8 +10,8 @@ export default function Footer() {
         <div>
           <Brand light />
           <p className="mt-6 max-w-md">
-            Business-first solutions, custom systems, websites, and dependable
-            support across North Georgia.
+            Modern solutions. Local partnership. Practical systems, websites,
+            advertising, and direct support across North Georgia.
           </p>
           <div className="mt-6 flex max-w-md items-center gap-4 border-t border-ivory/15 pt-5">
             <GeorgiaSeal className="h-14 w-14 shrink-0 text-brass-light" />
@@ -32,8 +32,8 @@ export default function Footer() {
             Navigate
           </h2>
           <nav className="mt-5 grid gap-3" aria-label="Footer navigation">
-            <Link href="/services">Services</Link>
-            <Link href="/services/automation">Custom Systems</Link>
+            <Link href="/services">Solutions</Link>
+            <Link href="/services/automation">Business Systems</Link>
             <Link href="/pricing">Pricing</Link>
             <Link href="/about">About</Link>
             <Link href="/contact">Contact</Link>
@@ -54,11 +54,11 @@ export default function Footer() {
       </div>
       <div className="container-x flex flex-col gap-4 pt-8 text-sm text-ivory/50 sm:flex-row sm:items-center sm:justify-between">
         <p>
-          © {new Date().getFullYear()} Pierce Web Solutions. All rights
+          © {new Date().getFullYear()} Pierce Business Integrations. All rights
           reserved. A brand of Pierce Business Group LLC.
         </p>
         <div className="flex flex-wrap gap-5">
-          <a href={`mailto:${site.email}`}>{site.email}</a>
+          {site.email && <a href={`mailto:${site.email}`}>{site.email}</a>}
           <Link href="/privacy">Privacy</Link>
           <Link href="/terms">Terms</Link>
         </div>

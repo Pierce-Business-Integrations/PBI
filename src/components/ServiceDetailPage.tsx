@@ -15,7 +15,7 @@ export default function ServiceDetailPage({ service }: { service: Service }) {
         eyebrow={service.shortTitle}
         title={service.title}
         breadcrumbs={[
-          { label: "Services", href: "/services" },
+          { label: "Solutions", href: "/services" },
           {
             label: service.shortTitle,
             href: `/services/${service.slug}`,

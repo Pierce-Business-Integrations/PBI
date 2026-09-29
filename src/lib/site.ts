@@ -1,14 +1,20 @@
 import type { Metadata } from "next";
 
 export const site = {
-  name: "Pierce Web Solutions",
-  url: "https://www.piercewebsolutions.com",
-  email: "contact@piercewebsolutions.com",
+  name: "Pierce Business Integrations",
+  tagline: "Modern solutions. Local partnership.",
+  url: "https://piercebusinessintegrations.com",
+  // Publish an address only after its mailbox has been created and verified.
+  email: /^[^\s@]+@pbintegrations\.com$/i.test(
+    process.env.NEXT_PUBLIC_CONTACT_EMAIL?.trim() || "",
+  )
+    ? process.env.NEXT_PUBLIC_CONTACT_EMAIL!.trim()
+    : "",
   location: "North Georgia",
   area: "Gwinnett, Hall, Barrow, Forsyth, and surrounding North Georgia communities",
-  contentUpdatedAt: "2026-09-15",
+  contentUpdatedAt: "2026-09-28",
   description:
-    "Business-first solutions, custom systems, websites, and ongoing support for organizations across North Georgia.",
+    "Pierce Business Integrations helps North Georgia businesses improve workflows and implement practical systems, integrations, websites, and advertising.",
 };
 
 export function pageMetadata(
@@ -34,7 +40,7 @@ export function pageMetadata(
           width: 1200,
           height: 630,
           type: "image/png",
-          alt: "Pierce Web Solutions business systems and practical solutions social preview",
+          alt: "Pierce Business Integrations: Modern solutions. Local partnership.",
         },
       ],
     },
@@ -117,10 +123,10 @@ export const services: Service[] = [
   {
     slug: "automation",
     number: "01",
-    shortTitle: "Custom Business Systems & Applications",
-    title: "Custom Business Systems Built for Your Operations",
+    shortTitle: "Business Systems & Integrations",
+    title: "Business Systems & Integrations Built Around Your Work",
     description:
-      "Diagnose operational friction, choose the right approach, and build or connect the systems your team needs.",
+      "Find what slows the work down, improve the process, and build or connect the systems your team actually needs.",
     problem:
       "Work gets harder to manage when information is scattered, decisions are repeated, and people have to bridge gaps between tools by hand.",
     fit: "Growing organizations with an operational bottleneck, disconnected workflow, reporting need, or process that existing software does not handle well.",

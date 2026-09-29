@@ -7,7 +7,7 @@ The project intake is a separate discovery form for invited clients and prospect
 1. Generate a random secret of at least 32 bytes. For example, run `node -e "console.log(require('node:crypto').randomBytes(48).toString('base64url'))"` on a trusted machine.
 2. Set the result as the server-only `PROJECT_INTAKE_ACCESS_TOKEN` environment variable in Vercel Production. Add it to Preview too if you want to test invitations there. Do not use `NEXT_PUBLIC_` or commit the secret.
 3. Redeploy after setting the variable.
-4. Privately send this link, replacing `YOUR_TOKEN` with the exact secret: `https://www.piercewebsolutions.com/api/intake/access?token=YOUR_TOKEN`.
+4. Privately send this link, replacing `YOUR_TOKEN` with the exact secret: `https://piercebusinessintegrations.com/api/intake/access?token=YOUR_TOKEN`.
 
 The invitation is a shared bearer link: anyone with the secret link can use the intake for 14 days after opening it. If the link spreads, rotate `PROJECT_INTAKE_ACCESS_TOKEN` and redeploy. Rotation immediately invalidates old invitation links and sessions. This is private by possession of a link, not identity-based login. Avoid placing the link in public pages, ads, or analytics campaigns.
 

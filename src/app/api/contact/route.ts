@@ -3,13 +3,14 @@ import { Resend } from "resend";
 import { site } from "@/lib/site";
 import { internalEmail, confirmationEmail } from "@/lib/contact-emails";
 import { processContactSubmission } from "@/lib/contact-service";
+import { usesPbiMailDomain } from "@/lib/mail-domain";
 import { track } from "@vercel/analytics/server";
 
 export const runtime = "nodejs";
 
 const MAX_BODY_BYTES = 64 * 1024;
 const genericError =
-  "We couldn’t send your inquiry right now. Please try again, or email contact@piercewebsolutions.com directly.";
+  "We couldn’t send your inquiry right now. Please try again later.";
 
 type TurnstileResponse = {
   success: boolean;
@@ -18,19 +19,15 @@ type TurnstileResponse = {
 
 function allowedHosts(): Set<string> {
   const hosts = new Set<string>();
-  const configured = process.env.NEXT_PUBLIC_SITE_URL || site.url;
-  try {
-    const configuredHost = new URL(configured).host.toLowerCase();
-    hosts.add(configuredHost);
-
-    // Treat the canonical apex domain and its www alias as the same site.
-    // Vercel can serve either hostname before a redirect has completed.
-    if (configuredHost.startsWith("www.")) {
-      hosts.add(configuredHost.slice(4));
-    } else {
-      hosts.add(`www.${configuredHost}`);
-    }
-  } catch {}
+  for (const url of [site.url, process.env.NEXT_PUBLIC_SITE_URL]) {
+    if (!url) continue;
+    try {
+      const host = new URL(url).host.toLowerCase();
+      hosts.add(host);
+      // Vercel may serve either hostname before the canonical redirect.
+      hosts.add(host.startsWith("www.") ? host.slice(4) : `www.${host}`);
+    } catch {}
+  }
   if (process.env.VERCEL_URL) hosts.add(process.env.VERCEL_URL.toLowerCase());
   if (process.env.NODE_ENV !== "production") {
     hosts.add("localhost:3000");
@@ -119,10 +116,14 @@ export async function POST(request: NextRequest) {
   const apiKey = process.env.RESEND_API_KEY;
   const notificationEmail = process.env.CONTACT_NOTIFICATION_EMAIL;
   const fromEmail = process.env.CONTACT_FROM_EMAIL;
+  const replyEmail = process.env.CONTACT_REPLY_EMAIL || site.email;
   if (
     !apiKey ||
     !notificationEmail ||
     !fromEmail ||
+    !replyEmail ||
+    !usesPbiMailDomain(fromEmail) ||
+    !usesPbiMailDomain(replyEmail) ||
     !process.env.TURNSTILE_SECRET_KEY
   ) {
     console.error("Contact form configuration is incomplete.");
@@ -154,7 +155,7 @@ export async function POST(request: NextRequest) {
       const response = await resend.emails.send({
         from: fromEmail,
         to: [submission.email],
-        replyTo: process.env.CONTACT_REPLY_EMAIL || site.email,
+        replyTo: replyEmail,
         ...email,
       });
       if (response.error) {

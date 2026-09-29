@@ -1,11 +1,18 @@
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 import { ImageResponse } from "next/og";
 
 export const alt =
-  "Pierce Web Solutions — Business Systems & Practical Solutions";
+  "Pierce Business Integrations — Modern solutions. Local partnership.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-export default function OpenGraphImage() {
+export default async function OpenGraphImage() {
+  const logo = await readFile(
+    join(process.cwd(), "public", "logos", "pbi-half-lockup-dark.png"),
+  );
+  const logoSrc = `data:image/png;base64,${logo.toString("base64")}`;
+
   return new ImageResponse(
     <div
       style={{
@@ -14,44 +21,34 @@ export default function OpenGraphImage() {
         justifyContent: "space-between",
         width: "100%",
         height: "100%",
-        padding: "65px 78px",
+        padding: "54px 68px",
         background: "#1f1f1d",
         color: "#f7f3ed",
-        border: "18px solid #f7f3ed",
+        border: "16px solid #f7f3ed",
       }}
     >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 18,
-          fontSize: 27,
-          letterSpacing: 2,
-          color: "#d3b986",
-        }}
-      >
-        <div style={{ width: 32, height: 32, border: "3px solid #b89456" }} />
-        Pierce Web Solutions
-      </div>
-      <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+      {/* The supplied lockup is rendered at its native aspect ratio. */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={logoSrc} alt="" width={430} height={150} />
+      <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
         <div
           style={{
             display: "flex",
             flexDirection: "column",
             fontFamily: "Georgia",
-            fontSize: 74,
+            fontSize: 70,
             lineHeight: 1.08,
           }}
         >
-          <span>Business Systems.</span>
-          <span>Practical Solutions.</span>
+          <span>Understand the problem.</span>
+          <span>Build what works.</span>
         </div>
-        <div style={{ fontSize: 27, color: "#a8b6a6" }}>
-          Built around how your business works.
+        <div style={{ fontSize: 25, color: "#a8b6a6" }}>
+          Practical systems and direct partnership for North Georgia businesses.
         </div>
       </div>
-      <div style={{ fontSize: 20, color: "#d3b986", letterSpacing: 2 }}>
-        NORTH GEORGIA · DIRECT PARTNERSHIP
+      <div style={{ fontSize: 19, color: "#d3b986", letterSpacing: 2 }}>
+        MODERN SOLUTIONS. LOCAL PARTNERSHIP.
       </div>
     </div>,
     size,

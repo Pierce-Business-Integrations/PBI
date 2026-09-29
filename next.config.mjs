@@ -5,6 +5,24 @@ const nextConfig = {
   images: {
     qualities: [75],
   },
+  async redirects() {
+    return [
+      ...["piercewebsolutions.com", "www.piercewebsolutions.com"].map(
+        (host) => ({
+          source: "/:path*",
+          has: [{ type: "host", value: host }],
+          destination: "https://piercebusinessintegrations.com/:path*",
+          permanent: true,
+        }),
+      ),
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "www.piercebusinessintegrations.com" }],
+        destination: "https://piercebusinessintegrations.com/:path*",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {

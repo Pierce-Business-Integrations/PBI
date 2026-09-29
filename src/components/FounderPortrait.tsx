@@ -17,7 +17,7 @@ export default function FounderPortrait({ className }: { className?: string }) {
         <div className="relative aspect-[4/5] overflow-hidden rounded-t-[999px] border border-brass/40 bg-ivory-deep shadow-soft">
           <Image
             src="/images/jacob.png"
-            alt="Jacob Pierce, founder of Pierce Web Solutions"
+            alt="Jacob Pierce, founder of Pierce Business Integrations"
             fill
             sizes="(max-width: 640px) 86vw, 460px"
             quality={75}

@@ -9,8 +9,8 @@ import Brand from "./Brand";
 
 const links = [
   { href: "/", label: "Home" },
-  { href: "/services", label: "Services" },
-  { href: "/services/automation", label: "Custom Systems" },
+  { href: "/services", label: "Solutions" },
+  { href: "/services/automation", label: "Business Systems" },
   { href: "/pricing", label: "Pricing" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
@@ -128,7 +128,7 @@ export default function Navbar() {
             data-analytics-location="desktop_nav"
             data-analytics-target="contact"
           >
-            Request a Consultation
+            Discuss a Problem
           </Link>
         </nav>
         <button
@@ -187,7 +187,7 @@ export default function Navbar() {
               data-analytics-location="mobile_nav"
               data-analytics-target="contact"
             >
-              Request a Consultation
+              Discuss a Problem
             </Link>
           </div>
         </div>

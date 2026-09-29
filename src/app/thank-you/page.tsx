@@ -9,7 +9,7 @@ import { pageMetadata, site } from "@/lib/site";
 export const metadata: Metadata = {
   ...pageMetadata(
     "Thank You",
-    "Your consultation inquiry has been received by Pierce Web Solutions.",
+    "Your consultation inquiry has been received by Pierce Business Integrations.",
     "/thank-you",
   ),
   robots: { index: false, follow: false },

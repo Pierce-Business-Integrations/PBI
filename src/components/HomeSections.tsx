@@ -25,7 +25,7 @@ export default function HomeSections() {
           <SectionHeading
             eyebrow="What We Do"
             title="Start with the problem. Choose the right solution."
-            copy="Business systems are our flagship capability. Websites, care, and advertising remain available when they fit the need."
+            copy="We diagnose friction, design a practical way forward, and deliver working solutions. Custom systems and integrations lead our work; websites, care, and advertising are here when those are the right answer."
           />
           <p className="mt-6 max-w-3xl border-l-2 border-brass pl-5 text-charcoal-soft">
             Built for service companies, professional offices, contractors,

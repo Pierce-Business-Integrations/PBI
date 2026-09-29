@@ -778,8 +778,8 @@ export default function ProjectIntakeForm() {
               className="mt-1 h-4 w-4 shrink-0 accent-foothill"
             />
             <span>
-              I consent to Pierce Web Solutions contacting me about this project
-              intake. <span aria-hidden="true">*</span>
+              I consent to Pierce Business Integrations contacting me about this
+              project intake. <span aria-hidden="true">*</span>
             </span>
           </label>
           {errors.consent && (
@@ -828,7 +828,7 @@ export default function ProjectIntakeForm() {
           className="border-l-2 border-foothill pl-4 text-sm text-charcoal-soft"
         >
           {notice ||
-            "Your intake is verified and emailed directly to Pierce Web Solutions."}
+            "Your intake is verified and emailed directly to Pierce Business Integrations."}
         </p>
       </Section>
     </form>

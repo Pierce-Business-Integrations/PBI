@@ -46,7 +46,7 @@ export default function Hero() {
       <div className="container-x relative grid min-h-[100svh] items-center lg:min-h-[calc(100dvh-5rem)]">
         <div className="hero-content max-w-xl pb-16 pt-24 lg:max-w-3xl lg:pb-8 lg:pt-24 xl:max-w-4xl">
           <p className="hero-eyebrow eyebrow mb-6 text-foothill-light">
-            Solving Business Problems Across North Georgia
+            Pierce Business Integrations · North Georgia
           </p>
 
           <h1
@@ -62,12 +62,11 @@ export default function Hero() {
           </h1>
 
           <p className="hero-description mt-7 max-w-lg text-lg text-ivory/78 lg:max-w-xl xl:max-w-2xl">
-            We find where time and money are being lost, then design and
-            implement the right solution—from a simpler process to a custom
-            business system, website, or growth platform.
+            Tell us where work gets stuck. We’ll understand the problem, improve
+            the process, and implement the right solution—from better use of
+            your current tools to an integration, custom application, website,
+            or advertising system.
           </p>
-
-          
 
           <div className="hero-actions mt-9 flex flex-wrap gap-4">
             <Link
@@ -77,7 +76,7 @@ export default function Hero() {
               data-analytics-location="homepage_hero"
               data-analytics-target="contact"
             >
-              Request a Consultation
+              Discuss a Business Problem
               <ArrowRight
                 size={18}
                 className="transition-transform duration-300 group-hover:translate-x-1"
@@ -90,7 +89,7 @@ export default function Hero() {
               data-analytics-location="homepage_hero"
               data-analytics-target="services"
             >
-              Explore Services
+              Explore Solutions
             </Link>
           </div>
 
@@ -99,7 +98,7 @@ export default function Hero() {
               <span className="text-[#9eab77]">&#9670;</span>
             </div>
             <p className="text-center font-serif text-lg italic text-ivory/60">
-              Business understanding. Practical solutions.
+              Modern solutions. Local partnership.
             </p>
           </div>
         </div>
