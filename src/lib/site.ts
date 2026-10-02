@@ -12,7 +12,7 @@ export const site = {
     : "",
   location: "North Georgia",
   area: "Gwinnett, Hall, Barrow, Forsyth, and surrounding North Georgia communities",
-  contentUpdatedAt: "2026-09-28",
+  contentUpdatedAt: "2026-10-02",
   description:
     "Pierce Business Integrations helps North Georgia businesses improve workflows and implement practical systems, integrations, websites, and advertising.",
 };

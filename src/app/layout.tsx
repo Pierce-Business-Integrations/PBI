@@ -2,12 +2,9 @@ import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
-import WindowFrame from "@/components/WindowFrame";
-import Navbar from "@/components/Navbar";
+import ExperienceFrame from "@/components/ExperienceFrame";
 import { site } from "@/lib/site";
 import AttributionCapture from "@/components/AttributionCapture";
-import { Analytics } from "@vercel/analytics/next";
-import AnalyticsClickTracker from "@/components/AnalyticsClickTracker";
 
 const isPreview = process.env.VERCEL_ENV === "preview";
 
@@ -121,16 +118,7 @@ gtag('config', 'AW-18304491645');`}
         <a href="#main-content" className="skip-link">
           Skip to content
         </a>
-        <WindowFrame />
-        <Navbar />
-        <Analytics />
-        <AnalyticsClickTracker />
-        <div
-          id="window-viewport"
-          className="relative z-10 min-h-[100dvh] overflow-x-clip scroll-pt-28 scroll-smooth lg:fixed lg:bottom-4 lg:left-4 lg:right-4 lg:top-[3.75rem] lg:min-h-0 lg:overflow-y-auto lg:overflow-x-hidden lg:rounded-b-2xl"
-        >
-          <main id="main-content">{children}</main>
-        </div>
+        <ExperienceFrame>{children}</ExperienceFrame>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
