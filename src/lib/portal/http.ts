@@ -7,6 +7,19 @@ export function sameOrigin(request: NextRequest) {
 }
 
 export function portalError(error: unknown) {
+  if (
+    error &&
+    typeof error === "object" &&
+    "code" in error &&
+    typeof error.code === "string" &&
+    /^(?:[0-9A-Z]{5}|ECONN|ENOTFOUND|ETIMEDOUT)/.test(error.code)
+  )
+    return NextResponse.json(
+      {
+        error: "Unable to complete this request. Please refresh and try again.",
+      },
+      { status: 503 },
+    );
   const message = error instanceof Error ? error.message : "Request failed";
   const status = /Authentication required/.test(message)
     ? 401

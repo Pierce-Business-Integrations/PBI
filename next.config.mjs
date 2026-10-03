@@ -6,10 +6,14 @@ const workspacePaths = [
   "/account/:path*",
   "/sign-in/:path*",
   "/sign-up/:path*",
+  "/auth/:path*",
 ];
 
 const nextConfig = {
   reactStrictMode: true,
+  devIndicators: false,
+  // Local databases, private QA PDFs, and browser profiles must never ship in server bundles.
+  outputFileTracingExcludes: { "/*": ["./.data/**/*"] },
   allowedDevOrigins: ["192.168.1.47"],
   images: {
     qualities: [75],
@@ -100,16 +104,19 @@ const nextConfig = {
           { key: "X-Robots-Tag", value: "noindex, nofollow" },
         ],
       },
-      ...["/account/:path*", "/sign-in/:path*", "/sign-up/:path*"].map(
-        (source) => ({
-          source,
-          headers: [
-            { key: "Cache-Control", value: "private, no-store" },
-            { key: "Referrer-Policy", value: "no-referrer" },
-            { key: "X-Robots-Tag", value: "noindex, nofollow" },
-          ],
-        }),
-      ),
+      ...[
+        "/account/:path*",
+        "/sign-in/:path*",
+        "/sign-up/:path*",
+        "/auth/:path*",
+      ].map((source) => ({
+        source,
+        headers: [
+          { key: "Cache-Control", value: "private, no-store" },
+          { key: "Referrer-Policy", value: "no-referrer" },
+          { key: "X-Robots-Tag", value: "noindex, nofollow" },
+        ],
+      })),
     ];
   },
 };

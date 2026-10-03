@@ -4,16 +4,36 @@ import PageHero from "@/components/PageHero";
 import SectionHeading from "@/components/SectionHeading";
 import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
-import FounderPortrait from "@/components/FounderPortrait";
+import TeamPortrait from "@/components/TeamPortrait";
 import TopographicContours from "@/components/TopographicContours";
 import { GeorgiaSeal } from "@/components/GeorgiaServiceAreaMap";
 import { pageMetadata } from "@/lib/site";
 
 export const metadata: Metadata = pageMetadata(
-  "About Jacob Pierce",
-  "Meet Jacob Pierce, a North Georgia solutions architect focused on business diagnosis, practical systems, websites, and direct support.",
+  "About Our Team",
+  "Meet Jacob, Mark, and Michael Pierce, the family-owned North Georgia team behind practical business systems, integrations, websites, and direct support.",
   "/about",
 );
+
+const teamMembers = [
+  {
+    name: "Jacob Pierce",
+    role: "Founder & Solutions Architect",
+    image: "/images/jacob.png",
+    imageClassName: "origin-center scale-[1.2] object-[58%_center]",
+  },
+  {
+    name: "Mark Pierce",
+    role: "Director of Business Development",
+    image: "/images/mark-pierce.webp",
+    imageClassName: "object-[50%_25%]",
+  },
+  {
+    name: "Michael Pierce",
+    role: "AI & Systems Engineer",
+    image: "/images/michael-pierce.webp",
+  },
+];
 
 export default function AboutPage() {
   return (
@@ -32,30 +52,35 @@ export default function AboutPage() {
         technology with more clarity, confidence, and practical purpose.
       </PageHero>
       <section className="section-pad bg-ivory">
-        <div className="container-x grid items-center gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
-          <FounderPortrait />
-          <div>
-            <SectionHeading
-              eyebrow="Meet Jacob Pierce"
-              title="A solutions architect focused on the business behind the technology"
-              copy={
-                <>
-                  <p>
-                    I’m Jacob Pierce. I work with North Georgia businesses to
-                    understand operational constraints, choose practical
-                    solutions, and implement the systems or customer-facing
-                    experiences those solutions require.
-                  </p>
-                  <p className="mt-5">
-                    I offer the kind of partnership businesses deserve: direct
-                    communication, careful work, honest recommendations, and
-                    support that continues after launch. I stay involved from
-                    the first conversation through architecture, implementation,
-                    and ongoing improvement.
-                  </p>
-                </>
-              }
-            />
+        <div className="container-x">
+          <SectionHeading
+            eyebrow="Family-owned. Locally rooted."
+            title="A family-owned team focused on the business behind the technology"
+            copy={
+              <>
+                <p>
+                  We’re the Pierce family. We work with North Georgia businesses
+                  to understand how the work gets done, what gets in the way,
+                  and what needs to improve. Then we choose and implement
+                  practical solutions that fit the business and the people using
+                  them.
+                </p>
+                <p className="mt-5">
+                  You work directly with us, from the first conversation through
+                  planning, implementation, and ongoing support. We bring
+                  careful work, honest recommendations, and clear communication
+                  to each step.
+                </p>
+              </>
+            }
+          />
+          <div
+            id="team"
+            className="mt-14 grid scroll-mt-36 gap-12 md:grid-cols-3 md:gap-6 lg:mt-16 xl:gap-10"
+          >
+            {teamMembers.map((member) => (
+              <TeamPortrait key={member.name} {...member} />
+            ))}
           </div>
         </div>
         <div
@@ -99,11 +124,11 @@ export default function AboutPage() {
               Service, carried into the work
             </h2>
             <p className="mt-5 text-charcoal-soft">
-              Pierce Business Integrations is a service-member-owned business. I
-              currently serve in the United States Marine Corps Reserve, and
-              that experience reinforces the same qualities I bring to client
-              work: preparation, accountability, clear communication, and
-              dependable follow-through.
+              Pierce Business Integrations is a service-member-owned business.
+              Founder Jacob Pierce currently serves in the United States Marine
+              Corps Reserve, and that experience reinforces the same qualities
+              we bring to client work: preparation, accountability, clear
+              communication, and dependable follow-through.
             </p>
           </div>
         </div>
@@ -119,10 +144,9 @@ export default function AboutPage() {
               </p>
               <h2 className="mt-3 font-serif text-3xl">Why North Georgia</h2>
               <p className="mt-3 text-ivory/70">
-                This is home. I understand the businesses, communities, and
-                relationships that keep this area moving, and I built this
-                practice to provide those businesses with a more direct and
-                capable technology partner.
+                This is home. We understand the businesses, communities, and
+                relationships that keep this area moving. We work to provide
+                those businesses with a direct and capable technology partner.
               </p>
             </div>
           </div>
@@ -131,7 +155,7 @@ export default function AboutPage() {
       <section className="section-pad bg-ivory-deep">
         <div className="container-x">
           <SectionHeading
-            eyebrow="How I Work"
+            eyebrow="How We Work"
             title="Understand the business before choosing the technology"
             copy="The best technical solution is not always the largest or most complicated one. It is the one that addresses the real constraint, fits the team, and can be supported over time."
           />

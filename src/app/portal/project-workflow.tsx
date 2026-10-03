@@ -13,6 +13,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { invoiceCanCheckout } from "@/lib/portal/payment-status";
+import { openSignWell } from "@/lib/portal/signwell-embed";
 
 type Doc = {
   id: string;
@@ -26,7 +27,6 @@ type Invoice = {
   documentId: string;
   amountCents: number;
   status: string;
-  simulationStatus: string | null;
 };
 type Signing = {
   id: string;
@@ -37,9 +37,9 @@ type Signing = {
 };
 
 const buttonClass =
-  "inline-flex min-h-10 items-center justify-center gap-2 rounded-full border border-[#233a30] px-4 py-2 text-sm font-semibold text-[#233a30] transition hover:bg-[#233a30] hover:text-white disabled:cursor-not-allowed disabled:opacity-50";
+  "inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-[#233a30]/20 bg-white px-3 py-2 text-xs font-medium text-[#233a30] transition hover:border-[#233a30]/40 hover:bg-[#f5f6f4] disabled:cursor-not-allowed disabled:opacity-50";
 const primaryButtonClass =
-  "inline-flex min-h-10 items-center justify-center gap-2 rounded-full bg-[#233a30] px-5 py-2 text-sm font-semibold text-white transition hover:bg-[#567d50] disabled:cursor-not-allowed disabled:opacity-50";
+  "inline-flex min-h-10 items-center justify-center gap-2 rounded-lg bg-[#233a30] px-4 py-2 text-xs font-semibold text-white transition hover:bg-[#3c5548] disabled:cursor-not-allowed disabled:opacity-50";
 const inputClass =
   "mt-2 w-full rounded-lg border border-[#233a30]/25 bg-white px-3 py-2 text-sm focus:border-[#567d50] focus:outline-none focus:ring-2 focus:ring-[#779c69]/30";
 
@@ -64,12 +64,14 @@ function documentStatus(status: string) {
 function signingStatus(status: string) {
   const messages: Record<string, string> = {
     pending: "Awaiting signatures",
+    preparing: "Preparing agreement",
+    submission_unknown: "PBI is checking the agreement",
     awaiting_file: "Final PDF processing",
     completed: "Signed PDF available",
     declined: "Signing declined",
     voided: "Request voided",
-    simulated_pending: "Demo signing available",
-    simulated_complete: "Demo step complete — no signature",
+    simulated_pending: "Not available yet",
+    simulated_complete: "No signature on file",
   };
   return `Signing: ${messages[status] || label(status)}`;
 }
@@ -98,7 +100,7 @@ function statusClass(status: string) {
 function Status({ text, status }: { text: string; status: string }) {
   return (
     <span
-      className={`inline-flex rounded-full border px-3 py-1 text-xs font-semibold ${statusClass(status)}`}
+      className={`inline-flex rounded-md border px-2 py-1 text-[11px] font-medium ${statusClass(status)}`}
     >
       {text}
     </span>
@@ -112,7 +114,7 @@ export default function ProjectWorkflow({
   invoices,
   signing,
   admin,
-  simulated,
+  stages,
 }: {
   projectId: string;
   organizationId: string;
@@ -120,14 +122,22 @@ export default function ProjectWorkflow({
   invoices: Invoice[];
   signing: Signing[];
   admin: boolean;
-  simulated: boolean;
+  stages: { id: string; title: string }[];
 }) {
   const router = useRouter();
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
   const [invoiceAmount, setInvoiceAmount] = useState("");
   const [invoiceDue, setInvoiceDue] = useState("");
-  const [clientUserId, setClientUserId] = useState("");
+  const [invoiceStage, setInvoiceStage] = useState("");
+  const [clientEmail, setClientEmail] = useState("");
+  const [invitationUrl, setInvitationUrl] = useState("");
+  const archived = documents.filter((document) =>
+    ["voided", "superseded"].includes(document.status),
+  );
+  const currentDocuments = documents.filter(
+    (document) => !["voided", "superseded"].includes(document.status),
+  );
 
   async function action(
     path: string,
@@ -145,6 +155,7 @@ export default function ProjectWorkflow({
       });
       const data = await result.json();
       if (!result.ok) throw new Error(data.error || "Request failed");
+      if (data.invitationUrl) setInvitationUrl(data.invitationUrl);
       if (navigate && data.url) {
         window.location.assign(data.url);
         return;
@@ -166,10 +177,17 @@ export default function ProjectWorkflow({
       );
       const result = await response.json();
       if (!response.ok) throw new Error(result.error);
-      const HelloSign = (await import("hellosign-embedded")).default;
-      const client = new HelloSign({ clientId: result.clientId });
-      client.open(result.url, { testMode: true, skipDomainVerification: true });
-      client.on("finish", () => router.refresh());
+      await openSignWell(
+        result.url,
+        () => {
+          setMessage(
+            "Your signing step is finished. The completed agreement will appear after all signers finish.",
+          );
+          router.refresh();
+        },
+        () =>
+          setMessage("Signing is temporarily unavailable. Please try again."),
+      );
     } catch (error) {
       setMessage(
         error instanceof Error ? error.message : "Unable to open signing",
@@ -190,11 +208,12 @@ export default function ProjectWorkflow({
       kind: "invoice",
       amountCents,
       due: invoiceDue,
+      stageId: invoiceStage || undefined,
     });
   }
 
   return (
-    <div className="mt-6 space-y-5" aria-busy={busy}>
+    <div className="mt-4 space-y-3" aria-busy={busy}>
       {message && (
         <p
           role="alert"
@@ -221,7 +240,7 @@ export default function ProjectWorkflow({
         </div>
       )}
 
-      {documents.map((doc) => {
+      {currentDocuments.map((doc) => {
         const request = signing.find((item) => item.documentId === doc.id);
         const invoice = invoices.find((item) => item.documentId === doc.id);
         const Icon =
@@ -234,20 +253,18 @@ export default function ProjectWorkflow({
           <article
             key={doc.id}
             id={`document-${doc.id}`}
-            className="scroll-mt-28 rounded-2xl border border-[#d8a45b]/50 bg-white p-6 shadow-sm sm:p-7"
+            className="scroll-mt-24 rounded-xl border border-[#233a30]/15 bg-white p-5"
           >
             <div className="flex flex-wrap items-start justify-between gap-5">
               <div className="flex min-w-0 items-start gap-4">
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#779c69]/15 text-[#567d50]">
-                  <Icon size={23} strokeWidth={1.5} aria-hidden="true" />
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[#233a30]/10 bg-[#f5f6f4] text-[#55725c]">
+                  <Icon size={19} strokeWidth={1.5} aria-hidden="true" />
                 </span>
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#567d50]">
-                    {label(doc.kind)} · Version {doc.revision}
+                  <h3 className="text-sm font-semibold">{label(doc.kind)}</h3>
+                  <p className="mt-1 text-xs text-[#233a30]/75">
+                    Version {doc.revision}
                   </p>
-                  <h3 className="mt-1 font-serif text-2xl">
-                    {label(doc.kind)}
-                  </h3>
                 </div>
               </div>
               <div className="flex flex-wrap gap-2">
@@ -268,14 +285,14 @@ export default function ProjectWorkflow({
             </div>
 
             <div
-              className="mt-5 flex flex-wrap gap-2 border-t border-[#d8a45b]/35 pt-5"
+              className="mt-4 flex flex-wrap gap-2 border-t border-[#233a30]/10 pt-3"
               aria-label="Document status"
             >
               <Status
                 text={
                   doc.status === "signing" &&
                   request?.status.startsWith("simulated_")
-                    ? "Demo signing record"
+                    ? "Agreement available"
                     : documentStatus(doc.status)
                 }
                 status={doc.status}
@@ -308,23 +325,14 @@ export default function ProjectWorkflow({
 
             <div className="mt-5 flex flex-wrap gap-3">
               {invoice &&
-                !simulated &&
                 doc.status === "approved" &&
                 invoiceCanCheckout(invoice.status) && (
-                  <button
-                    disabled={busy}
-                    onClick={() =>
-                      action(
-                        "/api/portal/pay",
-                        "POST",
-                        { invoiceId: invoice.id },
-                        true,
-                      )
-                    }
+                  <Link
+                    href={`/portal/invoices/${invoice.id}`}
                     className={primaryButtonClass}
                   >
-                    Pay with Stripe test checkout
-                  </button>
+                    View & pay invoice
+                  </Link>
                 )}
               {admin && doc.status === "draft" && (
                 <button
@@ -350,39 +358,22 @@ export default function ProjectWorkflow({
                     }
                     className={primaryButtonClass}
                   >
-                    Start sandbox signing
+                    Prepare signing
                   </button>
                 )}
-              {request?.provider === "dropbox-sign-test" &&
+              {request?.provider === "signwell-test" &&
                 request.status === "pending" && (
                   <button
                     disabled={busy}
                     onClick={() => sign(request)}
                     className={primaryButtonClass}
                   >
-                    Open sandbox signing
-                  </button>
-                )}
-              {request?.provider === "development-simulation" &&
-                request.status === "simulated_pending" &&
-                simulated && (
-                  <button
-                    disabled={busy}
-                    onClick={() =>
-                      action("/api/portal/sign", "PATCH", {
-                        signId: request.id,
-                      })
-                    }
-                    className={buttonClass}
-                  >
-                    Simulate completion (no signature)
+                    Open agreement signing
                   </button>
                 )}
               {admin &&
                 request &&
-                ["pending", "awaiting_file", "simulated_pending"].includes(
-                  request.status,
-                ) && (
+                ["pending", "simulated_pending"].includes(request.status) && (
                   <button
                     disabled={busy}
                     onClick={() =>
@@ -406,85 +397,50 @@ export default function ProjectWorkflow({
                 </Link>
               )}
             </div>
-
-            {invoice && simulated && (
-              <div className="mt-5 rounded-xl bg-[#f9f3ed] p-4 text-sm">
-                <p className="font-semibold">
-                  Local payment simulation · no charge occurs
-                </p>
-                <p className="mt-1 text-[#233a30]/75">
-                  Real status: {label(invoice.status)}. Demo status:{" "}
-                  {invoice.simulationStatus
-                    ? label(invoice.simulationStatus)
-                    : "Not started"}
-                  .
-                </p>
-                {doc.status === "approved" &&
-                  (invoice.simulationStatus === null ||
-                    invoice.simulationStatus === "simulated_failed") && (
-                    <button
-                      disabled={busy}
-                      onClick={() =>
-                        action("/api/portal/pay/simulate", "POST", {
-                          invoiceId: invoice.id,
-                          state: "processing",
-                        })
-                      }
-                      className={`${buttonClass} mt-3`}
-                    >
-                      Simulate payment initiated
-                    </button>
-                  )}
-                {invoice.simulationStatus === "simulated_processing" && (
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    <button
-                      disabled={busy}
-                      onClick={() =>
-                        action("/api/portal/pay/simulate", "POST", {
-                          invoiceId: invoice.id,
-                          state: "paid",
-                        })
-                      }
-                      className={buttonClass}
-                    >
-                      Simulate confirmed
-                    </button>
-                    <button
-                      disabled={busy}
-                      onClick={() =>
-                        action("/api/portal/pay/simulate", "POST", {
-                          invoiceId: invoice.id,
-                          state: "failed",
-                        })
-                      }
-                      className={buttonClass}
-                    >
-                      Simulate failed
-                    </button>
-                  </div>
-                )}
-              </div>
-            )}
-            {request?.status === "simulated_complete" && (
-              <p className="mt-4 text-xs font-semibold text-[#773f36]">
-                Simulation complete. No real signature or signed PDF exists.
-              </p>
-            )}
           </article>
         );
       })}
 
+      {archived.length > 0 && (
+        <details className="rounded-2xl border border-[#233a30]/15 bg-white p-6">
+          <summary className="cursor-pointer text-sm font-semibold">
+            Earlier versions & archived invoices ({archived.length})
+          </summary>
+          <ul className="mt-4 divide-y divide-[#233a30]/10">
+            {archived.map((doc) => (
+              <li
+                key={doc.id}
+                className="flex flex-wrap items-center justify-between gap-3 py-3 text-sm"
+              >
+                <span>
+                  {label(doc.kind)} · Version {doc.revision}{" "}
+                  <span className="ml-2 text-xs text-[#233a30]/60">
+                    {documentStatus(doc.status)}
+                  </span>
+                </span>
+                <Link
+                  href={`/portal/documents/${doc.fileId}`}
+                  className="inline-flex min-h-10 items-center gap-2 font-semibold underline underline-offset-4"
+                >
+                  View PDF <Eye size={14} aria-hidden="true" />
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </details>
+      )}
+
       {admin && (
-        <details className="group rounded-2xl border border-[#d8a45b]/50 bg-white p-6 sm:p-7">
+        <details className="group rounded-xl border border-[#233a30]/15 bg-white p-5">
           <summary className="flex cursor-pointer list-none items-center justify-between gap-4 marker:hidden">
             <span>
-              <span className="block text-xs font-semibold uppercase tracking-[0.16em] text-[#779c69]">
+              <span className="block text-[11px] font-medium text-[#55725c]">
                 Owner tools
               </span>
-              <span className="mt-2 block font-serif text-2xl">
+              <span className="mt-1 block text-sm font-semibold">
                 Prepare documents & access
               </span>
-              <span className="mt-1 block text-sm leading-6 text-[#233a30]/70">
+              <span className="mt-1 block text-xs leading-5 text-[#233a30]/75">
                 Generate a version, create an invoice, or connect a verified
                 client account.
               </span>
@@ -522,6 +478,21 @@ export default function ProjectWorkflow({
             </div>
             <div>
               <h3 className="font-semibold">Create an invoice</h3>
+              <label className="mt-3 block text-sm font-medium">
+                Project stage
+                <select
+                  value={invoiceStage}
+                  onChange={(event) => setInvoiceStage(event.target.value)}
+                  className={inputClass}
+                >
+                  <option value="">Project-wide invoice</option>
+                  {stages.map((stage) => (
+                    <option key={stage.id} value={stage.id}>
+                      {stage.title}
+                    </option>
+                  ))}
+                </select>
+              </label>
               <div className="mt-3 grid gap-3 sm:grid-cols-2">
                 <label className="text-sm font-medium">
                   Amount (USD)
@@ -557,32 +528,66 @@ export default function ProjectWorkflow({
                 <ShieldCheck size={18} aria-hidden="true" /> Grant client access
               </h3>
               <p className="mt-1 text-sm leading-6 text-[#233a30]/70">
-                Verify the client’s identity before linking their Clerk user ID
-                to this organization. Access is checked on every request.
+                Connect an existing client by email, or create an invitation
+                link to share with them.
               </p>
               <div className="mt-4 flex flex-wrap items-end gap-3">
                 <label className="min-w-48 flex-1 text-sm font-medium">
-                  Verified Clerk user ID
+                  Client email
                   <input
-                    value={clientUserId}
-                    onChange={(event) => setClientUserId(event.target.value)}
-                    placeholder="user_…"
+                    type="email"
+                    value={clientEmail}
+                    onChange={(event) => {
+                      setClientEmail(event.target.value);
+                      setInvitationUrl("");
+                    }}
+                    placeholder="client@company.com"
                     className={inputClass}
                   />
                 </label>
                 <button
-                  disabled={busy || !clientUserId.trim()}
+                  disabled={busy || !clientEmail.trim()}
                   onClick={() =>
                     action("/api/portal/memberships", "POST", {
                       organizationId,
-                      userId: clientUserId.trim(),
+                      email: clientEmail.trim(),
                     })
                   }
                   className={buttonClass}
                 >
                   Grant access
                 </button>
+                <button
+                  disabled={busy || !clientEmail.trim()}
+                  onClick={() =>
+                    action("/api/portal/memberships", "POST", {
+                      organizationId,
+                      email: clientEmail.trim(),
+                      invite: true,
+                    })
+                  }
+                  className={buttonClass}
+                >
+                  Create invitation link
+                </button>
               </div>
+              {invitationUrl && (
+                <div className="mt-4">
+                  <label className="block text-sm font-medium">
+                    Invitation link
+                    <input
+                      readOnly
+                      value={invitationUrl}
+                      className={inputClass}
+                      onFocus={(event) => event.target.select()}
+                    />
+                  </label>
+                  <p className="mt-2 text-xs text-[#233a30]/70">
+                    Share this one-time link with the client. It has not been
+                    emailed.
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </details>

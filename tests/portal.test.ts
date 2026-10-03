@@ -75,7 +75,7 @@ test("project guidance reflects real signing and payment states", () => {
       signing: [{ documentId: "agreement-doc", status: "simulated_pending" }],
       simulated: true,
     }).description,
-    /No legal signature/,
+    /Signing is not available yet/,
   );
   assert.match(
     projectFocus({
@@ -94,12 +94,11 @@ test("project guidance reflects real signing and payment states", () => {
         {
           documentId: document.id,
           status: "open",
-          simulationStatus: "simulated_paid",
         },
       ],
       simulated: true,
     }).description,
-    /real invoice remains open and no charge occurred/,
+    /Online payment is not available yet/,
   );
 });
 

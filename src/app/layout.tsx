@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
-import Script from "next/script";
 import "./globals.css";
 import ExperienceFrame from "@/components/ExperienceFrame";
 import { site } from "@/lib/site";
-import AttributionCapture from "@/components/AttributionCapture";
 
 const isPreview = process.env.VERCEL_ENV === "preview";
 
@@ -99,22 +97,7 @@ export default function RootLayout({
       className={`${playfair.variable} ${inter.variable}`}
       suppressHydrationWarning
     >
-      <head>
-        <Script
-          id="google-ads-tag-loader"
-          async
-          src="https://www.googletagmanager.com/gtag/js?id=AW-18304491645"
-          strategy="lazyOnload"
-        />
-        <Script id="google-ads-tag-config" strategy="lazyOnload">
-          {`window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'AW-18304491645');`}
-        </Script>
-      </head>
       <body className="bg-ivory font-sans text-charcoal antialiased">
-        <AttributionCapture />
         <a href="#main-content" className="skip-link">
           Skip to content
         </a>

@@ -1,15 +1,14 @@
 import Link from "next/link";
-import { UserProfile } from "@clerk/nextjs";
-import { FolderOpen } from "lucide-react";
 import { redirect } from "next/navigation";
-import { accountClerkAppearance } from "@/components/account/clerk-appearance";
-import { configuredClerk, portalActor } from "@/lib/portal/auth";
+import ProfileForm from "@/components/account/ProfileForm";
+import { configuredSupabase, portalActor, portalUser } from "@/lib/portal/auth";
 
 export const dynamic = "force-dynamic";
 
 export default async function ProfilePage() {
   const actor = await portalActor();
   if (!actor) redirect("/sign-in?redirect_url=%2Faccount%2Fprofile");
+  const user = configuredSupabase ? await portalUser() : null;
   return (
     <div className="min-h-screen bg-[#f9f3ed] px-5 pb-20 pt-10 text-[#233a30] sm:pt-12">
       <div className="mx-auto max-w-5xl">
@@ -29,27 +28,22 @@ export default async function ProfilePage() {
             whenever you need project information.
           </p>
         </div>
-        {configuredClerk ? (
+        {user ? (
           <div className="mt-8 overflow-x-auto rounded-2xl border border-[#d8a45b]/40 bg-white p-3 sm:p-6">
-            <UserProfile
-              path="/account/profile"
-              routing="path"
-              appearance={accountClerkAppearance}
-            >
-              <UserProfile.Link
-                label="Client portal"
-                labelIcon={<FolderOpen size={16} />}
-                url="/portal"
-              />
-            </UserProfile>
+            <ProfileForm
+              name={
+                typeof user.user_metadata?.full_name === "string"
+                  ? user.user_metadata.full_name
+                  : ""
+              }
+              email={user.email || ""}
+            />
           </div>
         ) : (
           <div className="mt-8 rounded-2xl border border-[#d8a45b]/40 bg-white p-8">
-            <p className="text-sm font-semibold">Local demo profile</p>
+            <p className="text-sm font-semibold">Profile settings</p>
             <p className="mt-3 text-sm">
-              This simulated identity has no editable account details or Google
-              connection. Real profile management appears here when Clerk is
-              configured.
+              Profile management is not available in this environment yet.
             </p>
             <Link
               href="/portal"

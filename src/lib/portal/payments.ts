@@ -1,8 +1,11 @@
 import "server-only";
 import Stripe from "stripe";
 import { audit, id, now, portalDb } from "./db";
-import { mayAccessOrganization, type PortalActor } from "./auth";
+import type { PortalActor } from "./auth";
+import { mayAccessOrganization } from "./access";
 import { invoiceCanCheckout } from "./payment-status";
+import { projectDisplayName } from "./presentation";
+import { nullEqual } from "./database-types";
 
 function stripe() {
   const key = process.env.STRIPE_SECRET_KEY;
@@ -39,50 +42,75 @@ export async function checkoutInvoice(
     throw new Error("Invoice must be approved before checkout");
   if (!invoiceCanCheckout(String(invoice.status)))
     throw new Error("This invoice is not payable");
+  if (invoice.checkout_attempt)
+    throw new Error("Checkout is already opening. Please try again shortly.");
+  const provider = stripe();
   if (invoice.stripe_session_id) {
-    const existing = await stripe().checkout.sessions.retrieve(
+    const existing = await provider.checkout.sessions.retrieve(
       String(invoice.stripe_session_id),
     );
     if (existing.status === "open" && existing.url) return existing.url;
+    if (existing.status === "complete")
+      throw new Error(
+        "Payment confirmation is pending. Please refresh the invoice shortly.",
+      );
   }
   const retryKey = invoice.stripe_session_id
     ? `retry-after-${invoice.stripe_session_id}`
     : `v${invoice.revision}`;
-  const session = await stripe().checkout.sessions.create(
-    {
-      mode: "payment",
-      allowed_payment_method_types:
-        process.env.STRIPE_ENABLE_ACH === "true"
-          ? ["card", "us_bank_account"]
-          : ["card"],
-      line_items: [
-        {
-          price_data: {
-            currency: "usd",
-            unit_amount: Number(invoice.amount_cents),
-            product_data: {
-              name: `PBI ${Number(invoice.demo) ? "demo " : ""}invoice for ${String(invoice.project_name)}`,
-            },
-          },
-          quantity: 1,
-        },
-      ],
-      metadata: {
-        portal_invoice_id: invoiceId,
-        portal_document_id: String(invoice.document_id),
-        portal_amount_cents: String(invoice.amount_cents),
-      },
-      payment_intent_data: { metadata: { portal_invoice_id: invoiceId } },
-      success_url: `${origin}/portal/${invoice.project_id}?payment=returned`,
-      cancel_url: `${origin}/portal/${invoice.project_id}?payment=cancelled`,
-    },
-    { idempotencyKey: `portal-invoice-${invoiceId}-${retryKey}` },
-  );
-  if (!session.url) throw new Error("Stripe returned no checkout URL");
-  await db.execute({
-    sql: "UPDATE invoices SET stripe_session_id=?,updated_at=? WHERE id=?",
-    args: [session.id, now(), invoiceId],
+  const attempt = id();
+  const reserved = await db.execute({
+    sql: `UPDATE invoices SET checkout_attempt=?,updated_at=? WHERE id=? AND status IN ('open','failed') AND checkout_attempt IS NULL AND ${nullEqual(db.dialect, "stripe_session_id")} AND EXISTS(SELECT 1 FROM documents WHERE documents.id=invoices.document_id AND documents.status='approved')`,
+    args: [attempt, now(), invoiceId, invoice.stripe_session_id],
   });
+  if (reserved.rowsAffected !== 1)
+    throw new Error(
+      "Checkout is already opening or this invoice is no longer payable.",
+    );
+  let session: Stripe.Checkout.Session;
+  try {
+    session = await provider.checkout.sessions.create(
+      {
+        mode: "payment",
+        allowed_payment_method_types:
+          process.env.STRIPE_ENABLE_ACH === "true"
+            ? ["card", "us_bank_account"]
+            : ["card"],
+        line_items: [
+          {
+            price_data: {
+              currency: "usd",
+              unit_amount: Number(invoice.amount_cents),
+              product_data: {
+                name: `PBI invoice for ${projectDisplayName(String(invoice.project_name), Boolean(invoice.demo))}`,
+              },
+            },
+            quantity: 1,
+          },
+        ],
+        metadata: {
+          portal_invoice_id: invoiceId,
+          portal_document_id: String(invoice.document_id),
+          portal_amount_cents: String(invoice.amount_cents),
+        },
+        payment_intent_data: { metadata: { portal_invoice_id: invoiceId } },
+        success_url: `${origin}/portal/invoices/${invoiceId}?payment=returned`,
+        cancel_url: `${origin}/portal/invoices/${invoiceId}?payment=cancelled`,
+      },
+      { idempotencyKey: `portal-invoice-${invoiceId}-${retryKey}` },
+    );
+    if (!session.url) throw new Error("Stripe returned no checkout URL");
+    await db.execute({
+      sql: "UPDATE invoices SET stripe_session_id=?,checkout_attempt=NULL,updated_at=? WHERE id=? AND checkout_attempt=?",
+      args: [session.id, now(), invoiceId, attempt],
+    });
+  } catch (error) {
+    await db.execute({
+      sql: "UPDATE invoices SET checkout_attempt=NULL WHERE id=? AND checkout_attempt=?",
+      args: [invoiceId, attempt],
+    });
+    throw error;
+  }
   await audit(
     String(invoice.organization_id),
     String(invoice.project_id),
@@ -176,7 +204,7 @@ export async function applyStripeEvent(raw: string, signature: string | null) {
   await db.batch(
     [
       {
-        sql: "INSERT INTO provider_events VALUES (?,?,?,?,?)",
+        sql: "INSERT INTO provider_events (id,provider,event_id,payload_json,received_at) VALUES (?,?,?,?,?)",
         args: [id(), "stripe", event.id, raw, at],
       },
       ...(invoiceId && nextStatus

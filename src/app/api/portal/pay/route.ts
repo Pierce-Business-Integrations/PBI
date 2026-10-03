@@ -14,6 +14,17 @@ export async function POST(request: NextRequest) {
       url: await checkoutInvoice(actor, invoiceId, request.nextUrl.origin),
     });
   } catch (error) {
+    if (
+      error instanceof Error &&
+      error.message === "Stripe test-mode secret key is required"
+    )
+      return NextResponse.json(
+        {
+          error:
+            "Online payments are being set up. Please contact PBI to arrange payment.",
+        },
+        { status: 503 },
+      );
     return portalError(error);
   }
 }

@@ -229,14 +229,6 @@ export default function ProjectEditor({
         />
         PBI signature required
       </label>
-      <label className="flex items-center gap-2 text-sm">
-        <input
-          type="checkbox"
-          checked={data.demo}
-          onChange={(e) => set("demo", e.target.checked)}
-        />
-        Demo content (illustrative only)
-      </label>
       <details className="border-t pt-4">
         <summary className="cursor-pointer font-semibold">
           Import validated JSON

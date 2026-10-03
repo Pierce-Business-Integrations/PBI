@@ -2,14 +2,17 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import {
   PDFDocument,
+  PDFName,
+  PDFString,
   StandardFonts,
   rgb,
   type PDFFont,
   type PDFPage,
 } from "pdf-lib";
 import type { ProjectDetails } from "./schema";
+import { SIGNING_FIELDS_KEY, type SigningField } from "./signing-fields";
 
-export const TEMPLATE_VERSION = "pbi-2026-10-v1";
+export const TEMPLATE_VERSION = "pbi-2026-10-v3";
 export type DocumentKind = "proposal" | "agreement" | "invoice";
 const C = {
   cream: rgb(249 / 255, 243 / 255, 237 / 255),
@@ -67,7 +70,12 @@ export async function renderPortalDocument(
   kind: DocumentKind,
   data: ProjectDetails,
   revision: number,
-  invoice?: { number: string; amountCents: number; due: string },
+  invoice?: {
+    number: string;
+    amountCents: number;
+    due: string;
+    stage?: { id: string; title: string; description: string };
+  },
 ) {
   const pdf = await PDFDocument.create();
   const serif = await pdf.embedFont(StandardFonts.TimesRoman);
@@ -86,6 +94,7 @@ export async function renderPortalDocument(
   );
   let page!: PDFPage;
   let y = 0;
+  const signingFields: SigningField[] = [];
   const newPage = (header = true) => {
     page = pdf.addPage([W, H]);
     page.drawRectangle({ x: 0, y: 0, width: W, height: H, color: C.cream });
@@ -163,7 +172,12 @@ export async function renderPortalDocument(
       leading: 11,
     });
   };
-  const row = (headingText: string, body: string, i?: number) => {
+  const row = (
+    headingText: string,
+    body: string,
+    i?: number,
+    field?: { recipient: string; key: string; type: SigningField["type"] },
+  ) => {
     ensure(75);
     page.drawLine({
       start: { x: M, y: y + 16 },
@@ -188,6 +202,19 @@ export async function renderPortalDocument(
       color: C.forest,
       gap: 3,
     });
+    if (field)
+      signingFields.push({
+        api_id: `${field.key}_${field.recipient}`,
+        recipient_id: field.recipient,
+        type: field.type,
+        page: pdf.getPageCount(),
+        required: true,
+        x: (M * 96) / 72,
+        y: ((H - y - 14) * 96) / 72,
+        width: ((field.type === "date" ? 170 : 390) * 96) / 72,
+        height: (26 * 96) / 72,
+        ...(field.type === "date" ? { lock_sign_date: true } : {}),
+      });
     text(body, { indent: left, color: C.muted, gap: 16 });
   };
 
@@ -278,6 +305,8 @@ export async function renderPortalDocument(
       : "Built around your business.",
   );
   text(data.summary, { size: 12, gap: 20 });
+  if (kind === "invoice" && invoice?.stage)
+    row(`Project stage: ${invoice.stage.title}`, invoice.stage.description);
   if (kind !== "invoice") {
     row("What is getting in the way", data.problem);
     row("What better looks like", data.desiredOutcome);
@@ -336,7 +365,10 @@ export async function renderPortalDocument(
     heading("Proposed terms");
     text("UNREVIEWED TERMS - DEMO ONLY", { font: sansBold, color: C.green });
     data.terms.forEach((term) => row(term.heading, term.body));
-    for (const signer of data.authorizedSigners) {
+    for (const [index, signer] of [...data.authorizedSigners]
+      .sort((a, b) => a.order - b.order)
+      .entries()) {
+      const recipient = String(index + 1);
       newPage();
       kicker("Authorized acceptance");
       heading(`Signature for ${signer.name}`);
@@ -347,21 +379,30 @@ export async function renderPortalDocument(
       row(
         "Signer name",
         "____________________________________________________________",
+        undefined,
+        { recipient, key: "name", type: "text" },
       );
       row(
         "Title",
         "____________________________________________________________",
+        undefined,
+        { recipient, key: "title", type: "text" },
       );
       row(
         "Signature",
         "____________________________________________________________",
+        undefined,
+        { recipient, key: "signature", type: "signature" },
       );
       row(
         "Date",
         "____________________________________________________________",
+        undefined,
+        { recipient, key: "date", type: "date" },
       );
     }
     if (data.requiresPbiSignature) {
+      const recipient = String(data.authorizedSigners.length + 1);
       newPage();
       kicker("PBI acceptance");
       heading("Pierce Business Group LLC");
@@ -369,14 +410,20 @@ export async function renderPortalDocument(
       row(
         "Authorized name and title",
         "____________________________________________________________",
+        undefined,
+        { recipient, key: "name", type: "text" },
       );
       row(
         "Signature",
         "____________________________________________________________",
+        undefined,
+        { recipient, key: "signature", type: "signature" },
       );
       row(
         "Date",
         "____________________________________________________________",
+        undefined,
+        { recipient, key: "date", type: "date" },
       );
     }
   } else if (kind === "proposal") {
@@ -406,5 +453,10 @@ export async function renderPortalDocument(
       color: C.muted,
     });
   });
+  if (signingFields.length)
+    pdf.catalog.set(
+      PDFName.of(SIGNING_FIELDS_KEY),
+      PDFString.of(JSON.stringify(signingFields)),
+    );
   return Buffer.from(await pdf.save());
 }

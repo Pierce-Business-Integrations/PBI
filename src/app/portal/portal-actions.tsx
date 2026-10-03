@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function PortalActions() {
+  const router = useRouter();
   const [error, setError] = useState("");
   async function choose(actor: string) {
     const result = await fetch("/api/portal/dev-session", {
@@ -14,7 +16,7 @@ export default function PortalActions() {
       setError((await result.json()).error || "Unable to switch identity");
       return;
     }
-    window.location.reload();
+    router.push("/portal");
   }
   return (
     <div className="mt-4 flex flex-wrap gap-2">

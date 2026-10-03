@@ -1,15 +1,14 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { SignOutButton } from "@clerk/nextjs";
-import { currentUser } from "@clerk/nextjs/server";
+import SignOut from "@/components/account/SignOut";
 import { ArrowRight, FileText, Settings2 } from "lucide-react";
 import {
   authenticatedActor,
-  configuredClerk,
+  configuredSupabase,
+  portalUser,
   hasPortalAccess,
 } from "@/lib/portal/auth";
 import { listProjects } from "@/lib/portal/repository";
-import PortalActions from "@/app/portal/portal-actions";
 
 export const dynamic = "force-dynamic";
 
@@ -17,20 +16,17 @@ export default async function AccountPage() {
   const actor = await authenticatedActor();
   if (!actor) redirect("/clients");
   const hasAccess = await hasPortalAccess(actor.userId);
-  const user = actor && configuredClerk ? await currentUser() : null;
+  const user = configuredSupabase ? await portalUser() : null;
+  const firstName =
+    typeof user?.user_metadata?.full_name === "string"
+      ? user.user_metadata.full_name.trim().split(" ")[0]
+      : "";
   const projects = hasAccess ? await listProjects(actor) : [];
-  const name =
-    user?.firstName ||
-    (actor?.simulated
-      ? actor.userId.replace("dev-", "Demo ").replaceAll("-", " ")
-      : "Your workspace");
   return (
-    <div className="min-h-screen bg-[#f9f3ed] px-5 pb-20 pt-10 text-[#233a30] sm:pt-12">
-      <div className="mx-auto max-w-5xl">
-        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#d8a45b]/70 pb-7">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em]">
-            Pierce Business Integrations / Clients
-          </p>
+    <div className="min-h-[calc(100dvh-10rem)] bg-[#f5f6f4] px-5 pb-12 pt-6 text-[#233a30] sm:px-8 sm:pt-8 xl:px-10">
+      <div className="mx-auto max-w-[1180px]">
+        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#233a30]/15 pb-4">
+          <p className="text-xs font-medium text-[#55725c]">Client home</p>
           <Link
             href="/contact"
             className="text-sm font-medium underline underline-offset-4"
@@ -75,84 +71,65 @@ export default async function AccountPage() {
                 >
                   About client access
                 </Link>
-                {configuredClerk && (
-                  <SignOutButton>
-                    <button className="mt-4 text-sm font-medium underline underline-offset-4">
-                      Sign out of this identity
-                    </button>
-                  </SignOutButton>
+                {configuredSupabase && (
+                  <SignOut className="mt-4 text-sm font-medium underline underline-offset-4" />
                 )}
               </div>
             </div>
           </>
         ) : (
           <>
-            <div className="mt-12 flex flex-wrap items-end justify-between gap-6">
+            <div className="mt-6 flex flex-wrap items-end justify-between gap-6">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#779c69]">
-                  Client workspace
-                </p>
-                <h1 className="mt-3 font-serif text-4xl sm:text-5xl">
-                  Welcome, {name}.
+                <h1 className="text-2xl font-semibold sm:text-[32px]">
+                  {firstName ? `Welcome, ${firstName}.` : "Welcome back."}
                 </h1>
-                <p className="mt-4 max-w-2xl text-[#233a30]/75">
-                  Your profile and the work we’re doing together, all in one
-                  place.
+                <p className="mt-2 max-w-2xl text-sm text-[#233a30]/75">
+                  Access your projects and manage your profile.
                 </p>
               </div>
-              {configuredClerk && (
-                <SignOutButton>
-                  <button className="rounded-full border border-[#233a30] px-5 py-2 text-sm font-medium hover:bg-white">
-                    Sign out
-                  </button>
-                </SignOutButton>
+              {configuredSupabase && (
+                <SignOut className="rounded-full border border-[#233a30] px-5 py-2 text-sm font-medium hover:bg-white" />
               )}
             </div>
-            {actor.simulated && (
-              <div className="mt-7 rounded-xl border border-[#d8a45b] bg-white p-5 text-sm">
-                <strong>Local demo identity — not a real client login.</strong>
-                <p className="mt-1">
-                  Switch between the owner and two isolated client views below.
-                </p>
-                <PortalActions />
-              </div>
-            )}
-            <div className="mt-9 grid gap-5 md:grid-cols-[1.2fr_0.8fr]">
+            <div className="mt-6 grid gap-4 md:grid-cols-2">
               <Link
                 href="/portal"
-                className="group rounded-2xl border border-[#233a30] bg-[#233a30] p-8 text-[#f9f3ed] shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+                className="group rounded-xl border border-[#233a30]/15 bg-white p-6 text-[#233a30] transition hover:border-[#567d50]/50"
               >
                 <FileText
-                  size={28}
+                  size={21}
                   strokeWidth={1.5}
-                  className="text-[#d8a45b]"
+                  className="text-[#55725c]"
                 />
-                <h2 className="mt-6 font-serif text-3xl">Client portal</h2>
-                <p className="mt-3 text-sm leading-6 text-[#f9f3ed]/80">
+                <h2 className="mt-4 text-base font-semibold">Projects</h2>
+                <p className="mt-2 text-sm leading-6 text-[#233a30]/75">
                   {projects.length
                     ? `View ${projects.length} assigned ${projects.length === 1 ? "project" : "projects"}, documents, signing, and invoices.`
                     : "Your projects and documents will appear here once PBI links your account."}
                 </p>
-                <span className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-[#d8a45b] group-hover:gap-3">
-                  Open portal <ArrowRight size={16} />
+                <span className="mt-5 inline-flex items-center gap-2 text-xs font-semibold text-[#233a30]">
+                  View projects <ArrowRight size={16} />
                 </span>
               </Link>
               <Link
                 href="/account/profile"
-                className="group rounded-2xl border border-[#d8a45b]/50 bg-white p-8 shadow-sm transition hover:-translate-y-1 hover:border-[#233a30]"
+                className="group rounded-xl border border-[#233a30]/15 bg-white p-6 transition hover:border-[#567d50]/50"
               >
                 <Settings2
-                  size={28}
+                  size={21}
                   strokeWidth={1.5}
                   className="text-[#779c69]"
                 />
-                <h2 className="mt-6 font-serif text-3xl">Profile & security</h2>
+                <h2 className="mt-4 text-base font-semibold">
+                  Profile & security
+                </h2>
                 <p className="mt-3 text-sm leading-6 text-[#233a30]/75">
-                  {configuredClerk
-                    ? "Review your personal details, email addresses, and account security settings."
-                    : "This is a local demo profile. Real account settings require Clerk configuration."}
+                  {configuredSupabase
+                    ? "Review your personal details, sign-in email, and password."
+                    : "Profile settings will be available when account access is configured."}
                 </p>
-                <span className="mt-7 inline-flex items-center gap-2 text-sm font-semibold group-hover:gap-3">
+                <span className="mt-5 inline-flex items-center gap-2 text-xs font-semibold">
                   View profile <ArrowRight size={16} />
                 </span>
               </Link>

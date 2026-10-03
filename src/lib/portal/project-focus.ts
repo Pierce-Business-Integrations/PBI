@@ -2,7 +2,6 @@ type Document = { id: string; kind: string; status: string };
 type Invoice = {
   documentId: string;
   status: string;
-  simulationStatus?: string | null;
 };
 type Signing = { documentId: string; status: string };
 
@@ -41,55 +40,25 @@ export function projectFocus({
     };
 
   const activeSigning = signing.find((request) =>
-    ["pending", "awaiting_file", "simulated_pending"].includes(request.status),
+    [
+      "preparing",
+      "submission_unknown",
+      "pending",
+      "awaiting_file",
+      "simulated_pending",
+    ].includes(request.status),
   );
-  const simulatedSigning =
-    simulated || activeSigning?.status.startsWith("simulated_");
   if (activeSigning)
     return {
-      eyebrow: simulatedSigning ? "Demo signing step" : "Agreement update",
-      title: simulatedSigning
-        ? "A signing simulation is ready."
+      eyebrow: "Agreement update",
+      title: activeSigning.status.startsWith("simulated_")
+        ? "Your agreement is ready to review."
         : "Signing is in progress.",
-      description: simulatedSigning
-        ? "Open the agreement to try the local signing step. No legal signature or signed PDF will be created."
+      description: activeSigning.status.startsWith("simulated_")
+        ? "Open the agreement to review its details. Signing is not available yet."
         : "Open the agreement to review its status and see whether a signing action is available to you.",
       href: `#document-${activeSigning.documentId}`,
       action: "View agreement",
-    };
-
-  const simulatedPaid =
-    simulated &&
-    invoices.find(
-      (invoice) =>
-        invoice.simulationStatus === "simulated_paid" &&
-        invoice.status === "open",
-    );
-  if (simulatedPaid)
-    return {
-      eyebrow: "Demo payment state",
-      title: "The payment simulation is complete.",
-      description:
-        "The demo step was recorded, but the real invoice remains open and no charge occurred. You can review both statuses below.",
-      href: `#document-${simulatedPaid.documentId}`,
-      action: "View invoice status",
-    };
-
-  const simulatedProcessing =
-    simulated &&
-    invoices.find(
-      (invoice) =>
-        invoice.simulationStatus === "simulated_processing" &&
-        invoice.status === "open",
-    );
-  if (simulatedProcessing)
-    return {
-      eyebrow: "Demo payment state",
-      title: "A payment simulation is in progress.",
-      description:
-        "This is a local demonstration only. Choose a simulated outcome on the invoice below; no charge will occur.",
-      href: `#document-${simulatedProcessing.documentId}`,
-      action: "View demo step",
     };
 
   const payable = invoices.find(
@@ -107,7 +76,7 @@ export function projectFocus({
         ? "An invoice is ready to review."
         : "An invoice is ready for payment.",
       description: simulated
-        ? "Review the invoice and try the clearly labeled local payment simulation. No charge will occur."
+        ? "Review the invoice details and its current status below. Online payment is not available yet."
         : "Review the invoice details below, then continue to secure checkout when you’re ready.",
       href: `#document-${payable.documentId}`,
       action: "View invoice",
@@ -156,7 +125,7 @@ export function projectFocus({
           eyebrow: "Owner review",
           title: "The agreement is ready for signing setup.",
           description:
-            "Review the approved version once more, then start the available sandbox signing step.",
+            "Review the approved version once more, then start the signing step when ready.",
           href: `#document-${agreement.id}`,
           action: "Review agreement",
         }

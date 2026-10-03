@@ -11,6 +11,8 @@ export async function POST(request: NextRequest) {
   const hostname = request.nextUrl.hostname;
   if (
     process.env.NODE_ENV !== "development" ||
+    process.env.NEXT_PUBLIC_SUPABASE_URL ||
+    process.env.SUPABASE_DB_URL ||
     !["localhost", "127.0.0.1"].includes(hostname)
   )
     return NextResponse.json({ error: "Unavailable" }, { status: 404 });

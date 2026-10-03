@@ -16,6 +16,7 @@ export async function POST(request: NextRequest) {
       kind: DocumentKind;
       amountCents?: number;
       due?: string;
+      stageId?: string;
     };
     if (!["proposal", "agreement", "invoice"].includes(body.kind))
       throw new Error("Invalid document kind");
@@ -24,7 +25,11 @@ export async function POST(request: NextRequest) {
       body.projectId,
       body.kind,
       body.kind === "invoice"
-        ? { amountCents: body.amountCents!, due: body.due || "" }
+        ? {
+            amountCents: body.amountCents!,
+            due: body.due || "",
+            stageId: body.stageId,
+          }
         : undefined,
     );
     return NextResponse.json(result, { status: 201 });

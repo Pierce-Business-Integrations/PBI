@@ -1,16 +1,20 @@
 "use client";
 
 import Image from "next/image";
+import Script from "next/script";
+import AttributionCapture from "./AttributionCapture";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useRef } from "react";
 import { ArrowUpRight, FolderOpen, LifeBuoy, UserRound } from "lucide-react";
 import { Analytics } from "@vercel/analytics/next";
 import AnalyticsClickTracker from "./AnalyticsClickTracker";
 import Navbar from "./Navbar";
 import WindowFrame from "./WindowFrame";
 import { site } from "@/lib/site";
+import styles from "./Workspace.module.css";
 
-const workspacePaths = ["/portal", "/account", "/sign-in", "/sign-up"];
+const workspacePaths = ["/portal", "/account", "/sign-in", "/sign-up", "/auth"];
 
 export default function ExperienceFrame({
   children,
@@ -18,6 +22,10 @@ export default function ExperienceFrame({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const viewport = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    viewport.current?.scrollTo({ top: 0, behavior: "instant" });
+  }, [pathname]);
   const workspace = workspacePaths.some(
     (path) => pathname === path || pathname.startsWith(`${path}/`),
   );
@@ -27,6 +35,20 @@ export default function ExperienceFrame({
       <>
         <WindowFrame />
         <Navbar />
+        <AttributionCapture />
+        <Script
+          id="google-ads-tag-loader"
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=AW-18304491645"
+          strategy="lazyOnload"
+        />
+        <Script
+          id="google-ads-tag-config"
+          strategy="lazyOnload"
+        >{`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'AW-18304491645');`}</Script>
         <Analytics />
         <AnalyticsClickTracker />
         <div
@@ -46,16 +68,17 @@ export default function ExperienceFrame({
   return (
     <div
       id="window-viewport"
-      className="h-[100dvh] overflow-y-auto overscroll-contain bg-[#f7f6f2] text-[#233a30] lg:flex"
+      ref={viewport}
+      className={`${styles.workspace} h-[100dvh] overflow-y-auto overscroll-contain bg-[#f5f6f4] text-[#233a30] lg:flex`}
     >
       <aside
-        className="sticky top-0 hidden h-[100dvh] w-[264px] shrink-0 flex-col bg-[#1e3029] px-6 py-8 text-[#f9f3ed] lg:flex xl:w-[288px]"
+        className="sticky top-0 hidden h-[100dvh] w-[224px] shrink-0 flex-col border-r border-white/10 bg-[#1e3029] px-4 py-6 text-[#f9f3ed] lg:flex"
         aria-label="Workspace sidebar"
       >
         <Link
           href={site.url}
           aria-label="Pierce Business Integrations website"
-          className="block"
+          className="block px-3"
         >
           <Image
             src="/logos/pbi-half-lockup-dark.png"
@@ -63,56 +86,26 @@ export default function ExperienceFrame({
             width={5000}
             height={1742}
             priority
-            className="h-auto w-[170px]"
+            className="h-auto w-[150px]"
           />
         </Link>
-        <div className="mt-9 border-t border-white/15 pt-7">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[#d8a45b]">
-            Client workspace
-          </p>
-          <p className="mt-2 font-serif text-[1.4rem] leading-tight">
-            A clear view of what’s next.
-          </p>
+        <div className="mt-7 border-t border-white/10 px-3 pt-5">
+          <p className="text-xs font-medium text-white/65">Client portal</p>
         </div>
-        <nav aria-label="Workspace navigation" className="mt-12 space-y-1">
-          <p className="mb-4 px-3 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/45">
-            Workspace
-          </p>
+        <nav aria-label="Workspace navigation" className="mt-5 space-y-1">
           <Link
             href="/portal"
             aria-current={projectsActive ? "page" : undefined}
-            className={`flex min-h-12 items-center gap-3 rounded-lg px-3 text-sm font-medium transition ${projectsActive ? "bg-white/15 text-white" : "text-white/65 hover:bg-white/10 hover:text-white"}`}
+            className={`flex min-h-11 items-center gap-3 rounded-lg px-3 text-sm font-medium transition ${projectsActive ? "bg-white/10 text-white" : "text-white/75 hover:bg-white/10 hover:text-white"}`}
           >
-            <FolderOpen
-              size={18}
-              aria-hidden="true"
-              className={projectsActive ? "text-[#d8a45b]" : ""}
-            />{" "}
-            Projects
-            {projectsActive && (
-              <span
-                className="ml-auto h-1.5 w-1.5 rounded-full bg-[#d8a45b]"
-                aria-hidden="true"
-              />
-            )}
+            <FolderOpen size={18} aria-hidden="true" /> Projects
           </Link>
           <Link
             href="/account"
             aria-current={accountActive ? "page" : undefined}
-            className={`flex min-h-12 items-center gap-3 rounded-lg px-3 text-sm font-medium transition ${accountActive ? "bg-white/15 text-white" : "text-white/65 hover:bg-white/10 hover:text-white"}`}
+            className={`flex min-h-11 items-center gap-3 rounded-lg px-3 text-sm font-medium transition ${accountActive ? "bg-white/10 text-white" : "text-white/75 hover:bg-white/10 hover:text-white"}`}
           >
-            <UserRound
-              size={18}
-              aria-hidden="true"
-              className={accountActive ? "text-[#d8a45b]" : ""}
-            />{" "}
-            Client home
-            {accountActive && (
-              <span
-                className="ml-auto h-1.5 w-1.5 rounded-full bg-[#d8a45b]"
-                aria-hidden="true"
-              />
-            )}
+            <UserRound size={18} aria-hidden="true" /> Client home
           </Link>
         </nav>
         <div className="mt-auto border-t border-white/15 pt-6">
@@ -128,7 +121,7 @@ export default function ExperienceFrame({
           >
             <ArrowUpRight size={18} aria-hidden="true" /> Visit website
           </Link>
-          <p className="mt-7 px-3 text-xs leading-5 text-white/40">
+          <p className="mt-6 px-3 text-[11px] leading-5 text-white/60">
             Pierce Business Integrations
             <br />
             Pierce Business Group LLC
@@ -136,6 +129,23 @@ export default function ExperienceFrame({
         </div>
       </aside>
       <div className="min-w-0 flex-1">
+        <div className="hidden h-16 items-center justify-between border-b border-[#233a30]/10 bg-white px-8 text-xs lg:flex xl:px-10">
+          <p className="flex items-center gap-3 text-[#233a30]/65">
+            <span className="font-medium text-[#233a30]">Client portal</span>
+            <span aria-hidden="true">/</span>
+            {projectsActive
+              ? "Projects"
+              : accountActive
+                ? "Client home"
+                : "Sign in"}
+          </p>
+          <Link
+            href="/contact"
+            className="inline-flex min-h-10 items-center gap-2 font-medium hover:text-[#567d50]"
+          >
+            <LifeBuoy size={15} aria-hidden="true" /> Contact PBI
+          </Link>
+        </div>
         <header className="sticky top-0 z-50 border-b border-[#233a30]/10 bg-[#f7f6f2]/95 backdrop-blur-xl lg:hidden">
           <div className="mx-auto flex h-[72px] w-[min(100%-2.5rem,1280px)] items-center justify-between gap-5">
             <div className="flex min-w-0 items-center gap-4 sm:gap-6">
@@ -198,7 +208,7 @@ export default function ExperienceFrame({
         >
           {children}
         </main>
-        <footer className="border-t border-[#233a30]/10 px-5 py-6 text-[#233a30]/60">
+        <footer className="border-t border-[#233a30]/10 px-5 py-5 text-[#233a30]/70 lg:px-8 xl:px-10">
           <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 text-xs">
             <span>
               Pierce Business Integrations · Pierce Business Group LLC

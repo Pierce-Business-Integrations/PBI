@@ -26,10 +26,12 @@ export async function GET(request: NextRequest) {
     if (!actor) throw new Error("Authentication required");
     const signId = request.nextUrl.searchParams.get("signId");
     if (!signId) throw new Error("Signing request ID required");
-    return NextResponse.json({
-      url: await signerUrl(actor, signId),
-      clientId: process.env.DROPBOX_SIGN_CLIENT_ID,
-    });
+    return NextResponse.json(
+      {
+        url: await signerUrl(actor, signId),
+      },
+      { headers: { "Cache-Control": "private, no-store" } },
+    );
   } catch (error) {
     return portalError(error);
   }
