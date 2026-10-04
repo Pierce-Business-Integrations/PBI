@@ -2,7 +2,11 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import type { ProjectDetails } from "@/lib/portal/schema";
+import {
+  formatValidationError,
+  parseProjectDetails,
+  type ProjectDetails,
+} from "@/lib/portal/schema";
 
 const asLines = (items: string[]) => items.join("\n");
 const pairs = (
@@ -101,6 +105,7 @@ export default function ProjectEditor({
           return { name, email, title, order: Number(order) };
         }),
       };
+      parseProjectDetails(complete);
       const response = await fetch(
         projectId
           ? `/api/portal/projects/${projectId}`
@@ -116,7 +121,7 @@ export default function ProjectEditor({
       router.push(`/portal/${projectId || result.id}`);
       router.refresh();
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Save failed");
+      setMessage(formatValidationError(error));
       setBusy(false);
     }
   }
@@ -143,20 +148,20 @@ export default function ProjectEditor({
         true,
       )}
       {field(
-        "Scope — one heading | description per line",
+        "Scope: one heading | description per line",
         raw.scope,
         (v) => rawSet("scope", v),
         true,
       )}
       <div className="grid gap-4 md:grid-cols-2">
         {field(
-          "Deliverables — one per line",
+          "Deliverables: one per line",
           raw.deliverables,
           (v) => rawSet("deliverables", v),
           true,
         )}
         {field(
-          "Exclusions — one per line",
+          "Exclusions: one per line",
           raw.exclusions,
           (v) => rawSet("exclusions", v),
           true,
@@ -186,7 +191,7 @@ export default function ProjectEditor({
           set("pricing", { ...data.pricing, description: v }),
         )}
         {field(
-          "Payment schedule — label | amount USD | due",
+          "Payment schedule: label | amount USD | due",
           raw.schedule,
           (v) => rawSet("schedule", v),
           true,
@@ -204,19 +209,19 @@ export default function ProjectEditor({
         )}
       </div>
       {field(
-        "Assumptions — one per line",
+        "Assumptions: one per line",
         raw.assumptions,
         (v) => rawSet("assumptions", v),
         true,
       )}
       {field(
-        "Proposed terms — heading | body per line; legal review required",
+        "Proposed terms: heading | body per line; review before sharing",
         raw.terms,
         (v) => rawSet("terms", v),
         true,
       )}
       {field(
-        "Authorized signers — name | email | title | order",
+        "Authorized signers: name | email | title | order",
         raw.signers,
         (v) => rawSet("signers", v),
         true,
@@ -248,7 +253,11 @@ export default function ProjectEditor({
           type="button"
           onClick={() => {
             try {
-              const value = JSON.parse(importText) as ProjectDetails;
+              const value = parseProjectDetails(JSON.parse(importText));
+              if (projectId && value.demo !== initial.demo)
+                throw new Error(
+                  "Keep this project's client or example classification unchanged",
+                );
               setData(value);
               setRaw({
                 scope: pairs(value.scope),
@@ -266,8 +275,12 @@ export default function ProjectEditor({
                   .join("\n"),
               });
               setMessage("JSON loaded. Review fields and save to validate.");
-            } catch {
-              setMessage("Invalid JSON syntax");
+            } catch (error) {
+              setMessage(
+                error instanceof SyntaxError
+                  ? "Invalid JSON syntax"
+                  : formatValidationError(error),
+              );
             }
           }}
           className="mt-2 rounded-full border px-4 py-2"

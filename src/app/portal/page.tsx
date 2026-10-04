@@ -10,6 +10,8 @@ import {
   projectDisplayName,
 } from "@/lib/portal/presentation";
 import ProjectEditor from "./project-editor";
+import { clientProjectsEnabled } from "@/lib/portal/configuration";
+import { emptyProjectDraft } from "@/lib/portal/project-draft";
 
 export const dynamic = "force-dynamic";
 
@@ -19,12 +21,19 @@ export default async function PortalHome() {
   const projects = await listProjects(actor);
   const admin = await isAdmin(actor.userId);
   const example = admin
-    ? JSON.parse(
-        await readFile(
-          join(process.cwd(), "docs", "client-portal", "example-project.json"),
-          "utf8",
-        ),
-      )
+    ? !actor.simulated && clientProjectsEnabled()
+      ? emptyProjectDraft()
+      : JSON.parse(
+          await readFile(
+            join(
+              process.cwd(),
+              "docs",
+              "client-portal",
+              "example-project.json",
+            ),
+            "utf8",
+          ),
+        )
     : null;
 
   return (
@@ -39,12 +48,20 @@ export default async function PortalHome() {
           </p>
         </div>
         {admin && (
-          <a
-            href="#create-project"
-            className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-[#233a30] px-4 py-2 text-xs font-semibold text-white hover:bg-[#3c5548]"
-          >
-            <Plus size={16} aria-hidden="true" /> New project
-          </a>
+          <div className="flex flex-wrap gap-3">
+            <Link
+              href="/portal/settings"
+              className="inline-flex min-h-11 items-center rounded-lg border border-[#233a30]/20 px-4 text-xs font-semibold"
+            >
+              Portal setup
+            </Link>
+            <a
+              href="#create-project"
+              className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-[#233a30] px-4 py-2 text-xs font-semibold text-white hover:bg-[#3c5548]"
+            >
+              <Plus size={16} aria-hidden="true" /> New project
+            </a>
+          </div>
         )}
       </header>
 

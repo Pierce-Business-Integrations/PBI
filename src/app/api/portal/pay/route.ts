@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     if (
       error instanceof Error &&
-      error.message === "Stripe test-mode secret key is required"
+      /Stripe (?:test|live)-mode secret key is required/.test(error.message)
     )
       return NextResponse.json(
         {

@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { portalActor } from "@/lib/portal/auth";
 import { getProjectBundle, updateProject } from "@/lib/portal/repository";
 import { sameOrigin, portalError } from "@/lib/portal/http";
-import { formatValidationError } from "@/lib/portal/schema";
 
 export const runtime = "nodejs";
 type Context = { params: Promise<{ id: string }> };
@@ -25,9 +24,6 @@ export async function PUT(request: NextRequest, context: Context) {
     await updateProject(actor, (await context.params).id, await request.json());
     return NextResponse.json({ ok: true });
   } catch (error) {
-    return NextResponse.json(
-      { error: formatValidationError(error) },
-      { status: 400 },
-    );
+    return portalError(error);
   }
 }

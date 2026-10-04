@@ -1,7 +1,12 @@
 import { z } from "zod";
-import { portalDb, id, now } from "../src/lib/portal/db";
-import { supabaseAdmin } from "../src/lib/supabase/admin";
+import { loadEnvConfig } from "@next/env";
+loadEnvConfig(process.cwd(), process.env.NODE_ENV !== "production", {
+  info() {},
+  error() {},
+});
 async function main() {
+  const { portalDb, id, now } = await import("../src/lib/portal/db");
+  const { supabaseAdmin } = await import("../src/lib/supabase/admin");
   const userId = z.uuid().parse(process.env.PORTAL_ADMIN_USER_ID);
   if (!process.env.SUPABASE_DB_URL)
     throw new Error("Set the Supabase database connection first");
