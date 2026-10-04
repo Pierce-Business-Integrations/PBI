@@ -5,7 +5,7 @@ import Script from "next/script";
 import AttributionCapture from "./AttributionCapture";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import { ArrowUpRight, FolderOpen, LifeBuoy, UserRound } from "lucide-react";
 import { Analytics } from "@vercel/analytics/next";
 import AnalyticsClickTracker from "./AnalyticsClickTracker";
@@ -24,7 +24,10 @@ export default function ExperienceFrame({
 }) {
   const pathname = usePathname();
   const viewport = useRef<HTMLDivElement>(null);
-  useEffect(() => {
+  useLayoutEffect(() => {
+    // Let anchor navigation reach its section; otherwise start the new page at the top.
+    if (window.location.hash) return;
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     viewport.current?.scrollTo({ top: 0, behavior: "instant" });
   }, [pathname]);
   const workspace = workspacePaths.some(
