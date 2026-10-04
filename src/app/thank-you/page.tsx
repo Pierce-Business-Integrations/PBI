@@ -5,6 +5,7 @@ import PageHero from "@/components/PageHero";
 import Footer from "@/components/Footer";
 import ThankYouConversion from "@/components/ThankYouConversion";
 import { pageMetadata, site } from "@/lib/site";
+import styles from "@/components/SiteDesign.module.css";
 
 export const metadata: Metadata = {
   ...pageMetadata(
@@ -20,7 +21,6 @@ export default function ThankYouPage() {
     <>
       <ThankYouConversion />
       <PageHero
-        eyebrow="Inquiry Received"
         title={
           <>
             Thank You.
@@ -34,11 +34,12 @@ export default function ThankYouPage() {
         I’ve received your information and will review it personally. You can
         expect a response within one business day.
       </PageHero>
-      <section className="section-pad bg-ivory">
-        <div className="container-x grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end">
+      <section className={styles.section}>
+        <div
+          className={`${styles.container} grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end`}
+        >
           <div>
-            <p className="eyebrow mb-5">What Happens Next</p>
-            <h2 className="heading-serif max-w-2xl text-3xl text-charcoal md:text-4xl">
+            <h2 className={styles.smallHeading}>
               No further action is required.
             </h2>
             <p className="mt-5 max-w-2xl text-charcoal-soft">

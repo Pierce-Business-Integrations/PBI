@@ -1,13 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
-import Script from "next/script";
 import "./globals.css";
-import WindowFrame from "@/components/WindowFrame";
-import Navbar from "@/components/Navbar";
+import ExperienceFrame from "@/components/ExperienceFrame";
 import { site } from "@/lib/site";
-import AttributionCapture from "@/components/AttributionCapture";
-import { Analytics } from "@vercel/analytics/next";
-import AnalyticsClickTracker from "@/components/AnalyticsClickTracker";
 
 const isPreview = process.env.VERCEL_ENV === "preview";
 
@@ -20,10 +15,16 @@ const playfair = Playfair_Display({
 });
 const inter = Inter({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
+  weight: ["300", "400", "500", "600", "700"],
   variable: "--font-inter",
   display: "swap",
 });
+
+export const viewport: Viewport = {
+  themeColor: "#f9f3ed",
+  colorScheme: "light",
+  viewportFit: "cover",
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -34,6 +35,12 @@ export const metadata: Metadata = {
   },
   description: site.description,
   applicationName: site.name,
+  verification: {
+    google: process.env.GOOGLE_SITE_VERIFICATION?.trim() || undefined,
+    other: process.env.BING_SITE_VERIFICATION?.trim()
+      ? { "msvalidate.01": process.env.BING_SITE_VERIFICATION.trim() }
+      : undefined,
+  },
   // Preview deployments should point at the production canonical without being indexed.
   robots: {
     index: !isPreview,
@@ -102,35 +109,11 @@ export default function RootLayout({
       className={`${playfair.variable} ${inter.variable}`}
       suppressHydrationWarning
     >
-      <head>
-        <Script
-          id="google-ads-tag-loader"
-          async
-          src="https://www.googletagmanager.com/gtag/js?id=AW-18304491645"
-          strategy="lazyOnload"
-        />
-        <Script id="google-ads-tag-config" strategy="lazyOnload">
-          {`window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'AW-18304491645');`}
-        </Script>
-      </head>
       <body className="bg-ivory font-sans text-charcoal antialiased">
-        <AttributionCapture />
         <a href="#main-content" className="skip-link">
           Skip to content
         </a>
-        <WindowFrame />
-        <Navbar />
-        <Analytics />
-        <AnalyticsClickTracker />
-        <div
-          id="window-viewport"
-          className="relative z-10 min-h-[100dvh] overflow-x-clip scroll-pt-28 scroll-smooth lg:fixed lg:bottom-4 lg:left-4 lg:right-4 lg:top-[3.75rem] lg:min-h-0 lg:overflow-y-auto lg:overflow-x-hidden lg:rounded-b-2xl"
-        >
-          <main id="main-content">{children}</main>
-        </div>
+        <ExperienceFrame>{children}</ExperienceFrame>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

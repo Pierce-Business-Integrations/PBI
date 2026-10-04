@@ -32,7 +32,6 @@ export default function GrowthLifecycle() {
       <div className="container-x">
         <div className="grid items-end gap-8 lg:grid-cols-[1fr_auto]">
           <SectionHeading
-            eyebrow="/ From Diagnosis to Delivery"
             title="The solution follows the business problem"
             light
             copy="Good architecture begins with understanding the work. The right answer is sometimes a custom system and sometimes something simpler."

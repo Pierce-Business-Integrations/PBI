@@ -1,66 +1,59 @@
+import Image from "next/image";
 import Link from "next/link";
-import Brand from "./Brand";
-import { featuredServices, site } from "@/lib/site";
-import { GeorgiaSeal } from "./GeorgiaServiceAreaMap";
+import { ArrowUpRight } from "lucide-react";
+import { site } from "@/lib/site";
+import styles from "./homepage/Homepage.module.css";
 
 export default function Footer() {
   return (
-    <footer className="border-t-4 border-foothill bg-charcoal py-16 text-ivory/70">
-      <div className="container-x grid gap-12 border-b border-ivory/15 pb-12 md:grid-cols-[1.3fr_0.7fr_1fr]">
-        <div>
-          <Brand light />
-          <p className="mt-6 max-w-md">
-            Modern solutions. Local partnership. Practical systems, websites,
-            advertising, and direct support across North Georgia.
-          </p>
-          <div className="mt-6 flex max-w-md items-center gap-4 border-t border-ivory/15 pt-5">
-            <GeorgiaSeal className="h-14 w-14 shrink-0 text-brass-light" />
-            <div>
-              <p className="text-xs leading-relaxed text-ivory/60">
-                <span className="font-semibold uppercase tracking-[0.14em] text-ivory/80">
-                  Based in North Georgia
-                </span>
-                <span className="mx-2 text-brass-light">·</span>
-                Serving Gwinnett, Hall, Barrow, Forsyth, and surrounding
-                communities
-              </p>
-            </div>
+    <footer className={styles.footer} role="contentinfo">
+      <div className={styles.container}>
+        <div className={styles.footerMain}>
+          <div className={styles.footerBrand}>
+            <Link href="/" aria-label="Pierce Business Integrations home">
+              <Image
+                src="/logos/pbi-half-lockup.png"
+                alt=""
+                width={5000}
+                height={1742}
+                sizes="220px"
+              />
+            </Link>
+            <p>Modern solutions. Local partnership.</p>
+            <p className={styles.footerLocation}>
+              Based in North Georgia. Serving Gwinnett, Hall, Barrow, Forsyth,
+              and surrounding communities.
+            </p>
           </div>
-        </div>
-        <div>
-          <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-foothill-light">
-            Navigate
-          </h2>
-          <nav className="mt-5 grid gap-3" aria-label="Footer navigation">
+          <nav className={styles.footerLinks} aria-label="Footer navigation">
+            <p>Explore</p>
             <Link href="/services">Solutions</Link>
-            <Link href="/services/automation">Business Systems</Link>
-            <Link href="/pricing">Pricing</Link>
-            <Link href="/about">About</Link>
+            <Link href="/services/automation">Business systems</Link>
+            <Link href="/how-we-work">How We Work</Link>
+            <Link href="/about">About PBI</Link>
             <Link href="/contact">Contact</Link>
+            {site.clientPortalPublic && <Link href="/clients">Clients</Link>}
+          </nav>
+          <nav className={styles.footerLinks} aria-label="Footer services">
+            <p>Also here to help</p>
+            <Link href="/services/web-design">Websites</Link>
+            <Link href="/services/website-care">Website care</Link>
+            <Link href="/services/advertising">Advertising</Link>
+            {site.email && <a href={"mailto:" + site.email}>{site.email}</a>}
           </nav>
         </div>
-        <div>
-          <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-foothill-light">
-            Services
-          </h2>
-          <div className="mt-5 grid gap-3">
-            {featuredServices.map((service) => (
-              <Link key={service.slug} href={`/services/${service.slug}`}>
-                {service.shortTitle}
-              </Link>
-            ))}
+        <div className={styles.footerLegal}>
+          <p>
+            © {new Date().getFullYear()} Pierce Business Integrations. A brand
+            of Pierce Business Group LLC.
+          </p>
+          <div>
+            <Link href="/privacy">Privacy</Link>
+            <Link href="/terms">Terms</Link>
+            <a href="#top">
+              Back to top <ArrowUpRight size={14} aria-hidden="true" />
+            </a>
           </div>
-        </div>
-      </div>
-      <div className="container-x flex flex-col gap-4 pt-8 text-sm text-ivory/50 sm:flex-row sm:items-center sm:justify-between">
-        <p>
-          © {new Date().getFullYear()} Pierce Business Integrations. All rights
-          reserved. A brand of Pierce Business Group LLC.
-        </p>
-        <div className="flex flex-wrap gap-5">
-          {site.email && <a href={`mailto:${site.email}`}>{site.email}</a>}
-          <Link href="/privacy">Privacy</Link>
-          <Link href="/terms">Terms</Link>
         </div>
       </div>
     </footer>

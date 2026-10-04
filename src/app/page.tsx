@@ -1,27 +1,29 @@
 import type { Metadata, Viewport } from "next";
-import Hero from "@/components/Hero";
-import HomeSections from "@/components/HomeSections";
-import Footer from "@/components/Footer";
+import { Inter } from "next/font/google";
+import clsx from "clsx";
+import HomePage from "@/components/homepage/HomePage";
+import styles from "@/components/homepage/Homepage.module.css";
 import { pageMetadata } from "@/lib/site";
 
+const homepageFont = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-homepage",
+  display: "swap",
+});
+
 export const metadata: Metadata = pageMetadata(
-  "Business Systems & Integrations in North Georgia",
-  "Pierce Business Integrations helps North Georgia businesses identify operational friction and implement practical solutions, from better workflows to custom systems, websites, and advertising.",
+  "Custom Software & Business Integrations | Pierce Business Integrations",
+  "Family-owned in North Georgia, PBI builds custom software, connects business tools, and applies practical AI to help your team work with less friction.",
   "/",
 );
 
 export const viewport: Viewport = {
-  themeColor: "#071117",
-  colorScheme: "dark",
+  themeColor: "#f9f3ed",
+  colorScheme: "light",
   viewportFit: "cover",
 };
 
 export default function Home() {
-  return (
-    <>
-      <Hero />
-      <HomeSections />
-      <Footer />
-    </>
-  );
+  return <HomePage className={clsx(styles.page, homepageFont.variable)} />;
 }

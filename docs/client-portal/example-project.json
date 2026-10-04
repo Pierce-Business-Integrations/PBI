@@ -1,0 +1,56 @@
+{
+  "label": "DEMO — illustrative content only",
+  "organizationName": "GoToHearing (demo)",
+  "contactName": "Demo Client A",
+  "contactEmail": "client-a@example.test",
+  "authorizedSigners": [
+    {
+      "name": "Demo Client A",
+      "email": "client-a@example.test",
+      "title": "Owner",
+      "order": 1
+    }
+  ],
+  "projectName": "Operations and website support (demo)",
+  "summary": "An illustrative partnership to improve day-to-day digital operations.",
+  "problem": "Information and support requests are spread across multiple tools.",
+  "desiredOutcome": "Clearer handoffs and a dependable way to prioritize improvements.",
+  "scope": [
+    {
+      "heading": "Discovery",
+      "description": "Review current processes and document priorities with the team."
+    },
+    {
+      "heading": "Improvements",
+      "description": "Implement approved, appropriately scoped workflow or website changes."
+    }
+  ],
+  "deliverables": ["Discovery summary", "Prioritized improvement plan"],
+  "exclusions": ["Third-party fees", "Work not expressly approved in writing"],
+  "pricing": {
+    "currency": "usd",
+    "model": "fixed",
+    "amountCents": 250000,
+    "description": "Illustrative fixed fee; not an offer"
+  },
+  "paymentSchedule": [
+    {
+      "label": "Demo project fee",
+      "amountCents": 250000,
+      "due": "Upon accepted agreement"
+    }
+  ],
+  "estimatedStart": "2026-10-15",
+  "estimatedEnd": "2026-11-15",
+  "proposalValidUntil": "2026-10-30",
+  "assumptions": ["Client will provide timely access to agreed systems"],
+  "terms": [
+    {
+      "heading": "Unreviewed demo terms",
+      "body": "This sample clause is for workflow testing only and is not an approved legal agreement."
+    }
+  ],
+  "requiresPbiSignature": true,
+  "preparedBy": "Pierce Business Integrations",
+  "demo": true
+}

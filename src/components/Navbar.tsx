@@ -3,17 +3,19 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X } from "lucide-react";
+import { Menu, UserRound, X } from "lucide-react";
 import clsx from "clsx";
 import Brand from "./Brand";
+import { site } from "@/lib/site";
 
 const links = [
   { href: "/", label: "Home" },
   { href: "/services", label: "Solutions" },
   { href: "/services/automation", label: "Business Systems" },
-  { href: "/pricing", label: "Pricing" },
+  { href: "/how-we-work", label: "How We Work" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
+  ...(site.clientPortalPublic ? [{ href: "/clients", label: "Clients" }] : []),
 ];
 
 export default function Navbar() {
@@ -71,6 +73,10 @@ export default function Navbar() {
 
   const active = (href: string) =>
     pathname === href ||
+    (href === "/clients" &&
+      (pathname.startsWith("/account") ||
+        pathname.startsWith("/sign-in") ||
+        pathname.startsWith("/sign-up"))) ||
     (href === "/services" &&
       pathname.startsWith("/services/") &&
       pathname !== "/services/automation");
@@ -93,7 +99,7 @@ export default function Navbar() {
       <div className="container-x flex items-center justify-between">
         <Brand light={lightAtTop} compact={scrolled || open} />
         <nav
-          className="hidden items-center gap-8 lg:flex"
+          className="hidden items-center gap-4 xl:gap-7 lg:flex"
           aria-label="Primary navigation"
         >
           {links.map((link) => (
@@ -103,7 +109,7 @@ export default function Navbar() {
               onClick={() => setOpen(false)}
               aria-current={active(link.href) ? "page" : undefined}
               className={clsx(
-                "relative py-2 text-[0.88rem] tracking-wide transition-colors",
+                "relative inline-flex items-center gap-1.5 py-2 text-[0.82rem] tracking-wide transition-colors xl:text-[0.88rem]",
                 lightAtTop
                   ? active(link.href)
                     ? "text-ivory after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-brass"
@@ -113,6 +119,9 @@ export default function Navbar() {
                     : "text-charcoal-soft hover:text-charcoal",
               )}
             >
+              {link.href === "/clients" && (
+                <UserRound size={16} aria-hidden="true" />
+              )}
               {link.label}
             </Link>
           ))}
@@ -176,6 +185,13 @@ export default function Navbar() {
                   active(link.href) ? "text-foothill-deep" : "text-charcoal",
                 )}
               >
+                {link.href === "/clients" && (
+                  <UserRound
+                    size={20}
+                    aria-hidden="true"
+                    className="mr-2 inline"
+                  />
+                )}
                 {link.label}
               </Link>
             ))}

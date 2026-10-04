@@ -7,9 +7,7 @@ Custom events currently tracked:
 - `Consultation CTA Clicked`: includes the CTA placement and destination.
 - `Services Overview Clicked`: homepage service-overview intent.
 - `Service Explored`: includes the selected service slug.
-- `Pricing Navigation Clicked`: includes the selected lifecycle or pricing destination.
-- `Pricing Section Viewed`: fires once per visible Build, Launch, Care, Grow, or Evolve section.
-- `Plan Fit Opened`: includes the public plan name.
+- `How We Work Navigation Clicked`: includes the placement and process-page destination. Public pricing/plan events are retired with the price-list page; historical events remain in Analytics.
 - `Contact Form Started`: fires on the first form interaction.
 - `Contact Form Attempted`: fires after client validation succeeds and delivery is attempted.
 - `Inquiry Accepted`: fires server-side only after the inquiry email is accepted; includes service category, budget band, and non-personal lead source.

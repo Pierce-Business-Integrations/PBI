@@ -10,7 +10,7 @@ export const metadata: Metadata = pageMetadata(
 
 export default function TermsPage() {
   return (
-    <LegalPage title="Website Terms" updated="September 28, 2026">
+    <LegalPage title="Website Terms" updated="October 3, 2026">
       <h2>Informational website</h2>
       <p>
         This website provides general information about Pierce Business
@@ -25,12 +25,13 @@ export default function TermsPage() {
         proposal or agreement describing scope, responsibilities, pricing,
         payment terms, timing, third-party costs, and other applicable terms.
       </p>
-      <h2>Pricing information</h2>
+      <h2>Project scope and costs</h2>
       <p>
-        Published prices are starting points for common scopes. Final pricing is
-        confirmed in writing after the requirements are understood. Third-party
-        subscriptions, advertising spend, content production, and work outside
-        the agreed scope may be priced separately.
+        Project pricing depends on the agreed scope, complexity, integrations,
+        and support requirements and is confirmed in writing before
+        implementation begins. Third-party subscriptions, advertising spend,
+        content production, and work outside the agreed scope may be priced
+        separately.
       </p>
       <h2>Website content and intellectual property</h2>
       <p>

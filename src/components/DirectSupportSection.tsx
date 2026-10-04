@@ -34,7 +34,6 @@ export default function DirectSupportSection() {
       <div className="container-x grid items-start gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
         <div className="lg:sticky lg:top-28">
           <SectionHeading
-            eyebrow="Technology Should Feel Personal"
             title="Direct support from someone who knows your business."
             copy="Work directly with the person designing and building your solution, from the first conversation through launch and ongoing support."
           />

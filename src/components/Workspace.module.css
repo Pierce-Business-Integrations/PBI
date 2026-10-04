@@ -1,0 +1,62 @@
+.workspace {
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+/* Product typography stays separate from the marketing and PDF templates. */
+.workspace :global(.font-serif) {
+  font-family: inherit;
+}
+
+.workspace :is(h1, h2, h3) {
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+.workspace :global(.rounded-2xl) {
+  border-radius: 12px;
+}
+
+.workspace :is(a, button):global(.rounded-full) {
+  border-radius: 8px;
+}
+
+.workspace :global(.shadow-sm) {
+  box-shadow: none;
+}
+
+.workspace :is(a, button, summary):focus-visible {
+  outline: 2px solid #567d50;
+  outline-offset: 3px;
+}
+
+.workspace :is(button, a) {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.workspace::-webkit-scrollbar,
+.workspace *::-webkit-scrollbar {
+  width: 8px;
+  height: 6px;
+}
+
+.workspace::-webkit-scrollbar-track,
+.workspace *::-webkit-scrollbar-track {
+  background: #f5f6f4;
+}
+
+.workspace::-webkit-scrollbar-thumb,
+.workspace *::-webkit-scrollbar-thumb {
+  background: #c9d0c7;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .workspace *,
+  .workspace *::before,
+  .workspace *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

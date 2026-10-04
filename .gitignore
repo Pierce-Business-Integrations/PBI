@@ -27,4 +27,7 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+# Local portal database and generated private files
+/.data/
 next-env.d.ts

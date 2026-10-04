@@ -3,6 +3,7 @@ import PageHero from "@/components/PageHero";
 import ConsultationForm from "@/components/ConsultationForm";
 import Footer from "@/components/Footer";
 import { pageMetadata, site } from "@/lib/site";
+import styles from "@/components/SiteDesign.module.css";
 
 export const metadata: Metadata = pageMetadata(
   "Discuss a Business Problem or Project",
@@ -14,10 +15,9 @@ export default function ContactPage() {
   return (
     <>
       <PageHero
-        eyebrow="Start a Conversation"
         title={
           <>
-            Tell me where your business
+            Tell us where your business
             <br />
             <span className="italic text-foothill">gets stuck.</span>
           </>
@@ -28,11 +28,12 @@ export default function ContactPage() {
         are welcome too. You will typically receive an initial response within
         one business day.
       </PageHero>
-      <section className="section-pad bg-ivory-deep">
-        <div className="container-x grid gap-12 lg:grid-cols-[0.65fr_1.35fr] lg:gap-20">
+      <section className={styles.section}>
+        <div
+          className={`${styles.container} grid gap-12 lg:grid-cols-[0.65fr_1.35fr] lg:gap-20`}
+        >
           <aside>
-            <p className="eyebrow mb-5">Contact Details</p>
-            <h2 className="heading-serif text-3xl">
+            <h2 className={styles.smallHeading}>
               Start with a straightforward conversation.
             </h2>
             <dl className="mt-8 divide-y divide-charcoal/15 border-y border-charcoal/15">
@@ -59,7 +60,7 @@ export default function ContactPage() {
               </div>
             </dl>
           </aside>
-          <div>
+          <div className={styles.formSurface}>
             <ConsultationForm />
           </div>
         </div>

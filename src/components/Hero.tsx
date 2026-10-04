@@ -63,7 +63,7 @@ export default function Hero() {
 
           <p className="hero-description mt-7 max-w-lg text-lg text-ivory/78 lg:max-w-xl xl:max-w-2xl">
             Tell us where work gets stuck. We’ll understand the problem, improve
-            the process, and implement the right solution—from better use of
+            the process, and implement the right solution, from better use of
             your current tools to an integration, custom application, website,
             or advertising system.
           </p>

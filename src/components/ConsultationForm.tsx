@@ -236,8 +236,7 @@ export default function ConsultationForm() {
       aria-busy={isSubmitting || isTransmitting}
     >
       <div className="mb-8 border-l border-brass/60 pl-4">
-        <p className="eyebrow">/ Start a Project</p>
-        <p className="mt-2 max-w-2xl text-sm text-charcoal-soft">
+        <p className="max-w-2xl text-sm text-charcoal-soft">
           Tell me where work is getting stuck, or select the service you already
           know you need. Four short sections provide context for a useful first
           conversation.
@@ -271,9 +270,9 @@ export default function ConsultationForm() {
             onFocusCapture={() => setActiveSection(0)}
             className="form-section"
           >
-            <legend className="sr-only">01 / {formSections[0]}</legend>
+            <legend className="sr-only">{formSections[0]}</legend>
             <p className="form-section__heading" aria-hidden="true">
-              01 / {formSections[0]}
+              {formSections[0]}
             </p>
             <div className="grid gap-6 sm:grid-cols-2">
               <Field
@@ -321,9 +320,9 @@ export default function ConsultationForm() {
             onFocusCapture={() => setActiveSection(1)}
             className="form-section"
           >
-            <legend className="sr-only">02 / {formSections[1]}</legend>
+            <legend className="sr-only">{formSections[1]}</legend>
             <p className="form-section__heading" aria-hidden="true">
-              02 / {formSections[1]}
+              {formSections[1]}
             </p>
             <div className="grid gap-6 sm:grid-cols-2">
               <Field
@@ -353,9 +352,9 @@ export default function ConsultationForm() {
             onFocusCapture={() => setActiveSection(2)}
             className="form-section"
           >
-            <legend className="sr-only">03 / {formSections[2]}</legend>
+            <legend className="sr-only">{formSections[2]}</legend>
             <p className="form-section__heading" aria-hidden="true">
-              03 / {formSections[2]}
+              {formSections[2]}
             </p>
             <div className="grid gap-6 xl:grid-cols-3">
               <SelectField
@@ -389,9 +388,9 @@ export default function ConsultationForm() {
             onFocusCapture={() => setActiveSection(3)}
             className="form-section"
           >
-            <legend className="sr-only">04 / {formSections[3]}</legend>
+            <legend className="sr-only">{formSections[3]}</legend>
             <p className="form-section__heading" aria-hidden="true">
-              04 / {formSections[3]}
+              {formSections[3]}
             </p>
             <label
               className={clsx(

@@ -4,6 +4,8 @@ export const site = {
   name: "Pierce Business Integrations",
   tagline: "Modern solutions. Local partnership.",
   url: "https://piercebusinessintegrations.com",
+  // Restore public portal navigation and indexing once the workflow is ready.
+  clientPortalPublic: false,
   // Publish an address only after its mailbox has been created and verified.
   email: /^[^\s@]+@pbintegrations\.com$/i.test(
     process.env.NEXT_PUBLIC_CONTACT_EMAIL?.trim() || "",
@@ -12,9 +14,9 @@ export const site = {
     : "",
   location: "North Georgia",
   area: "Gwinnett, Hall, Barrow, Forsyth, and surrounding North Georgia communities",
-  contentUpdatedAt: "2026-09-28",
+  contentUpdatedAt: "2026-10-03",
   description:
-    "Pierce Business Integrations helps North Georgia businesses improve workflows and implement practical systems, integrations, websites, and advertising.",
+    "Custom software, systems integration, practical AI, websites, and ongoing support for North Georgia businesses. Modern solutions. Local partnership.",
 };
 
 export function pageMetadata(
@@ -61,6 +63,7 @@ export type Service = {
   description: string;
   problem: string;
   fit: string;
+  introTitle: string;
   intro: string;
   deliverables: string[];
   closing: string;
@@ -77,6 +80,7 @@ export const services: Service[] = [
     problem:
       "An outdated, confusing, or hard-to-manage website can make a capable business look less established than it is and leave prospective customers unsure what to do next.",
     fit: "New businesses establishing a credible presence, established companies ready for a redesign, and service businesses that need focused landing pages or useful integrations.",
+    introTitle: "Give customers a clear next step",
     intro:
       "A good website is more than a polished first impression. It should explain what you do, make the next step obvious, and work reliably for customers on every device.",
     deliverables: [
@@ -103,6 +107,7 @@ export const services: Service[] = [
     problem:
       "Websites need attention after launch. Unchecked forms, stale content, platform updates, and small technical issues can quietly erode customer trust.",
     fit: "Businesses that want a dependable local partner to keep their site current, review its performance, and handle routine technical needs.",
+    introTitle: "Keep your site current and dependable",
     intro:
       "Website care provides managed hosting, consistent oversight, and a direct point of contact, so small issues are addressed and useful improvements do not get lost in a support queue.",
     deliverables: [
@@ -130,6 +135,7 @@ export const services: Service[] = [
     problem:
       "Work gets harder to manage when information is scattered, decisions are repeated, and people have to bridge gaps between tools by hand.",
     fit: "Growing organizations with an operational bottleneck, disconnected workflow, reporting need, or process that existing software does not handle well.",
+    introTitle: "Build around the way you work",
     intro:
       "We begin by understanding the work, its costs, and the people involved. The recommendation might be a process change, an existing platform, an integration, automation, or a custom application. The solution should fit the problem and be maintainable by the team using it.",
     deliverables: [
@@ -156,6 +162,7 @@ export const services: Service[] = [
     problem:
       "Campaigns are difficult to improve when the landing experience, tracking, account ownership, and business goals are not aligned.",
     fit: "Businesses with a clear offer, capacity to respond to leads, and a realistic test budget for measurable Google or Meta campaigns.",
+    introTitle: "A clear path from ad to inquiry",
     intro:
       "Effective advertising connects campaign planning, focused landing pages, accurate measurement, and ongoing review around outcomes that matter to the business.",
     deliverables: [
