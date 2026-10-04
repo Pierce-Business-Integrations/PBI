@@ -12,12 +12,12 @@
   line-height: 1.6;
 }
 
-/* The original fixed desktop window remains active on every other route. */
+/* Marketing pages use the document's native scroll, separate from the portal. */
 :global(body):has(.homeShell) {
   height: auto;
-  min-height: 100dvh;
+  min-height: 100svh;
   overflow-x: clip;
-  overflow-y: auto;
+  overflow-y: visible;
   background: #f9f3ed;
 }
 
@@ -37,7 +37,7 @@
 .homeViewport {
   position: relative;
   width: 100%;
-  min-height: 100dvh;
+  min-height: 100svh;
   scroll-margin-top: 6rem;
 }
 
@@ -156,8 +156,10 @@
 
 .mobileLinks {
   max-height: calc(100svh - 96px - env(safe-area-inset-top, 0px));
-  padding: 10px max(28px, calc((100vw - 1280px) / 2)) 24px;
+  padding: 10px max(28px, calc((100vw - 1280px) / 2))
+    max(24px, env(safe-area-inset-bottom, 0px));
   overflow-y: auto;
+  overscroll-behavior-y: contain;
   border-top: 1px solid var(--home-line);
   background: var(--home-cream);
 }
@@ -184,7 +186,6 @@
   display: grid;
   align-items: center;
   min-height: max(820px, 100svh);
-  min-height: max(820px, 100dvh);
   overflow: hidden;
   background: #dce3cf;
   isolation: isolate;
@@ -604,6 +605,9 @@
 }
 
 .footerLinks a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   padding-block: 3px;
   overflow-wrap: anywhere;
 }
@@ -630,11 +634,17 @@
 .footerLegal a {
   display: inline-flex;
   align-items: center;
-  min-height: 36px;
+  min-height: 44px;
   gap: 6px;
 }
 
 @media (max-width: 1100px) {
+  .navigation {
+    position: fixed;
+  }
+  .navigationScrolled {
+    animation: none;
+  }
   .desktopLinks {
     display: none;
   }
@@ -682,7 +692,6 @@
   }
   .hero {
     min-height: max(700px, 100svh);
-    min-height: max(700px, 100dvh);
   }
   .gradient {
     object-position: 34% center;
@@ -810,6 +819,19 @@
     align-items: flex-start;
     flex-direction: column;
     gap: 12px;
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .navigation {
+    position: fixed;
+  }
+  .navigationScrolled {
+    animation: none;
+  }
+  .heroBackground,
+  .heroHeadingLetter {
+    transform: none;
   }
 }
 

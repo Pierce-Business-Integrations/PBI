@@ -37,7 +37,7 @@ export default function ExperienceFrame({
   if (!workspace) {
     return (
       <div className={`${homepageStyles.homeShell} ${siteStyles.siteShell}`}>
-        <HomeNavigation />
+        <HomeNavigation key={pathname} />
         <AttributionCapture />
         <Script
           id="google-ads-tag-loader"

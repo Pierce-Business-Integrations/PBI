@@ -12,6 +12,12 @@ export default function WireframeReveal() {
   const comparisonRef = useRef<HTMLDivElement>(null);
   const handleRef = useRef<HTMLButtonElement>(null);
   const dragOffsetRef = useRef(0);
+  const dragRef = useRef<{
+    pointerId: number;
+    startX: number;
+    startY: number;
+    active: boolean;
+  } | null>(null);
 
   function applyPosition(position: number) {
     const nextPosition = Math.min(100, Math.max(0, position));
@@ -46,8 +52,15 @@ export default function WireframeReveal() {
       (event.pointerType === "mouse" && event.button !== 0)
     )
       return;
-    event.preventDefault();
-    event.currentTarget.focus();
+    const active = event.pointerType === "mouse";
+    dragRef.current = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      active,
+    };
+    if (active) event.preventDefault();
+    event.currentTarget.focus({ preventScroll: true });
     const handleBounds = event.currentTarget.getBoundingClientRect();
     dragOffsetRef.current =
       event.clientX - (handleBounds.left + handleBounds.width / 2);
@@ -55,12 +68,27 @@ export default function WireframeReveal() {
   }
 
   function handlePointerMove(event: PointerEvent<HTMLButtonElement>) {
+    const drag = dragRef.current;
+    if (!drag || drag.pointerId !== event.pointerId) return;
     if (!event.currentTarget.hasPointerCapture(event.pointerId)) return;
+    if (!drag.active) {
+      // Leave vertical touch gestures to the browser until the intent is clear.
+      const horizontal = Math.abs(event.clientX - drag.startX);
+      const vertical = Math.abs(event.clientY - drag.startY);
+      if (vertical >= 6 && vertical > horizontal) {
+        handlePointerUp(event);
+        return;
+      }
+      if (horizontal < 6 || horizontal <= vertical * 1.25) return;
+      drag.active = true;
+    }
     event.preventDefault();
     updateFromPointer(event);
   }
 
   function handlePointerUp(event: PointerEvent<HTMLButtonElement>) {
+    if (dragRef.current?.pointerId !== event.pointerId) return;
+    dragRef.current = null;
     if (event.currentTarget.hasPointerCapture(event.pointerId)) {
       event.currentTarget.releasePointerCapture(event.pointerId);
     }
@@ -140,9 +168,11 @@ export default function WireframeReveal() {
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}
           onPointerCancel={handlePointerUp}
+          onLostPointerCapture={handlePointerUp}
           onKeyDown={handleKeyDown}
-          className="peer absolute top-1/2 z-30 h-11 w-11 -translate-x-1/2 -translate-y-1/2 touch-none select-none cursor-ew-resize opacity-0"
+          className="peer absolute top-1/2 z-30 h-11 w-11 -translate-x-1/2 -translate-y-1/2 select-none cursor-ew-resize opacity-0"
           style={{
+            touchAction: "pan-y pinch-zoom",
             left: "clamp(1.375rem, var(--reveal-position), calc(100% - 1.375rem))",
             willChange: "left",
           }}

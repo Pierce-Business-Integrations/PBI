@@ -3,6 +3,7 @@ import Image from "next/image";
 import Breadcrumbs from "./Breadcrumbs";
 import HeroBackground from "./homepage/HeroBackground";
 import HeroHeadline from "./homepage/HeroHeadline";
+import PageEntrance from "./PageEntrance";
 import homepageStyles from "./homepage/Homepage.module.css";
 import styles from "./SiteDesign.module.css";
 
@@ -49,7 +50,7 @@ export default function PageHero({
         />
       </HeroBackground>
       <div className={styles.heroFade} aria-hidden="true" />
-      <div className={styles.container}>
+      <PageEntrance className={styles.container}>
         {breadcrumbs && <Breadcrumbs items={breadcrumbs} />}
         <HeroHeadline
           id="page-heading"
@@ -57,7 +58,7 @@ export default function PageHero({
           lines={titleText(title).split("\n").filter(Boolean)}
         />
         <div className={styles.heroCopy}>{children}</div>
-      </div>
+      </PageEntrance>
     </section>
   );
 }
