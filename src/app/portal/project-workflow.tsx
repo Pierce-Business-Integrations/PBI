@@ -114,6 +114,7 @@ export default function ProjectWorkflow({
   invoices,
   signing,
   admin,
+  clientProject = false,
   stages,
 }: {
   projectId: string;
@@ -122,11 +123,15 @@ export default function ProjectWorkflow({
   invoices: Invoice[];
   signing: Signing[];
   admin: boolean;
+  clientProject?: boolean;
   stages: { id: string; title: string }[];
 }) {
   const router = useRouter();
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
+  const [reviewedAgreements, setReviewedAgreements] = useState<
+    Record<string, boolean>
+  >({});
   const [invoiceAmount, setInvoiceAmount] = useState("");
   const [invoiceDue, setInvoiceDue] = useState("");
   const [invoiceStage, setInvoiceStage] = useState("");
@@ -323,6 +328,26 @@ export default function ProjectWorkflow({
               </p>
             )}
 
+            {admin &&
+              clientProject &&
+              doc.kind === "agreement" &&
+              doc.status === "draft" && (
+                <label className="mt-5 flex items-start gap-3 text-sm leading-6">
+                  <input
+                    type="checkbox"
+                    className="mt-1 h-4 w-4 shrink-0"
+                    checked={Boolean(reviewedAgreements[doc.id])}
+                    onChange={(e) =>
+                      setReviewedAgreements((current) => ({
+                        ...current,
+                        [doc.id]: e.target.checked,
+                      }))
+                    }
+                  />
+                  I have reviewed this version&apos;s scope, fees,
+                  responsibilities, and agreement terms for this client.
+                </label>
+              )}
             <div className="mt-5 flex flex-wrap gap-3">
               {invoice &&
                 doc.status === "approved" &&
@@ -336,10 +361,16 @@ export default function ProjectWorkflow({
                 )}
               {admin && doc.status === "draft" && (
                 <button
-                  disabled={busy}
+                  disabled={
+                    busy ||
+                    (clientProject &&
+                      doc.kind === "agreement" &&
+                      !reviewedAgreements[doc.id])
+                  }
                   onClick={() =>
                     action("/api/portal/documents", "PATCH", {
                       documentId: doc.id,
+                      termsReviewed: Boolean(reviewedAgreements[doc.id]),
                     })
                   }
                   className={primaryButtonClass}
@@ -361,7 +392,8 @@ export default function ProjectWorkflow({
                     Prepare signing
                   </button>
                 )}
-              {request?.provider === "signwell-test" &&
+              {request &&
+                ["signwell-test", "signwell-live"].includes(request.provider) &&
                 request.status === "pending" && (
                   <button
                     disabled={busy}

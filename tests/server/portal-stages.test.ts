@@ -248,6 +248,11 @@ test("stage persistence isolates clients, protects issued invoices, and rejects 
         await release;
         return {
           id: "cs_test_reserved",
+          mode: "payment",
+          livemode: false,
+          amount_total: 50000,
+          currency: "usd",
+          metadata: params.metadata,
           url: "https://checkout.example.test/session",
           status: "open",
         };

@@ -1,4 +1,5 @@
 import "server-only";
+import { createHash } from "node:crypto";
 import { jsonText, type PortalStatement } from "./database-types";
 import { preparePrivateFile, privateFileBytes } from "./storage";
 import { audit, id, now, portalDb } from "./db";
@@ -9,6 +10,7 @@ import {
 } from "./documents";
 import { parseProjectDetails, type ProjectDetails } from "./schema";
 import type { PortalActor } from "./auth";
+import { assertClientProjectAccess } from "./configuration";
 import { isAdmin, mayAccessOrganization } from "./access";
 import {
   invoiceDraftSchema,
@@ -90,11 +92,8 @@ export async function getProjectBundle(projectId: string, actor: PortalActor) {
 export async function createProject(actor: PortalActor, raw: unknown) {
   if (!(await isAdmin(actor.userId))) throw new Error("Admin access required");
   const details = parseProjectDetails(raw);
-  if (!details.demo)
-    throw new Error(
-      "Only clearly labeled demo projects are enabled during this initial build",
-    );
   const db = await portalDb();
+  if (!details.demo) assertClientProjectAccess(actor.simulated, db.dialect);
   const orgId = id(),
     projectId = id(),
     at = now();
@@ -136,22 +135,32 @@ export async function updateProject(
 ) {
   if (!(await isAdmin(actor.userId))) throw new Error("Admin access required");
   const details = parseProjectDetails(raw);
-  if (!details.demo)
-    throw new Error(
-      "Only clearly labeled demo projects are enabled during this initial build",
-    );
   const db = await portalDb();
+  if (!details.demo) assertClientProjectAccess(actor.simulated, db.dialect);
   const project = (
     await db.execute({
-      sql: "SELECT organization_id,draft_version FROM projects WHERE id=?",
+      sql: "SELECT p.organization_id,p.draft_version,o.demo FROM projects p JOIN organizations o ON o.id=p.organization_id WHERE p.id=?",
       args: [projectId],
     })
   ).rows[0];
   if (!project) throw new Error("Project not found");
-  await db.execute({
-    sql: "UPDATE projects SET name=?,details_json=?,draft_version=draft_version+1,updated_at=? WHERE id=?",
-    args: [details.projectName, JSON.stringify(details), now(), projectId],
-  });
+  if (Boolean(project.demo) !== details.demo)
+    throw new Error(
+      "A project's example or client classification cannot be changed",
+    );
+  await db.batch(
+    [
+      {
+        sql: "UPDATE projects SET name=?,details_json=?,draft_version=draft_version+1,updated_at=? WHERE id=?",
+        args: [details.projectName, JSON.stringify(details), now(), projectId],
+      },
+      {
+        sql: "UPDATE organizations SET name=? WHERE id=?",
+        args: [details.organizationName, project.organization_id],
+      },
+    ],
+    "write",
+  );
   await audit(
     String(project.organization_id),
     projectId,
@@ -159,6 +168,67 @@ export async function updateProject(
     "project.draft.updated",
     { priorVersion: Number(project.draft_version) },
   );
+}
+
+export async function approveDocument(
+  actor: PortalActor,
+  documentId: string,
+  termsReviewed = false,
+) {
+  if (!(await isAdmin(actor.userId))) throw new Error("Admin access required");
+  const db = await portalDb();
+  const tx = await db.transaction("write");
+  try {
+    const document = (
+      await tx.execute({
+        sql: "SELECT d.*,f.sha256 FROM documents d JOIN private_files f ON f.id=d.file_id WHERE d.id=?",
+        args: [documentId],
+      })
+    ).rows[0];
+    if (!document || document.status !== "draft")
+      throw new Error("Only draft documents can be approved");
+    const details = parseProjectDetails(
+      JSON.parse(String(document.source_json)).details,
+    );
+    if (!details.demo && document.kind === "agreement" && !termsReviewed)
+      throw new Error(
+        "Confirm review of this agreement's scope, fees, responsibilities, and terms before sharing",
+      );
+    const changed = await tx.execute({
+      sql: "UPDATE documents SET status='approved' WHERE id=? AND status='draft'",
+      args: [documentId],
+    });
+    if (changed.rowsAffected !== 1)
+      throw new Error(
+        "This document was already reviewed. Refresh to see its status.",
+      );
+    await tx.execute({
+      sql: "INSERT INTO audit_events VALUES (?,?,?,?,?,?,?)",
+      args: [
+        id(),
+        document.organization_id,
+        document.project_id,
+        actor.userId,
+        "document.approved",
+        JSON.stringify({
+          documentId,
+          revision: document.revision,
+          fileSha256: document.sha256,
+          termsReviewed,
+          termsSha256: createHash("sha256")
+            .update(JSON.stringify(details.terms))
+            .digest("hex"),
+        }),
+        now(),
+      ],
+    });
+    await tx.commit();
+  } catch (error) {
+    await tx.rollback();
+    throw error;
+  } finally {
+    tx.close();
+  }
 }
 
 export async function createDocument(

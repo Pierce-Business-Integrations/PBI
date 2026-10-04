@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+import { ZodError } from "zod";
+import { formatValidationError } from "./schema";
 
 export function sameOrigin(request: NextRequest) {
   const origin = request.headers.get("origin");
@@ -7,6 +9,25 @@ export function sameOrigin(request: NextRequest) {
 }
 
 export function portalError(error: unknown) {
+  if (
+    error &&
+    typeof error === "object" &&
+    "type" in error &&
+    typeof error.type === "string" &&
+    error.type.startsWith("Stripe")
+  )
+    return NextResponse.json(
+      {
+        error:
+          "Online payments are temporarily unavailable. Please contact PBI.",
+      },
+      { status: 503 },
+    );
+  if (error instanceof ZodError)
+    return NextResponse.json(
+      { error: formatValidationError(error) },
+      { status: 400 },
+    );
   if (
     error &&
     typeof error === "object" &&

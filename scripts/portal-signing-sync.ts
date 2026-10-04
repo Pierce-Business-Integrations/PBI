@@ -1,6 +1,11 @@
-import { retrySignWellEvents } from "../src/lib/portal/signing";
-import { portalDb } from "../src/lib/portal/db";
+import { loadEnvConfig } from "@next/env";
+loadEnvConfig(process.cwd(), process.env.NODE_ENV !== "production", {
+  info() {},
+  error() {},
+});
 async function main() {
+  const { retrySignWellEvents } = await import("../src/lib/portal/signing");
+  const { portalDb } = await import("../src/lib/portal/db");
   if (!process.env.SIGNWELL_API_KEY)
     throw new Error("Configure SignWell before retrying queued events");
   try {

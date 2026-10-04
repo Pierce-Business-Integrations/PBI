@@ -8,5 +8,12 @@ export function supabaseAdmin() {
   if (!key) throw new Error("Supabase server configuration is required");
   return createClient(url, key, {
     auth: { autoRefreshToken: false, persistSession: false },
+    global: {
+      fetch: (input, options) =>
+        fetch(input, {
+          ...options,
+          signal: options?.signal ?? AbortSignal.timeout(20_000),
+        }),
+    },
   });
 }

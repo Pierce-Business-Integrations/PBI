@@ -66,6 +66,8 @@ test("hosted repository uses Postgres transactions and private storage without c
   const {
     createProject,
     createDocument,
+    approveDocument,
+    updateProject,
     getProjectBundle,
     getInvoiceBundle,
     getPrivateFile,
@@ -188,6 +190,78 @@ test("hosted repository uses Postgres transactions and private storage without c
       await getPrivateFile(clientA, fileId),
       "Voiding preserves the original archived PDF",
     );
+    const example = JSON.parse(
+      await readFile("docs/client-portal/example-project.json", "utf8"),
+    );
+    const clientDetails = {
+      ...example,
+      demo: false,
+      organizationName: "Isolated client",
+      terms: [
+        {
+          heading: "Test terms",
+          body: "Test-only reviewed language; not a real contract.",
+        },
+      ],
+    };
+    await assert.rejects(
+      () => createProject(owner, clientDetails),
+      /Enable client projects/,
+    );
+    process.env.PORTAL_ALLOW_CLIENT_PROJECTS = "true";
+    await assert.rejects(
+      () => createProject({ ...owner, simulated: true }, clientDetails),
+      /hosted owner/,
+    );
+    const clientProjectId = await createProject(owner, clientDetails);
+    await assert.rejects(
+      () =>
+        updateProject(owner, clientProjectId, { ...clientDetails, demo: true }),
+      /classification/,
+    );
+    const agreement = await createDocument(owner, clientProjectId, "agreement");
+    await assert.rejects(
+      () => approveDocument(clientA, agreement.documentId, true),
+      /Admin access/,
+    );
+    await assert.rejects(
+      () => approveDocument(owner, agreement.documentId),
+      /Confirm review/,
+    );
+    await approveDocument(owner, agreement.documentId, true);
+    const approval = (
+      await db.execute({
+        sql: "SELECT details_json FROM audit_events WHERE action='document.approved' AND project_id=?",
+        args: [clientProjectId],
+      })
+    ).rows[0];
+    const approvalDetails = JSON.parse(String(approval.details_json));
+    assert.equal(approvalDetails.termsReviewed, true);
+    assert.match(approvalDetails.fileSha256, /^[a-f0-9]{64}$/);
+    assert.match(approvalDetails.termsSha256, /^[a-f0-9]{64}$/);
+    await assert.rejects(
+      () => approveDocument(owner, agreement.documentId, true),
+      /Only draft/,
+    );
+    await updateProject(owner, clientProjectId, {
+      ...clientDetails,
+      organizationName: "Renamed isolated client",
+      summary: "Updated future draft",
+    });
+    const revised = (await getProjectBundle(clientProjectId, owner))!;
+    assert.equal(revised.project.organization_name, "Renamed isolated client");
+    const approved = (
+      await db.execute({
+        sql: "SELECT source_json,status FROM documents WHERE id=?",
+        args: [agreement.documentId],
+      })
+    ).rows[0];
+    assert.equal(
+      JSON.parse(String(approved.source_json)).details.summary,
+      clientDetails.summary,
+      "Editing the project cannot alter its reviewed agreement",
+    );
+    assert.equal(approved.status, "approved");
     objects.set(String(stored.storage_path), new Uint8Array([1, 2, 3]));
     await assert.rejects(() => getPrivateFile(clientA, fileId), /integrity/);
   } finally {

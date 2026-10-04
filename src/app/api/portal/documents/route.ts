@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { portalActor, requireAdmin } from "@/lib/portal/auth";
-import { createDocument } from "@/lib/portal/repository";
-import { audit, now, portalDb } from "@/lib/portal/db";
+import { approveDocument, createDocument } from "@/lib/portal/repository";
+import { z } from "zod";
 import { sameOrigin, portalError } from "@/lib/portal/http";
 import type { DocumentKind } from "@/lib/portal/documents";
 
@@ -42,27 +42,13 @@ export async function PATCH(request: NextRequest) {
   try {
     sameOrigin(request);
     const actor = await requireAdmin();
-    const { documentId } = (await request.json()) as { documentId: string };
-    const db = await portalDb();
-    const document = (
-      await db.execute({
-        sql: "SELECT * FROM documents WHERE id=?",
-        args: [documentId],
+    const { documentId, termsReviewed } = z
+      .object({
+        documentId: z.string().min(1),
+        termsReviewed: z.boolean().default(false),
       })
-    ).rows[0];
-    if (!document || document.status !== "draft")
-      throw new Error("Only draft documents can be approved");
-    await db.execute({
-      sql: "UPDATE documents SET status='approved' WHERE id=? AND status='draft'",
-      args: [documentId],
-    });
-    await audit(
-      String(document.organization_id),
-      String(document.project_id),
-      actor.userId,
-      "document.approved",
-      { documentId, at: now() },
-    );
+      .parse(await request.json());
+    await approveDocument(actor, documentId, termsReviewed);
     return NextResponse.json({ ok: true });
   } catch (error) {
     return portalError(error);

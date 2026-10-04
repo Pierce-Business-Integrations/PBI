@@ -9,6 +9,7 @@ import { isAdmin, mayAccessOrganization } from "./access";
 import { preparePrivateFile, privateFileBytes } from "./storage";
 import { readSigningFields } from "./signing-fields";
 import { signWellEventSchema, verifySignWellEvent } from "./signwell-events";
+import { assertProviderRecord } from "./configuration";
 
 const endpoint = "https://www.signwell.com/api/v1";
 export const signingConfigured = () =>
@@ -61,7 +62,7 @@ function matchesRequest(
   request: Record<string, unknown>,
 ) {
   if (
-    !resource.test_mode ||
+    resource.test_mode !== (request.provider !== "signwell-live") ||
     resource.id !== request.provider_id ||
     resource.metadata.portal_document_id !== request.document_id ||
     resource.metadata.portal_sign_id !== request.id
@@ -83,10 +84,8 @@ export async function startSigning(actor: PortalActor, documentId: string) {
   const details = parseProjectDetails(
     JSON.parse(String(doc.source_json)).details,
   );
-  if (!details.demo)
-    throw new Error(
-      "Only demo agreements may be sent to the signing sandbox in this build",
-    );
+  const mode = assertProviderRecord(details.demo, actor.simulated, db.dialect);
+  const providerName = mode === "live" ? "signwell-live" : "signwell-test";
   const bytes = await privateFileBytes(doc);
   const fields = await readSigningFields(bytes);
   const recipients = [...details.authorizedSigners]
@@ -138,7 +137,7 @@ export async function startSigning(actor: PortalActor, documentId: string) {
         doc.organization_id,
         doc.project_id,
         documentId,
-        real ? "signwell-test" : "development-simulation",
+        real ? providerName : "development-simulation",
         null,
         real ? "preparing" : "simulated_pending",
         JSON.stringify(recipients),
@@ -162,8 +161,8 @@ export async function startSigning(actor: PortalActor, documentId: string) {
       const response = await signWell("/documents", {
         method: "POST",
         body: JSON.stringify({
-          name: `PBI agreement — ${details.projectName}`,
-          test_mode: true,
+          name: `PBI agreement: ${details.projectName}`,
+          test_mode: mode === "test",
           draft: false,
           embedded_signing: true,
           embedded_signing_notifications: false,
@@ -214,6 +213,7 @@ export async function startSigning(actor: PortalActor, documentId: string) {
       }
       const resource = providerDocument.parse(await response.json());
       matchesRequest(resource, {
+        provider: providerName,
         id: signId,
         provider_id: resource.id,
         document_id: documentId,
@@ -237,13 +237,13 @@ export async function startSigning(actor: PortalActor, documentId: string) {
     "signing.started",
     {
       documentId,
-      provider: real ? "signwell-test" : "development-simulation",
-      testMode: true,
+      provider: real ? providerName : "development-simulation",
+      testMode: mode === "test",
     },
   );
   return {
     signId,
-    provider: real ? "signwell-test" : "development-simulation",
+    provider: real ? providerName : "development-simulation",
     status: real ? "pending" : "simulated_pending",
   };
 }
@@ -266,7 +266,7 @@ export async function signerUrl(actor: PortalActor, signId: string) {
     throw new Error("Signing request not found");
   if (
     actor.simulated ||
-    request.provider !== "signwell-test" ||
+    !["signwell-test", "signwell-live"].includes(String(request.provider)) ||
     request.status !== "pending"
   )
     throw new Error("Signing is unavailable for this request");
@@ -323,7 +323,7 @@ export async function voidSigning(actor: PortalActor, signId: string) {
     !["pending", "simulated_pending"].includes(String(request.status))
   )
     throw new Error("No cancellable signing request");
-  if (request.provider === "signwell-test") {
+  if (["signwell-test", "signwell-live"].includes(String(request.provider))) {
     const resource = await getProviderDocument(String(request.provider_id));
     matchesRequest(resource, request);
     if (resource.status.toLowerCase() === "completed")
@@ -403,7 +403,7 @@ export async function acceptSignWellEvent(raw: unknown) {
   const db = await portalDb();
   let request = (
     await db.execute({
-      sql: "SELECT id FROM sign_requests WHERE provider='signwell-test' AND provider_id=?",
+      sql: "SELECT id FROM sign_requests WHERE provider IN ('signwell-test','signwell-live') AND provider_id=?",
       args: [payload.data.object.id],
     })
   ).rows[0];
@@ -413,7 +413,7 @@ export async function acceptSignWellEvent(raw: unknown) {
     const resource = await getProviderDocument(payload.data.object.id);
     const reserved = (
       await db.execute({
-        sql: "SELECT * FROM sign_requests WHERE id=? AND provider='signwell-test' AND provider_id IS NULL AND status IN ('preparing','submission_unknown')",
+        sql: "SELECT * FROM sign_requests WHERE id=? AND provider IN ('signwell-test','signwell-live') AND provider_id IS NULL AND status IN ('preparing','submission_unknown')",
         args: [resource.metadata.portal_sign_id],
       })
     ).rows[0];
@@ -455,7 +455,7 @@ export async function processSignWellEvent(eventId: string) {
   );
   const request = (
     await db.execute({
-      sql: "SELECT * FROM sign_requests WHERE provider='signwell-test' AND provider_id=?",
+      sql: "SELECT * FROM sign_requests WHERE provider IN ('signwell-test','signwell-live') AND provider_id=?",
       args: [payload.data.object.id],
     })
   ).rows[0];
@@ -581,18 +581,22 @@ export async function processSignWellEvent(eventId: string) {
   } catch (error) {
     await db.execute({
       sql: "UPDATE provider_events SET last_error=? WHERE id=?",
-      args: ["Provider reconciliation pending; retry required", event.id],
+      args: [
+        `${now()}: Provider reconciliation pending; retry required`,
+        event.id,
+      ],
     });
     throw error;
   }
 }
 
-export async function retrySignWellEvents() {
+export async function retrySignWellEvents(limit = 10) {
   const db = await portalDb();
   const events = (
-    await db.execute(
-      "SELECT event_id FROM provider_events WHERE provider='signwell' AND processed_at IS NULL ORDER BY received_at LIMIT 50",
-    )
+    await db.execute({
+      sql: "SELECT event_id FROM provider_events WHERE provider='signwell' AND processed_at IS NULL ORDER BY CASE WHEN last_error IS NULL THEN 0 ELSE 1 END,CASE WHEN last_error LIKE '20%' THEN last_error ELSE received_at END,received_at LIMIT ?",
+      args: [limit],
+    })
   ).rows;
   let completed = 0;
   for (const event of events) {
@@ -603,5 +607,12 @@ export async function retrySignWellEvents() {
       /* Persisted for the next retry; never log signing links or document contents. */
     }
   }
-  return { completed, remaining: events.length - completed };
+  const remaining = Number(
+    (
+      await db.execute(
+        "SELECT count(*) AS count FROM provider_events WHERE provider='signwell' AND processed_at IS NULL",
+      )
+    ).rows[0]?.count || 0,
+  );
+  return { completed, remaining };
 }

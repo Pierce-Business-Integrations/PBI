@@ -253,6 +253,7 @@ export default async function ProjectPage({
           Proposals, agreements, and saved document versions.
         </p>
         <ProjectWorkflow
+          clientProject={!bundle.details.demo}
           projectId={id}
           organizationId={String(bundle.project.organization_id)}
           documents={bundle.documents

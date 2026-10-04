@@ -8,7 +8,8 @@ import {
 export default async function proxy(request: NextRequest) {
   if (
     !configuredSupabase ||
-    request.nextUrl.pathname.startsWith("/api/portal/webhooks/")
+    request.nextUrl.pathname.startsWith("/api/portal/webhooks/") ||
+    request.nextUrl.pathname === "/api/portal/maintenance"
   )
     return NextResponse.next();
   const { url, key } = supabasePublicConfig();
