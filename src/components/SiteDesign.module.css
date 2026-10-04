@@ -1,0 +1,467 @@
+.siteShell {
+  --site-cream: #f9f3ed;
+  --site-sage: #779c69;
+  --site-gold: #d8a45b;
+  --site-ink: #25332c;
+  --site-muted: #535c53;
+  --site-line: rgba(37, 51, 44, 0.17);
+  background: var(--site-cream);
+  color: var(--site-ink);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.container {
+  width: min(100% - 112px, 1280px);
+  margin-inline: auto;
+}
+
+.section {
+  padding-block: 108px;
+  background: var(--site-cream, #f9f3ed);
+  scroll-margin-top: 112px;
+}
+
+.sectionAlternate {
+  background: #f1eee5;
+}
+
+.pageHero {
+  position: relative;
+  isolation: isolate;
+  min-height: 540px;
+  overflow: hidden;
+  padding-block: 170px 100px;
+  background: #dce3cf;
+}
+
+.pageHeroHeading {
+  max-width: 1120px;
+  color: var(--site-ink, #25332c);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-size: clamp(48px, 6.6vw, 100px);
+  font-weight: 700;
+  letter-spacing: -0.065em;
+  line-height: 1.05;
+  text-wrap: balance;
+}
+
+.heroFade {
+  position: absolute;
+  inset: auto 0 0;
+  z-index: -1;
+  height: 145px;
+  background: linear-gradient(transparent, var(--site-cream, #f9f3ed));
+  pointer-events: none;
+}
+
+.label {
+  margin-bottom: 24px;
+  color: #47603e;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.025em;
+  line-height: 1.5;
+}
+
+.heroCopy {
+  max-width: 720px;
+  margin-top: 28px;
+  color: #3b483e;
+  font-size: clamp(17px, 1.6vw, 20px);
+  line-height: 1.8;
+}
+
+.headingBlock {
+  max-width: 820px;
+}
+
+.headingCentered {
+  margin-inline: auto;
+  text-align: center;
+}
+
+.sectionHeading {
+  color: var(--site-ink, #25332c);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-size: clamp(36px, 4.4vw, 58px);
+  font-weight: 600;
+  letter-spacing: -0.055em;
+  line-height: 1.12;
+  text-wrap: balance;
+}
+
+.sectionCopy {
+  margin-top: 24px;
+  color: var(--site-muted, #535c53);
+  font-size: 17px;
+  line-height: 1.8;
+}
+
+.light {
+  color: var(--site-cream, #f9f3ed);
+}
+
+.light .label,
+.label.light {
+  color: var(--site-gold, #d8a45b);
+}
+
+.light .sectionHeading,
+.sectionHeading.light {
+  color: var(--site-cream, #f9f3ed);
+}
+
+.light .sectionCopy,
+.sectionCopy.light {
+  color: rgba(249, 243, 237, 0.78);
+}
+
+.split {
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: 80px;
+}
+
+.smallHeading {
+  color: var(--site-ink, #25332c);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-size: clamp(26px, 2.9vw, 38px);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+.bodyCopy {
+  color: var(--site-muted, #535c53);
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 48px;
+  margin-top: 54px;
+}
+
+.steps > article {
+  border-top: 2px solid var(--site-sage, #779c69);
+  padding-top: 26px;
+}
+
+.steps h3 {
+  color: var(--site-ink, #25332c);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.25;
+}
+
+.steps p {
+  margin-top: 16px;
+  color: var(--site-muted, #535c53);
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.preserved {
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-weight: 300;
+  line-height: 1.7;
+}
+
+.preserved[data-design-preserve="team"] {
+  color: #1f1f1d;
+}
+
+.legalCopy {
+  max-width: 780px;
+  color: var(--site-muted, #535c53);
+  font-size: 16px;
+  line-height: 1.85;
+}
+
+.legalCopy h2 {
+  margin-top: 44px;
+  margin-bottom: 18px;
+  color: var(--site-ink, #25332c);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.25;
+}
+
+.legalCopy h2:first-child {
+  margin-top: 0;
+}
+
+.legalCopy p + p {
+  margin-top: 18px;
+}
+
+.legalCopy a {
+  color: #47603e;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* Explicit public button hooks leave portrait and dark-section typography alone. */
+.siteShell :global(.btn-brass),
+.siteShell :global(.btn-outline),
+.siteShell :global(.btn-outline-light) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  min-height: 54px;
+  padding: 14px 24px;
+  border-radius: 7px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.4;
+  box-shadow: none;
+  transform: none;
+  transition:
+    background-color 200ms ease,
+    border-color 200ms ease,
+    color 200ms ease;
+}
+
+.siteShell :global(.btn-brass) {
+  border: 1px solid var(--site-ink);
+  background: var(--site-ink);
+  color: var(--site-cream);
+}
+
+.siteShell :global(.btn-outline) {
+  border: 1px solid rgba(37, 51, 44, 0.32);
+  background: transparent;
+  color: var(--site-ink);
+}
+
+.siteShell :global(.btn-outline-light) {
+  border: 1px solid rgba(249, 243, 237, 0.4);
+  background: transparent;
+  color: var(--site-cream);
+}
+
+.siteShell :global(.btn-brass):is(:hover, :focus-visible) {
+  border-color: #3a4d3e;
+  background: #3a4d3e;
+  color: var(--site-cream);
+  box-shadow: none;
+  transform: none;
+}
+
+.siteShell :global(.btn-outline):is(:hover, :focus-visible) {
+  border-color: #47603e;
+  background: rgba(119, 156, 105, 0.09);
+  color: var(--site-ink);
+  box-shadow: none;
+  transform: none;
+}
+
+.siteShell :global(.btn-outline-light):is(:hover, :focus-visible) {
+  border-color: var(--site-cream);
+  background: rgba(249, 243, 237, 0.1);
+  color: var(--site-cream);
+  box-shadow: none;
+  transform: none;
+}
+
+.siteShell :global(.btn-brass) svg,
+.siteShell :global(.btn-outline) svg,
+.siteShell :global(.btn-outline-light) svg {
+  flex-shrink: 0;
+  transform: none;
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.siteShell :global(.btn-brass):is(:hover, :focus-visible) svg,
+.siteShell :global(.btn-outline):is(:hover, :focus-visible) svg,
+.siteShell :global(.btn-outline-light):is(:hover, :focus-visible) svg {
+  transform: translateX(3px);
+}
+
+.siteShell :global(.btn-brass):focus-visible,
+.siteShell :global(.btn-outline):focus-visible {
+  outline: 2px solid #40583a;
+  outline-offset: 5px;
+}
+
+.siteShell :global(.btn-outline-light):focus-visible {
+  outline: 2px solid var(--site-gold);
+  outline-offset: 5px;
+}
+
+/* Actual fields only: hidden spam tokens, honeypots, and checkboxes stay intact. */
+.formSurface
+  :where(
+    input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not(
+        [name="companyWebsite"]
+      ),
+    select,
+    textarea
+  ) {
+  min-height: 50px;
+  border: 1px solid rgba(37, 51, 44, 0.25);
+  border-radius: 6px;
+  background: #fcfaf7;
+  color: var(--site-ink, #25332c);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.formSurface input::placeholder,
+.formSurface textarea::placeholder {
+  color: #737a70;
+  opacity: 1;
+}
+
+.formSurface
+  :where(
+    input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not(
+        [name="companyWebsite"]
+      ),
+    select,
+    textarea
+  ):focus,
+.formSurface
+  :global(.form-inspection):focus-within
+  :where(
+    input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not(
+        [name="companyWebsite"]
+      ),
+    select,
+    textarea
+  ) {
+  border-color: #40583a;
+  outline: 2px solid rgba(64, 88, 58, 0.6);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+.formSurface
+  :where(
+    input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not(
+        [name="companyWebsite"]
+      ),
+    select,
+    textarea
+  )[aria-invalid="true"],
+.formSurface
+  :global(.form-inspection.has-error):focus-within
+  :where(
+    input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not(
+        [name="companyWebsite"]
+      ),
+    select,
+    textarea
+  ) {
+  border-color: #b42318;
+}
+
+.formSurface
+  :where(
+    input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not(
+        [name="companyWebsite"]
+      ),
+    select,
+    textarea
+  )[aria-invalid="true"]:focus {
+  outline-color: rgba(180, 35, 24, 0.7);
+}
+.formSurface :global(.form-inspection__annotation),
+.formSurface :global(.form-inspection__guide) {
+  display: none;
+}
+
+.formSurface :global(.form-section__heading) {
+  color: #47603e;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.025em;
+  text-transform: none;
+}
+
+.formSurface :global(.font-serif) {
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+@media (max-width: 1100px) {
+  .container {
+    width: calc(100% - 64px);
+  }
+
+  .split {
+    gap: 48px;
+  }
+
+  .steps {
+    gap: 32px;
+  }
+}
+
+@media (max-width: 767px) {
+  .container {
+    width: calc(100% - 40px);
+  }
+
+  .section {
+    padding-block: 76px;
+  }
+
+  .pageHero {
+    padding-block: 136px 76px;
+  }
+
+  .pageHeroHeading {
+    font-size: clamp(36px, 8vw, 58px);
+  }
+
+  .heroCopy {
+    font-size: 17px;
+  }
+
+  .split {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .sectionHeading {
+    font-size: clamp(34px, 7.4vw, 46px);
+  }
+
+  .steps {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    margin-top: 40px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .siteShell :global(.btn-brass),
+  .siteShell :global(.btn-outline),
+  .siteShell :global(.btn-outline-light),
+  .siteShell :global(.btn-brass) svg,
+  .siteShell :global(.btn-outline) svg,
+  .siteShell :global(.btn-outline-light) svg {
+    transition: none;
+  }
+
+  .siteShell :global(.btn-brass):is(:hover, :focus-visible) svg,
+  .siteShell :global(.btn-outline):is(:hover, :focus-visible) svg,
+  .siteShell :global(.btn-outline-light):is(:hover, :focus-visible) svg {
+    transform: none;
+  }
+}

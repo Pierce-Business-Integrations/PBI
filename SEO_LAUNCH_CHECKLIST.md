@@ -7,7 +7,7 @@
 3. Create or verify Google Search Console Domain properties for both domains, using DNS verification. Use Change of Address if the old domain is eligible.
 4. Submit `https://piercebusinessintegrations.com/sitemap.xml` in Search Console.
 5. Use URL Inspection on the homepage and each core service URL; confirm the declared canonical is the new apex URL and request indexing.
-6. Run PageSpeed Insights for the homepage, services, pricing, and contact pages after the production cache is warm. Review both mobile field data and the lab diagnostics.
+6. Run PageSpeed Insights for the homepage, services, How We Work, and contact pages after the production cache is warm. Review both mobile field data and the lab diagnostics.
 7. Test the homepage and service structured data with Google's Rich Results Test.
 8. Check Search Console weekly for indexing errors, duplicate canonicals, Core Web Vitals, queries, and pages receiving impressions.
 9. Add the site to Bing Webmaster Tools and submit the same sitemap.

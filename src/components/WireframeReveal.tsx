@@ -104,7 +104,7 @@ export default function WireframeReveal() {
     <div>
       <div
         ref={comparisonRef}
-        className="relative h-[50rem] w-full min-w-0 max-w-full overflow-hidden border border-charcoal/20 bg-ivory shadow-panel sm:h-[42rem] lg:h-auto lg:aspect-[16/10]"
+        className="relative h-[50rem] w-full min-w-0 max-w-full overflow-hidden border border-charcoal/20 bg-[#f9f3ed] sm:h-[42rem] lg:h-auto lg:aspect-[16/10]"
         style={{ "--reveal-position": "54%" } as CSSProperties}
       >
         <StructureView />
@@ -177,26 +177,9 @@ export default function WireframeReveal() {
   );
 }
 
-function BrowserBar({ dark = false }: { dark?: boolean }) {
-  return (
-    <div
-      className={`flex h-10 items-center gap-2 border-b px-4 ${dark ? "border-ivory/15" : "border-charcoal/10"}`}
-    >
-      <span className="h-2 w-2 rounded-full border border-brass/70" />
-      <span className="h-2 w-2 rounded-full border border-brass/70" />
-      <span className="h-2 w-2 rounded-full border border-brass/70" />
-      <span
-        className={`ml-3 h-px flex-1 ${dark ? "bg-ivory/10" : "bg-charcoal/10"}`}
-      />
-    </div>
-  );
-}
-
 function StructureView() {
   return (
-    <div className="absolute inset-0 bg-ivory-deep text-taupe">
-      <BrowserBar />
-      <div className="grid-texture absolute inset-x-0 bottom-0 top-10 opacity-70" />
+    <div className="absolute inset-0 bg-[#f1eee5] text-taupe">
       <div className="relative p-5 sm:p-8">
         <div className="flex items-center justify-between border-b border-charcoal/15 pb-4">
           <div className="h-7 w-24 border border-charcoal/25" />
@@ -239,12 +222,11 @@ function StructureView() {
 
 function ExperienceView() {
   return (
-    <div className="absolute inset-0 bg-ivory text-charcoal">
-      <BrowserBar />
+    <div className="absolute inset-0 bg-[#f9f3ed] text-charcoal">
       <div className="relative p-5 sm:p-8">
         <div className="flex items-center justify-between border-b border-charcoal/10 pb-4">
           <div>
-            <p className="font-serif text-lg font-semibold leading-none">
+            <p className="font-sans text-lg font-semibold leading-none">
               North Georgia
             </p>
             <p className="mt-1 text-[0.5rem] font-semibold uppercase tracking-[0.25em] text-foothill">
@@ -262,7 +244,7 @@ function ExperienceView() {
             <p className="text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-foothill">
               Dependable · Local · Skilled
             </p>
-            <h3 className="mt-4 font-serif text-[clamp(2rem,4vw,3.6rem)] leading-[0.98]">
+            <h3 className="mt-4 font-sans text-[clamp(2rem,4vw,3.6rem)] leading-[0.98]">
               Dependable work.
               <br />
               <span className="italic text-brass-deep">Close to home.</span>
@@ -284,22 +266,13 @@ function ExperienceView() {
         </div>
         <div className="mt-8 grid grid-cols-3 gap-3">
           <div className="border-t-2 border-foothill bg-ivory-deep p-3">
-            <span className="text-[0.55rem] uppercase tracking-wider text-taupe">
-              01
-            </span>
-            <p className="mt-2 font-serif text-sm">Clear scope</p>
+            <p className="font-sans text-sm">Clear scope</p>
           </div>
           <div className="border-t-2 border-brass bg-ivory-deep p-3">
-            <span className="text-[0.55rem] uppercase tracking-wider text-taupe">
-              02
-            </span>
-            <p className="mt-2 font-serif text-sm">Careful work</p>
+            <p className="font-sans text-sm">Careful work</p>
           </div>
           <div className="border-t-2 border-foothill bg-ivory-deep p-3">
-            <span className="text-[0.55rem] uppercase tracking-wider text-taupe">
-              03
-            </span>
-            <p className="mt-2 font-serif text-sm">Direct support</p>
+            <p className="font-sans text-sm">Direct support</p>
           </div>
         </div>
       </div>

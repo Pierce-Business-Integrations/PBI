@@ -23,7 +23,6 @@ export default function HomeSections() {
       <section id="services" className="section-pad bg-ivory">
         <div className="container-x">
           <SectionHeading
-            eyebrow="What We Do"
             title="Start with the problem. Choose the right solution."
             copy="We diagnose friction, design a practical way forward, and deliver working solutions. Custom systems and integrations lead our work; websites, care, and advertising are here when those are the right answer."
           />

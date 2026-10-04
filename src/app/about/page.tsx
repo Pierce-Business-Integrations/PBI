@@ -8,10 +8,11 @@ import TeamPortrait from "@/components/TeamPortrait";
 import TopographicContours from "@/components/TopographicContours";
 import { GeorgiaSeal } from "@/components/GeorgiaServiceAreaMap";
 import { pageMetadata } from "@/lib/site";
+import styles from "@/components/SiteDesign.module.css";
 
 export const metadata: Metadata = pageMetadata(
   "About Our Team",
-  "Meet Jacob, Mark, and Michael Pierce, the family-owned North Georgia team behind practical business systems, integrations, websites, and direct support.",
+  "We’re a family-owned business in North Georgia, helping local businesses improve how they work through custom software, connected systems, and straightforward support",
   "/about",
 );
 
@@ -20,13 +21,13 @@ const teamMembers = [
     name: "Jacob Pierce",
     role: "Founder & Solutions Architect",
     image: "/images/jacob.png",
-    imageClassName: "origin-center scale-[1.2] object-[58%_center]",
+    imageClassName: "origin-center scale-[1.25] object-[58%_center]",
   },
   {
     name: "Mark Pierce",
     role: "Director of Business Development",
     image: "/images/mark-pierce.webp",
-    imageClassName: "object-[50%_25%]",
+    imageClassName: "object-[50%_25%] scale-[1]",
   },
   {
     name: "Michael Pierce",
@@ -39,7 +40,6 @@ export default function AboutPage() {
   return (
     <>
       <PageHero
-        eyebrow="About Pierce Business Integrations"
         title={
           <>
             Local perspective.
@@ -51,19 +51,17 @@ export default function AboutPage() {
         Pierce Business Integrations helps North Georgia businesses use
         technology with more clarity, confidence, and practical purpose.
       </PageHero>
-      <section className="section-pad bg-ivory">
+      <section className={styles.section}>
         <div className="container-x">
           <SectionHeading
-            eyebrow="Family-owned. Locally rooted."
             title="A family-owned team focused on the business behind the technology"
             copy={
               <>
                 <p>
-                  We’re the Pierce family. We work with North Georgia businesses
-                  to understand how the work gets done, what gets in the way,
-                  and what needs to improve. Then we choose and implement
-                  practical solutions that fit the business and the people using
-                  them.
+                  We work with North Georgia businesses to understand how the
+                  work gets done, what gets in the way, and what needs to
+                  improve. Then we choose and implement practical solutions that
+                  fit the business and the people using them.
                 </p>
                 <p className="mt-5">
                   You work directly with us, from the first conversation through
@@ -76,16 +74,38 @@ export default function AboutPage() {
           />
           <div
             id="team"
-            className="mt-14 grid scroll-mt-36 gap-12 md:grid-cols-3 md:gap-6 lg:mt-16 xl:gap-10"
+            className={`${styles.preserved} mt-14 grid scroll-mt-36 gap-12 md:grid-cols-3 md:gap-6 lg:mt-16 xl:gap-10`}
+            data-design-preserve="team"
           >
             {teamMembers.map((member) => (
               <TeamPortrait key={member.name} {...member} />
             ))}
           </div>
         </div>
+      </section>
+      <section
+        className={`${styles.preserved} bg-charcoal py-14 text-ivory md:py-16`}
+        data-design-preserve="north-georgia"
+      >
+        <div className="container-x relative overflow-hidden border border-ivory/15 px-7 py-9 md:px-10">
+          <TopographicContours className="absolute -bottom-24 -right-24 w-[34rem] text-foothill-light opacity-10" />
+          <div className="relative grid items-center gap-7 md:grid-cols-[auto_1fr]">
+            <GeorgiaSeal className="h-20 w-20 text-brass" />
+            <div className="max-w-3xl">
+              <h2 className="font-serif text-3xl">Why North Georgia</h2>
+              <p className="mt-3 text-ivory/70">
+                This is home. We understand the businesses, communities, and
+                relationships that keep this area moving. We work to provide
+                those businesses with a direct and capable technology partner.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className={styles.section}>
         <div
           id="service-member-owned"
-          className="container-x mt-16 grid scroll-mt-28 items-center gap-9 border-y border-charcoal/15 py-9 md:grid-cols-[0.75fr_1.25fr] lg:mt-20 lg:gap-14 lg:py-11"
+          className="container-x grid scroll-mt-28 items-center gap-9 border-y border-charcoal/15 py-9 md:grid-cols-[0.75fr_1.25fr] lg:gap-14 lg:py-11"
         >
           <figure className="pointer-events-none mx-auto w-full max-w-[420px] select-none">
             <div className="relative pb-2.5 pr-2.5">
@@ -119,11 +139,10 @@ export default function AboutPage() {
             </figcaption>
           </figure>
           <div className="max-w-2xl">
-            <p className="eyebrow">Service-member-owned</p>
-            <h2 className="heading-serif mt-3 text-[clamp(2rem,4vw,3.35rem)] text-charcoal">
+            <h2 className={styles.smallHeading}>
               Service, carried into the work
             </h2>
-            <p className="mt-5 text-charcoal-soft">
+            <p className={`${styles.bodyCopy} mt-5`}>
               Pierce Business Integrations is a service-member-owned business.
               Founder Jacob Pierce currently serves in the United States Marine
               Corps Reserve, and that experience reinforces the same qualities
@@ -133,50 +152,30 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-      <section className="bg-charcoal py-14 text-ivory md:py-16">
-        <div className="container-x relative overflow-hidden border border-ivory/15 px-7 py-9 md:px-10">
-          <TopographicContours className="absolute -bottom-24 -right-24 w-[34rem] text-foothill-light opacity-10" />
-          <div className="relative grid items-center gap-7 md:grid-cols-[auto_1fr]">
-            <GeorgiaSeal className="h-20 w-20 text-brass" />
-            <div className="max-w-3xl">
-              <p className="text-[0.62rem] font-semibold uppercase tracking-[0.17em] text-brass-light">
-                Based in Auburn, Georgia
-              </p>
-              <h2 className="mt-3 font-serif text-3xl">Why North Georgia</h2>
-              <p className="mt-3 text-ivory/70">
-                This is home. We understand the businesses, communities, and
-                relationships that keep this area moving. We work to provide
-                those businesses with a direct and capable technology partner.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-      <section className="section-pad bg-ivory-deep">
-        <div className="container-x">
+      <section className={`${styles.section} ${styles.sectionAlternate}`}>
+        <div className={styles.container}>
           <SectionHeading
-            eyebrow="How We Work"
             title="Understand the business before choosing the technology"
             copy="The best technical solution is not always the largest or most complicated one. It is the one that addresses the real constraint, fits the team, and can be supported over time."
           />
-          <div className="mt-14 grid border-y border-charcoal/15 md:grid-cols-3">
-            <article className="py-8 md:pr-9">
-              <h3 className="font-serif text-2xl">Listen closely</h3>
-              <p className="mt-3 text-charcoal-soft">
+          <div className={`${styles.steps} ${styles.bodyCopy}`}>
+            <article>
+              <h3>Listen closely</h3>
+              <p>
                 Understand the customers, workflow, priorities, and constraints
                 before prescribing technology.
               </p>
             </article>
-            <article className="border-y border-charcoal/15 py-8 md:border-x md:border-y-0 md:px-9">
-              <h3 className="font-serif text-2xl">Build deliberately</h3>
-              <p className="mt-3 text-charcoal-soft">
+            <article>
+              <h3>Build deliberately</h3>
+              <p>
                 Create a clear, maintainable solution shaped around the business
                 rather than a rigid template.
               </p>
             </article>
-            <article className="py-8 md:pl-9">
-              <h3 className="font-serif text-2xl">Stay involved</h3>
-              <p className="mt-3 text-charcoal-soft">
+            <article>
+              <h3>Stay involved</h3>
+              <p>
                 Offer a direct path for support, review, and thoughtful
                 improvements as the business changes.
               </p>

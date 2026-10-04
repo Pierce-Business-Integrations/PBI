@@ -1,8 +1,16 @@
 import type { Metadata, Viewport } from "next";
-import Hero from "@/components/Hero";
-import HomeSections from "@/components/HomeSections";
-import Footer from "@/components/Footer";
+import { Inter } from "next/font/google";
+import clsx from "clsx";
+import HomePage from "@/components/homepage/HomePage";
+import styles from "@/components/homepage/Homepage.module.css";
 import { pageMetadata } from "@/lib/site";
+
+const homepageFont = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-homepage",
+  display: "swap",
+});
 
 export const metadata: Metadata = pageMetadata(
   "Business Systems & Integrations in North Georgia",
@@ -11,17 +19,11 @@ export const metadata: Metadata = pageMetadata(
 );
 
 export const viewport: Viewport = {
-  themeColor: "#071117",
-  colorScheme: "dark",
+  themeColor: "#f9f3ed",
+  colorScheme: "light",
   viewportFit: "cover",
 };
 
 export default function Home() {
-  return (
-    <>
-      <Hero />
-      <HomeSections />
-      <Footer />
-    </>
-  );
+  return <HomePage className={clsx(styles.page, homepageFont.variable)} />;
 }

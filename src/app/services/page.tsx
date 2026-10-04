@@ -5,6 +5,7 @@ import ServiceSummary from "@/components/ServiceSummary";
 import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
 import { pageMetadata, featuredServices } from "@/lib/site";
+import styles from "@/components/Services.module.css";
 
 export const metadata: Metadata = pageMetadata(
   "Business Solutions & Custom Systems",
@@ -16,14 +17,11 @@ export default function ServicesPage() {
   return (
     <>
       <PageHero
-        eyebrow="Solutions"
         title={
           <>
             Understand the problem.
             <br />
-            <span className="italic text-foothill">
-              Deliver a working solution.
-            </span>
+            Deliver a working solution.
           </>
         }
       >
@@ -31,40 +29,37 @@ export default function ServicesPage() {
         existing platform, integration, custom application, website, or
         advertising system.
       </PageHero>
-      <section id="service-options" className="section-pad bg-ivory">
-        <div className="container-x">
-          <SectionHeading
-            eyebrow="Ways We Can Help"
-            title="From operational systems to customer-facing work"
-          />
-          <div className="mt-14">
+      <section id="service-options" className={styles.section}>
+        <div className={styles.container}>
+          <SectionHeading title="From operational systems to customer-facing work" />
+          <div className={styles.summaryList}>
             {featuredServices.map((service) => (
               <ServiceSummary key={service.slug} service={service} />
             ))}
           </div>
         </div>
       </section>
-      <section className="section-pad bg-ivory-deep">
-        <div className="container-x grid gap-8 md:grid-cols-3">
+      <section className={styles.mutedSection}>
+        <div className={`${styles.container} ${styles.partnership}`}>
           <div>
-            <p className="eyebrow mb-4">The Problem</p>
-            <p className="text-charcoal-soft">
+            <h2>The Problem</h2>
+            <p>
               We identify the point of friction, missed opportunity, or unclear
               customer experience.
             </p>
           </div>
           <div>
-            <p className="eyebrow mb-4">The Scope</p>
-            <p className="text-charcoal-soft">
+            <h2>The Scope</h2>
+            <p>
               You receive a clear recommendation, deliverables, timeline, and
               price before work begins.
             </p>
           </div>
           <div>
-            <p className="eyebrow mb-4">The Partnership</p>
-            <p className="text-charcoal-soft">
-              You work directly with Jacob and have a clear path for support
-              after launch.
+            <h2>The Partnership</h2>
+            <p>
+              You work directly with the PBI team and have a clear path for
+              support after launch.
             </p>
           </div>
         </div>

@@ -9,10 +9,11 @@ import { useEffect, useRef } from "react";
 import { ArrowUpRight, FolderOpen, LifeBuoy, UserRound } from "lucide-react";
 import { Analytics } from "@vercel/analytics/next";
 import AnalyticsClickTracker from "./AnalyticsClickTracker";
-import Navbar from "./Navbar";
-import WindowFrame from "./WindowFrame";
 import { site } from "@/lib/site";
 import styles from "./Workspace.module.css";
+import HomeNavigation from "./homepage/HomeNavigation";
+import homepageStyles from "./homepage/Homepage.module.css";
+import siteStyles from "./SiteDesign.module.css";
 
 const workspacePaths = ["/portal", "/account", "/sign-in", "/sign-up", "/auth"];
 
@@ -32,9 +33,8 @@ export default function ExperienceFrame({
 
   if (!workspace) {
     return (
-      <>
-        <WindowFrame />
-        <Navbar />
+      <div className={`${homepageStyles.homeShell} ${siteStyles.siteShell}`}>
+        <HomeNavigation />
         <AttributionCapture />
         <Script
           id="google-ads-tag-loader"
@@ -51,13 +51,10 @@ gtag('js', new Date());
 gtag('config', 'AW-18304491645');`}</Script>
         <Analytics />
         <AnalyticsClickTracker />
-        <div
-          id="window-viewport"
-          className="relative z-10 min-h-[100dvh] overflow-x-clip scroll-pt-28 scroll-smooth lg:fixed lg:bottom-4 lg:left-4 lg:right-4 lg:top-[3.75rem] lg:min-h-0 lg:overflow-y-auto lg:overflow-x-hidden lg:rounded-b-2xl"
-        >
+        <div id="window-viewport" className={homepageStyles.homeViewport}>
           <main id="main-content">{children}</main>
         </div>
-      </>
+      </div>
     );
   }
 

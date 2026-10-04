@@ -6,15 +6,16 @@ import { usePathname } from "next/navigation";
 import { Menu, UserRound, X } from "lucide-react";
 import clsx from "clsx";
 import Brand from "./Brand";
+import { site } from "@/lib/site";
 
 const links = [
   { href: "/", label: "Home" },
   { href: "/services", label: "Solutions" },
   { href: "/services/automation", label: "Business Systems" },
-  { href: "/pricing", label: "Pricing" },
+  { href: "/how-we-work", label: "How We Work" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
-  { href: "/clients", label: "Clients" },
+  ...(site.clientPortalPublic ? [{ href: "/clients", label: "Clients" }] : []),
 ];
 
 export default function Navbar() {

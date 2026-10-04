@@ -26,8 +26,8 @@ export default function FormProgress({
   return (
     <>
       <div className="form-progress-mobile" aria-hidden="true">
-        <span>{String(active + 1).padStart(2, "0")} / 04</span>
-        <strong>{formSections[active]}</strong>
+        <span>Your inquiry</span>
+        <strong>{transmitting ? "Sending" : formSections[active]}</strong>
       </div>
       <aside className="form-progress" aria-hidden="true">
         <div className="form-progress__rail">
@@ -38,7 +38,10 @@ export default function FormProgress({
           {formSections.map((section, index) => (
             <li
               key={section}
-              style={{ top: positions[index] ?? 0 }}
+              style={{
+                top: positions[index] ?? 0,
+                gridTemplateColumns: "0.7rem auto",
+              }}
               className={clsx(
                 "form-progress__node",
                 index === active && "is-active",
@@ -46,9 +49,6 @@ export default function FormProgress({
               )}
             >
               <span className="form-progress__marker" />
-              <span className="form-progress__number">
-                {String(index + 1).padStart(2, "0")}
-              </span>
               <span>{section}</span>
             </li>
           ))}

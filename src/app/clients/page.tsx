@@ -3,13 +3,19 @@ import Link from "next/link";
 import { ArrowRight, FileText, FolderOpen, ReceiptText } from "lucide-react";
 import PageHero from "@/components/PageHero";
 import Footer from "@/components/Footer";
-import { pageMetadata } from "@/lib/site";
+import styles from "@/components/SiteDesign.module.css";
+import { pageMetadata, site } from "@/lib/site";
 
-export const metadata: Metadata = pageMetadata(
-  "Clients",
-  "A private workspace for Pierce Business Integrations clients to review their projects, documents, agreements, and invoices.",
-  "/clients",
-);
+export const metadata: Metadata = {
+  ...pageMetadata(
+    "Clients",
+    "A private workspace for Pierce Business Integrations clients to review their projects, documents, agreements, and invoices.",
+    "/clients",
+  ),
+  ...(!site.clientPortalPublic
+    ? { robots: { index: false, follow: false } }
+    : {}),
+};
 
 const clientSignInHref =
   process.env.VERCEL_ENV === "production"
@@ -20,7 +26,6 @@ export default function ClientsPage() {
   return (
     <>
       <PageHero
-        eyebrow="For current clients"
         title={
           <>
             Your work,{" "}
@@ -48,11 +53,10 @@ export default function ClientsPage() {
           </Link>
         </div>
       </PageHero>
-      <section className="section-pad bg-ivory">
-        <div className="container-x grid gap-12 lg:grid-cols-[1fr_1fr] lg:gap-20">
+      <section className={styles.section}>
+        <div className={`${styles.container} ${styles.split}`}>
           <div className="max-w-xl">
-            <p className="eyebrow">Client access</p>
-            <h2 className="heading-serif mt-4 text-4xl text-charcoal sm:text-5xl">
+            <h2 className={styles.sectionHeading}>
               Built for the work we’re doing together.
             </h2>
             <p className="mt-6 text-charcoal-soft">
@@ -102,7 +106,9 @@ export default function ClientsPage() {
                   className="mt-1 shrink-0 text-foothill"
                 />
                 <div>
-                  <h3 className="font-serif text-2xl text-charcoal">{title}</h3>
+                  <h3 className="text-2xl font-medium tracking-tight">
+                    {title}
+                  </h3>
                   <p className="mt-1 text-sm text-charcoal-soft">
                     {description}
                   </p>
@@ -112,23 +118,20 @@ export default function ClientsPage() {
           </div>
         </div>
       </section>
-      <section className="bg-charcoal py-16 text-ivory">
-        <div className="container-x flex flex-wrap items-center justify-between gap-8">
+      <section className={`${styles.section} ${styles.sectionAlternate}`}>
+        <div
+          className={`${styles.container} flex flex-wrap items-center justify-between gap-8`}
+        >
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass-light">
-              New to PBI?
-            </p>
-            <h2 className="mt-3 font-serif text-3xl sm:text-4xl">
-              Start with a conversation.
-            </h2>
-            <p className="mt-3 max-w-xl text-ivory/70">
+            <h2 className={styles.smallHeading}>Start with a conversation.</h2>
+            <p className={`${styles.bodyCopy} mt-4 max-w-xl`}>
               You do not need a client account to discuss a business problem or
               explore a project.
             </p>
           </div>
           <Link
             href="/contact"
-            className="btn-outline-light inline-flex items-center gap-2"
+            className="btn-outline inline-flex items-center gap-2"
           >
             Discuss a problem <ArrowRight size={17} aria-hidden="true" />
           </Link>

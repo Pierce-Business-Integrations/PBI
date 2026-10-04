@@ -1,0 +1,86 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 640 480"
+  fill="none"
+  role="img"
+  aria-labelledby="title desc"
+>
+  <title id="title">A clear message with a useful next step</title>
+  <desc id="desc">
+    A designed advertising message connects through an orderly communication
+    path to an inquiry envelope and an organized contact document.
+  </desc>
+  <g
+    stroke="#25332c"
+    stroke-width="1.6"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path d="m85 116 277-18 17 263-277 18z" fill="#dce3d3" stroke="none" />
+    <path d="m66 100 277-18 17 263-277 18z" fill="#fcfaf7" />
+    <path d="m81 115 247-16 7 113-247 16z" fill="#dce3d3" stroke="none" />
+    <path
+      d="m117 215-4-39a53 53 0 0 1 106-7l4 39"
+      fill="#779c69"
+      stroke="none"
+    />
+    <path d="m139 213-3-32a31 31 0 0 1 62-4l3 32" stroke="#fcfaf7" />
+    <path d="m250 132 60-4 4 60-60 4z" fill="#d8a45b" stroke="none" />
+    <path
+      d="m266 150 16 12 17-14m-17 14 1 17"
+      stroke="#fcfaf7"
+      stroke-width="2"
+    />
+    <path
+      d="m94 249 174-11m-173 26 144-10"
+      stroke="#25332c"
+      stroke-width="8"
+      stroke-linecap="butt"
+    />
+    <path d="m98 290 211-14m-210 25 174-11" stroke="#779c69" />
+    <path d="m99 321 85-5 1 21-85 5z" fill="#47603e" stroke="none" />
+    <path d="m111 331 51-3m-5-4 6 4-5 4" stroke="#f9f3ed" />
+    <path
+      d="M376 156h44c35 0 45-15 45-40V89"
+      stroke="#779c69"
+      stroke-width="2"
+    />
+    <path d="m459 96 6-7 6 7" stroke="#779c69" stroke-width="2" />
+    <path
+      d="M393 203h46c24 0 39 16 39 40v26"
+      stroke="#779c69"
+      stroke-width="2"
+    />
+    <path d="m472 262 6 7 6-7" stroke="#779c69" stroke-width="2" />
+    <path
+      d="M389 129a36 36 0 0 1 0 54m16-67a54 54 0 0 1 0 81"
+      stroke="#d8a45b"
+      stroke-width="2"
+    />
+    <path d="M420 63h116v25H420z" fill="#dce3d3" stroke="none" />
+    <path d="M435 75h67m-67 31h85m-85 31h58" stroke="#779c69" />
+    <path
+      d="M420 98h116v21H420zM420 129h116v21H420z"
+      fill="#fcfaf7"
+      stroke="#dce3d3"
+    />
+    <path d="M435 108h85m-85 31h58" stroke="#779c69" />
+    <path d="M439 292h136v145H439z" fill="#dce3d3" stroke="none" />
+    <path d="M426 278h136v145H426z" fill="#fcfaf7" />
+    <path d="M444 300h55v8h-55z" fill="#25332c" stroke="none" />
+    <path d="M445 327h99m-99 12h78m-78 12h88" stroke="#779c69" />
+    <path d="M445 376h76m-76 12h54" stroke="#dce3d3" />
+    <path d="M344 333h131v85H344z" fill="#dce3d3" stroke="none" />
+    <path d="M333 322h131v85H333z" fill="#f9f3ed" />
+    <path d="m333 322 66 47 65-47" stroke="#47603e" />
+    <path d="m333 407 48-51m83 51-47-51" stroke="#779c69" />
+    <path d="M151 407h136c14 0 22-9 22-22v-22" stroke="#d8a45b" />
+    <path d="m303 370 6-7 6 7" stroke="#d8a45b" />
+    <path d="M120 392v30m-8-22h16m-16 14h16" stroke="#d8a45b" />
+    <path
+      d="M116 397h8v6h-8zM116 411h8v6h-8z"
+      fill="#fcfaf7"
+      stroke="#d8a45b"
+    />
+  </g>
+</svg>

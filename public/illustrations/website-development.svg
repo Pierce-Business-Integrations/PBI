@@ -1,0 +1,72 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 640 480"
+  fill="none"
+  role="img"
+  aria-labelledby="title desc"
+>
+  <title id="title">A website designed around the work it needs to do</title>
+  <desc id="desc">
+    A carefully arranged website canvas and a coordinated mobile layout, with a
+    small selection cursor connecting design to function.
+  </desc>
+  <g
+    stroke="#25332c"
+    stroke-width="1.6"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path d="M76 105h380v275H76z" fill="#dce3d3" stroke="none" />
+    <path d="M59 88h388v277H59z" fill="#fcfaf7" />
+    <path d="M59 141h388" stroke="#dce3d3" />
+    <path d="M83 109h12v12H83z" fill="#779c69" stroke="none" />
+    <path d="m95 109 8 6-8 6" stroke="#47603e" />
+    <path d="M321 115h28m14 0h22m14 0h24" stroke="#779c69" />
+    <path
+      d="M86 171h117v12H86zM86 192h145v12H86z"
+      fill="#25332c"
+      stroke="none"
+    />
+    <path d="M86 226h124m-124 9h102m-102 9h112" stroke="#779c69" />
+    <path d="M86 269h87v27H86z" fill="#47603e" stroke="none" />
+    <path d="M102 282h48m-6-4 5 4-5 4" stroke="#f9f3ed" />
+    <path d="M273 158h149v145H273z" fill="#dce3d3" stroke="none" />
+    <path d="M288 287v-67a58 58 0 0 1 116 0v67" fill="#779c69" stroke="none" />
+    <path
+      d="M307 287v-60a39 39 0 0 1 78 0v60"
+      stroke="#fcfaf7"
+      stroke-width="1.8"
+    />
+    <path d="M336 257v-30a10 10 0 0 1 20 0v30" fill="#d8a45b" stroke="none" />
+    <path d="M59 322h388" stroke="#dce3d3" />
+    <path d="M85 343h58m32 0h64m30 0h65" stroke="#779c69" />
+    <path d="M453 123h127v298H453z" fill="#dce3d3" stroke="none" />
+    <rect x="440" y="109" width="126" height="298" rx="17" fill="#fcfaf7" />
+    <path d="M473 121h60" stroke="#dce3d3" stroke-width="3" />
+    <path d="M454 144h98v100h-98z" fill="#dce3d3" stroke="none" />
+    <path d="M466 234v-46a37 37 0 0 1 74 0v46" fill="#779c69" stroke="none" />
+    <path d="M482 234v-39a21 21 0 0 1 42 0v39" stroke="#fcfaf7" />
+    <path
+      d="M455 263h84v9h-84zM455 281h68v9h-68z"
+      fill="#25332c"
+      stroke="none"
+    />
+    <path d="M455 311h89m-89 9h72m-72 9h80" stroke="#779c69" />
+    <path d="M455 353h96v27h-96z" fill="#47603e" stroke="none" />
+    <path d="M476 366h53m-5-4 5 4-5 4" stroke="#f9f3ed" />
+    <path d="M235 254h41v48h-41z" stroke="#d8a45b" />
+    <path
+      d="M232 251h6v6h-6zM273 251h6v6h-6zM232 299h6v6h-6zM273 299h6v6h-6z"
+      fill="#fcfaf7"
+      stroke="#d8a45b"
+    />
+    <path
+      d="m252 275 16 35 5-12 13-4z"
+      fill="#25332c"
+      stroke="#fcfaf7"
+      stroke-width="2"
+    />
+    <path d="M95 392h296" stroke="#dce3d3" />
+    <path d="m385 387 6 5-6 5" stroke="#779c69" />
+  </g>
+</svg>

@@ -15,17 +15,17 @@ const config: Config = {
           soft: "#3a3a37",
         },
         ivory: {
-          DEFAULT: "#F7F3ED",
-          deep: "#efe8dc",
+          DEFAULT: "#F1E8DC",
+          deep: "#E5D9C8",
         },
         brass: {
           DEFAULT: "#B89456",
           deep: "#9c7a3f",
           light: "#d3b986",
         },
-        taupe: "#8E8578",
+        taupe: "#685E52",
         foothill: {
-          DEFAULT: "#5D6E5E",
+          DEFAULT: "#546453",
           deep: "#495847",
           light: "#A8B6A6",
         },

@@ -4,6 +4,8 @@ export const site = {
   name: "Pierce Business Integrations",
   tagline: "Modern solutions. Local partnership.",
   url: "https://piercebusinessintegrations.com",
+  // Restore public portal navigation and indexing once the workflow is ready.
+  clientPortalPublic: false,
   // Publish an address only after its mailbox has been created and verified.
   email: /^[^\s@]+@pbintegrations\.com$/i.test(
     process.env.NEXT_PUBLIC_CONTACT_EMAIL?.trim() || "",
@@ -12,7 +14,7 @@ export const site = {
     : "",
   location: "North Georgia",
   area: "Gwinnett, Hall, Barrow, Forsyth, and surrounding North Georgia communities",
-  contentUpdatedAt: "2026-10-02",
+  contentUpdatedAt: "2026-10-03",
   description:
     "Pierce Business Integrations helps North Georgia businesses improve workflows and implement practical systems, integrations, websites, and advertising.",
 };

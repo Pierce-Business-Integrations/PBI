@@ -23,7 +23,6 @@ export default function SimplifiedProcess() {
     <section id="process" className="section-pad scroll-mt-24 bg-ivory">
       <div className="container-x">
         <SectionHeading
-          eyebrow="A Simple Process"
           title="From business diagnosis to measurable improvement"
           copy="The proposal defines the approach, work, investment, and realistic measures before implementation begins."
         />

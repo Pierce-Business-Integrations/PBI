@@ -53,11 +53,23 @@ const nextConfig = {
         destination: "/portal",
         permanent: false,
       },
+      {
+        source: "/pricing",
+        has: [{ type: "host", value: clientHost }],
+        destination: `https://${publicHost}/how-we-work`,
+        permanent: true,
+      },
+      // Migrate the public price list before route rendering; query strings pass through.
+      {
+        source: "/pricing",
+        destination: "/how-we-work",
+        permanent: true,
+      },
       ...[
         "/clients",
         "/contact",
         "/about",
-        "/pricing",
+        "/how-we-work",
         "/services/:path*",
         "/project-intake/:path*",
         "/thank-you",

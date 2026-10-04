@@ -212,10 +212,9 @@ function Section({
       className="border-t border-charcoal/20 py-9 sm:py-12"
       aria-labelledby={`intake-section-${number}`}
     >
-      <p className="eyebrow text-foothill">{number} / Project Discovery</p>
       <h2
         id={`intake-section-${number}`}
-        className="heading-serif mt-3 text-2xl sm:text-3xl"
+        className="heading-serif text-2xl sm:text-3xl"
       >
         {title}
       </h2>
@@ -352,8 +351,7 @@ export default function ProjectIntakeForm() {
         </label>
       </div>
       <div className="border-l border-brass/60 pl-5">
-        <p className="eyebrow">A complete starting picture</p>
-        <p className="mt-2 max-w-3xl text-sm leading-6 text-charcoal-soft">
+        <p className="max-w-3xl text-sm leading-6 text-charcoal-soft">
           Core questions are required. Service-specific questions are optional
           but help shape a practical proposal. Nothing here commits you to a
           particular solution.

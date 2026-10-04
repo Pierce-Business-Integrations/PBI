@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="480" viewBox="0 0 640 480" fill="none">
+  <title>Connected business systems</title>
+  <desc>Records from separate tools connect through an organized central system and arrive as a clear handoff.</desc>
+
+  <path d="M209 82H362C447 82 515 151 515 235V383H362C278 383 209 315 209 231V82Z" fill="#dce3d3" fill-opacity=".54"/>
+
+  <!-- Purposeful routes between the records, system, and completed handoff. -->
+  <g stroke="#47603e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M175 159H222C240 159 244 178 244 191V217H278"/>
+    <path d="M163 318H218C236 318 244 301 244 284V262H278"/>
+    <path d="M401 240H433C451 240 461 252 461 270V297H482"/>
+  </g>
+  <g fill="#f9f3ed" stroke="#47603e" stroke-width="2">
+    <circle cx="244" cy="217" r="5"/>
+    <circle cx="244" cy="262" r="5"/>
+    <circle cx="461" cy="270" r="5"/>
+  </g>
+  <path d="m207 154 5 5-5 5M207 313l5 5-5 5M429 235l5 5-5 5" stroke="#d8a45b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- A working record and a stack of information from existing tools. -->
+  <path d="M76 102H165V207H76V102Z" fill="#25332c" fill-opacity=".05"/>
+  <path d="M68 94H150L174 118V198H68V94Z" fill="#fcfaf7" stroke="#25332c" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M150 94V118H174" fill="#e8eadf"/>
+  <path d="M150 94V118H174" stroke="#25332c" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M87 136H151M87 151H134M87 166H146M87 181H116" stroke="#47603e" stroke-width="2" stroke-linecap="round"/>
+  <path d="M68 94H131V104H68V94Z" fill="#779c69"/>
+
+  <path d="M62 274H165V369H62V274Z" fill="#d8a45b" fill-opacity=".13"/>
+  <path d="M72 258H174V355H72V258Z" fill="#fcfaf7" stroke="#25332c" stroke-width="1.5"/>
+  <path d="M82 248H184V345H82V248Z" fill="#fcfaf7" stroke="#25332c" stroke-width="1.5"/>
+  <path d="M82 248H184V275H82V248Z" fill="#dce3d3"/>
+  <path d="M82 275H184M96 291H170M96 307H157M96 324H170" stroke="#47603e" stroke-width="1.5" stroke-linecap="round"/>
+
+  <!-- A single organized system: records align, no invented dashboard data. -->
+  <path d="M285 171H408V312H285V171Z" fill="#25332c" fill-opacity=".07"/>
+  <rect x="277" y="161" width="125" height="141" rx="4" fill="#fcfaf7" stroke="#25332c" stroke-width="1.5"/>
+  <path d="M277 187H402" stroke="#25332c" stroke-width="1.5"/>
+  <path d="M291 174H325" stroke="#47603e" stroke-width="3" stroke-linecap="round"/>
+  <path d="M298 203H381V223H298V203Z" fill="#dce3d3"/>
+  <path d="M298 232H381V252H298V232Z" fill="#dce3d3"/>
+  <path d="M298 261H381V281H298V261Z" fill="#e8d2ae"/>
+  <path d="M309 213H367M309 242H358M309 271H367" stroke="#47603e" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M263 207H277M263 270H277M402 240H416" stroke="#25332c" stroke-width="1.5"/>
+
+  <!-- A handoff with the context carried forward. -->
+  <path d="M484 228H565V361H484V228Z" fill="#25332c" fill-opacity=".06"/>
+  <path d="M477 218H538L565 245V352H477V218Z" fill="#fcfaf7" stroke="#25332c" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M538 218V245H565" fill="#dce3d3"/>
+  <path d="M538 218V245H565" stroke="#25332c" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M493 275H547M493 289H540M493 328H526" stroke="#47603e" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M493 305H532" stroke="#d8a45b" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="552" cy="337" r="24" fill="#779c69" stroke="#47603e" stroke-width="1.5"/>
+  <path d="m542 337 7 7 13-15" stroke="#fcfaf7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

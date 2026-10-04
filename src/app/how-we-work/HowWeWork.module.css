@@ -1,0 +1,254 @@
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 24px 32px;
+  margin-top: 32px;
+}
+
+.textLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  color: #25332c;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
+  text-decoration: underline;
+  text-decoration-color: rgba(71, 96, 62, 0.4);
+  text-underline-offset: 5px;
+}
+
+.textLink svg {
+  flex-shrink: 0;
+  transition: transform 200ms ease;
+}
+
+.textLink:hover {
+  color: #47603e;
+  text-decoration-color: currentColor;
+}
+
+.textLink:hover svg {
+  transform: translateX(3px);
+}
+
+.textLink:focus-visible,
+.faq summary:focus-visible {
+  border-radius: 3px;
+  outline: 2px solid #40583a;
+  outline-offset: 6px;
+}
+
+.process {
+  margin-top: 56px;
+  border-top: 1px solid rgba(37, 51, 44, 0.17);
+}
+
+.processIntro {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  align-items: center;
+  gap: 80px;
+}
+
+.step {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.8fr) minmax(0, 1.2fr);
+  align-items: start;
+  gap: 32px;
+  padding-block: 36px;
+  border-bottom: 1px solid rgba(37, 51, 44, 0.17);
+  scroll-margin-top: 120px;
+}
+
+.step h3 {
+  color: #25332c;
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-size: clamp(23px, 2.2vw, 30px);
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 1.25;
+  text-wrap: balance;
+}
+
+.step p,
+.copy p,
+.faq p {
+  color: #535c53;
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.proposalLayout,
+.communication,
+.faqLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  align-items: start;
+  gap: 80px;
+}
+
+.copy p + p {
+  margin-top: 20px;
+}
+
+.copy > div + p {
+  margin-top: 24px;
+}
+
+.proposalSheet {
+  margin: 0;
+  padding: 36px;
+  border: 1px solid rgba(37, 51, 44, 0.17);
+  border-top: 3px solid #779c69;
+  background: #fcfaf7;
+}
+
+.proposalSheet figcaption {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 30px;
+  margin-bottom: 24px;
+  color: #25332c;
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+}
+
+.proposalSheet dl > div {
+  padding-block: 20px;
+  border-top: 1px solid rgba(37, 51, 44, 0.17);
+}
+
+.sheetLogo {
+  width: 180px;
+  max-width: 100%;
+  height: auto;
+}
+
+.proposalSheet dt {
+  color: #25332c;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.proposalSheet dd {
+  margin-top: 8px;
+  color: #535c53;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.sheetFooter {
+  padding-top: 20px;
+  border-top: 1px solid rgba(37, 51, 44, 0.17);
+  color: #47603e;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.copy .textLink {
+  margin-top: 24px;
+}
+
+.communication {
+  border-top: 2px solid #779c69;
+  padding-top: 48px;
+}
+
+.faqs {
+  border-top: 1px solid rgba(37, 51, 44, 0.17);
+}
+
+.faq {
+  border-bottom: 1px solid rgba(37, 51, 44, 0.17);
+}
+
+.faq summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 68px;
+  padding-block: 22px;
+  color: #25332c;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.5;
+  list-style: none;
+}
+
+.faq summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq summary svg {
+  flex-shrink: 0;
+  color: #47603e;
+  transition: transform 180ms ease;
+}
+
+.faq[open] summary svg {
+  transform: rotate(45deg);
+}
+
+.faq p {
+  padding-bottom: 24px;
+}
+
+@media (max-width: 1100px) {
+  .step {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: 24px;
+  }
+
+  .proposalLayout,
+  .processIntro,
+  .communication,
+  .faqLayout {
+    gap: 48px;
+  }
+}
+
+@media (max-width: 767px) {
+  .process {
+    margin-top: 40px;
+  }
+
+  .step {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding-block: 28px;
+  }
+
+  .proposalLayout,
+  .processIntro,
+  .communication,
+  .faqLayout {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .communication {
+    padding-top: 32px;
+  }
+
+  .proposalSheet {
+    padding: 24px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .textLink svg,
+  .faq summary svg {
+    transition: none;
+  }
+
+  .textLink:hover svg {
+    transform: none;
+  }
+}
