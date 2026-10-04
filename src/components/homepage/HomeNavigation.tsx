@@ -10,9 +10,10 @@ import { site } from "@/lib/site";
 import styles from "./Homepage.module.css";
 
 const links = [
+  { label: "Home", href: "/" },
   { label: "Solutions", href: "/services" },
   { label: "Business systems", href: "/services/automation" },
-  { label: "How We Work", href: "/how-we-work" },
+  { label: "Our Approach", href: "/how-we-work" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];

@@ -29,7 +29,7 @@ export default function Footer() {
             <p>Explore</p>
             <Link href="/services">Solutions</Link>
             <Link href="/services/automation">Business systems</Link>
-            <Link href="/how-we-work">How We Work</Link>
+            <Link href="/how-we-work">Our Approach</Link>
             <Link href="/about">About PBI</Link>
             <Link href="/contact">Contact</Link>
             {site.clientPortalPublic && <Link href="/clients">Clients</Link>}

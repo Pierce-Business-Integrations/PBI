@@ -72,7 +72,7 @@ function WhatCustomUnlocksSection() {
             data-analytics-location="web_design_custom_unlocks"
             data-analytics-target="how-we-work"
           >
-            How we work
+            Our Approach
           </Link>
           <Link
             href="/contact"

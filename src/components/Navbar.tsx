@@ -12,7 +12,7 @@ const links = [
   { href: "/", label: "Home" },
   { href: "/services", label: "Solutions" },
   { href: "/services/automation", label: "Business Systems" },
-  { href: "/how-we-work", label: "How We Work" },
+  { href: "/how-we-work", label: "Our Approach" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
   ...(site.clientPortalPublic ? [{ href: "/clients", label: "Clients" }] : []),
