@@ -15,7 +15,7 @@ const description =
   "See how Pierce Business Integrations takes a project from the first conversation through discovery, a scoped proposal, implementation, and ongoing support.";
 
 export const metadata: Metadata = pageMetadata(
-  "How We Work",
+  "Our Approach",
   description,
   "/how-we-work",
 );
@@ -82,7 +82,7 @@ export default function HowWeWorkPage() {
             then build the right solution.
           </>
         }
-        breadcrumbs={[{ label: "How We Work", href: "/how-we-work" }]}
+        breadcrumbs={[{ label: "Our Approach", href: "/how-we-work" }]}
       >
         <p>
           Custom software, systems integration, practical AI, websites, and
@@ -115,7 +115,7 @@ export default function HowWeWorkPage() {
                 "@type": "WebPage",
                 "@id": `${site.url}/how-we-work#webpage`,
                 url: `${site.url}/how-we-work`,
-                name: "How We Work | Pierce Business Integrations",
+                name: "Our Approach | Pierce Business Integrations",
                 description,
                 about: { "@id": `${site.url}/#organization` },
               },

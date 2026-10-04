@@ -203,7 +203,7 @@ export default function HomePage({ className }: { className: string }) {
               data-analytics-location="homepage_process"
               data-analytics-target="how-we-work"
             >
-              How We Work <ArrowRight size={18} aria-hidden="true" />
+              Our Approach <ArrowRight size={18} aria-hidden="true" />
             </Link>
           </div>
         </div>
