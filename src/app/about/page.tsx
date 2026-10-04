@@ -16,12 +16,19 @@ export const metadata: Metadata = pageMetadata(
   "/about",
 );
 
+// These portraits are enlarged inside the arches. Request enough pixels for
+// both the CSS zoom and object-cover crop, rather than just the frame width.
+const zoomedPortraitSizes =
+  "(max-width: 767px) 165vw, (max-width: 1279px) 85vw, 560px";
+
 const teamMembers = [
   {
     name: "Jacob Pierce",
     role: "Founder & Solutions Architect",
     image: "/images/jacob.png",
     imageClassName: "origin-center scale-[1.25] object-[58%_center]",
+    quality: 95,
+    imageSizes: zoomedPortraitSizes,
   },
   {
     name: "Mark Pierce",
@@ -33,6 +40,14 @@ const teamMembers = [
     name: "Michael Pierce",
     role: "AI & Systems Engineer",
     image: "/images/michael-pierce.webp",
+  },
+  {
+    name: "Trinity Pierce",
+    role: "Content & Marketing Coordinator",
+    image: "/images/trinity-pierce.jpg",
+    imageClassName: "origin-[40%_37%] scale-[1.75] object-[50%_30%]",
+    quality: 95,
+    imageSizes: zoomedPortraitSizes,
   },
 ];
 
@@ -74,11 +89,18 @@ export default function AboutPage() {
           />
           <div
             id="team"
-            className={`${styles.preserved} mt-14 grid scroll-mt-36 gap-12 md:grid-cols-3 md:gap-6 lg:mt-16 xl:gap-10`}
+            className={`${styles.preserved} mt-14 grid scroll-mt-36 gap-12 md:grid-cols-2 md:gap-6 lg:mt-16 xl:grid-cols-4 xl:gap-10`}
             data-design-preserve="team"
           >
             {teamMembers.map((member) => (
-              <TeamPortrait key={member.name} {...member} />
+              <TeamPortrait
+                key={member.name}
+                {...member}
+                sizes={
+                  member.imageSizes ??
+                  "(max-width: 767px) 86vw, (max-width: 1279px) 44vw, 300px"
+                }
+              />
             ))}
           </div>
         </div>

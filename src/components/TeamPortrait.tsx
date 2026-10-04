@@ -8,6 +8,7 @@ export default function TeamPortrait({
   imageClassName,
   className,
   sizes = "(max-width: 767px) 86vw, (max-width: 1279px) 30vw, 400px",
+  quality = 75,
 }: {
   name: string;
   role: string;
@@ -15,6 +16,7 @@ export default function TeamPortrait({
   imageClassName?: string;
   className?: string;
   sizes?: string;
+  quality?: number;
 }) {
   return (
     <figure
@@ -34,7 +36,7 @@ export default function TeamPortrait({
             alt={`${name}, ${role} at Pierce Business Integrations`}
             fill
             sizes={sizes}
-            quality={75}
+            quality={quality}
             draggable={false}
             className={clsx(
               "pointer-events-none select-none object-cover",

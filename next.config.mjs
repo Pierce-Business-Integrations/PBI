@@ -21,7 +21,7 @@ const nextConfig = {
   outputFileTracingExcludes: { "/*": ["./.data/**/*"] },
   allowedDevOrigins: ["192.168.1.47"],
   images: {
-    qualities: [75],
+    qualities: [75, 95],
   },
   async redirects() {
     return [
