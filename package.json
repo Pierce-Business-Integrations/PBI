@@ -12,6 +12,7 @@
     "test": "tsx --test tests/*.test.ts",
     "test:portal-repository": "node --conditions=react-server --import tsx --test tests/server/*.test.ts",
     "typecheck": "tsc --noEmit",
+    "check:seo": "node scripts/check-seo.mjs",
     "portal:admin": "node --conditions=react-server --import tsx scripts/portal-admin.ts",
     "portal:signing-sync": "node --conditions=react-server --import tsx scripts/portal-signing-sync.ts"
   },

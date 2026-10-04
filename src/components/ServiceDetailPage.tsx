@@ -60,10 +60,7 @@ export default function ServiceDetailPage({ service }: { service: Service }) {
           className={`${styles.container} ${styles.intro} ${illustration ? styles.introWithIllustration : ""}`}
         >
           <div>
-            <SectionHeading
-              title="Solve the right problem first"
-              copy={service.intro}
-            />
+            <SectionHeading title={service.introTitle} copy={service.intro} />
             <p className={styles.problem}>{service.problem}</p>
             <Link
               href="/contact"

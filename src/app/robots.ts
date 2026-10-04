@@ -1,7 +1,11 @@
 import type { MetadataRoute } from "next";
+import { headers } from "next/headers";
 import { site } from "@/lib/site";
-export default function robots(): MetadataRoute.Robots {
-  if (process.env.VERCEL_ENV === "preview") {
+import { isPrivateSearchHost } from "@/lib/seo";
+
+export default async function robots(): Promise<MetadataRoute.Robots> {
+  const host = (await headers()).get("host");
+  if (process.env.VERCEL_ENV === "preview" || isPrivateSearchHost(host)) {
     return { rules: { userAgent: "*", disallow: "/" } };
   }
   return {

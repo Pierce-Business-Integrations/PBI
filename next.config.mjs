@@ -1,6 +1,11 @@
 /** @type {import('next').NextConfig} */
 const publicHost = "piercebusinessintegrations.com";
 const clientHost = "client.piercebusinessintegrations.com";
+const privateSearchHosts = [
+  clientHost,
+  "beta.piercebusinessintegrations.com",
+  ".*\\.vercel\\.app",
+];
 const workspacePaths = [
   "/portal/:path*",
   "/account/:path*",
@@ -54,6 +59,12 @@ const nextConfig = {
         permanent: false,
       },
       {
+        source: "/sitemap.xml",
+        has: [{ type: "host", value: clientHost }],
+        destination: `https://${publicHost}/sitemap.xml`,
+        permanent: true,
+      },
+      {
         source: "/pricing",
         has: [{ type: "host", value: clientHost }],
         destination: `https://${publicHost}/how-we-work`,
@@ -85,6 +96,23 @@ const nextConfig = {
   },
   async headers() {
     return [
+      ...privateSearchHosts.map((host) => ({
+        source: "/:path*",
+        has: [{ type: "host", value: host }],
+        headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
+      })),
+      ...(process.env.VERCEL_ENV === "preview"
+        ? [
+            {
+              source: "/:path*",
+              headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
+            },
+          ]
+        : []),
+      ...["/thank-you", "/api/:path*"].map((source) => ({
+        source,
+        headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
+      })),
       {
         source: "/project-intake/:path*",
         headers: [

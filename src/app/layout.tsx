@@ -35,6 +35,12 @@ export const metadata: Metadata = {
   },
   description: site.description,
   applicationName: site.name,
+  verification: {
+    google: process.env.GOOGLE_SITE_VERIFICATION?.trim() || undefined,
+    other: process.env.BING_SITE_VERIFICATION?.trim()
+      ? { "msvalidate.01": process.env.BING_SITE_VERIFICATION.trim() }
+      : undefined,
+  },
   // Preview deployments should point at the production canonical without being indexed.
   robots: {
     index: !isPreview,

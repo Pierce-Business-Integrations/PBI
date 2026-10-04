@@ -13,8 +13,8 @@ const homepageFont = Inter({
 });
 
 export const metadata: Metadata = pageMetadata(
-  "Business Systems & Integrations in North Georgia",
-  "Pierce Business Integrations helps North Georgia businesses identify operational friction and implement practical solutions, from better workflows to custom systems, websites, and advertising.",
+  "Custom Software & Business Integrations | Pierce Business Integrations",
+  "Family-owned in North Georgia, PBI builds custom software, connects business tools, and applies practical AI to help your team work with less friction.",
   "/",
 );
 
