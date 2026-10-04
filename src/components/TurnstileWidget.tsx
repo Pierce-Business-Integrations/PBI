@@ -40,6 +40,7 @@ export default function TurnstileWidget({
     const widgetId = window.turnstile.render(containerRef.current, {
       sitekey: siteKey,
       theme: "light",
+      size: "compact",
       appearance: "interaction-only",
       callback: (token: string) => {
         setFailed(false);

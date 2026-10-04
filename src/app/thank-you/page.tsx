@@ -47,7 +47,7 @@ export default function ThankYouPage() {
               need to add something in the meantime, you’re welcome to email me.
             </p>
           </div>
-          <div className="flex flex-col items-start gap-4 sm:flex-row">
+          <div className="flex flex-col flex-wrap items-start gap-4 sm:flex-row">
             <Link href="/" className="btn-outline">
               Return Home
             </Link>

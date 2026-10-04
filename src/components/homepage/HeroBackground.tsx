@@ -14,80 +14,85 @@ export default function HeroBackground({ children }: { children: ReactNode }) {
     if (!background || !hero) return;
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    let visible = true;
-    let frame: number | null = null;
+    const touchDevice = window.matchMedia("(hover: none), (pointer: coarse)");
+    let stopTracking = () => {};
 
-    function cancelFrame() {
-      if (frame !== null) window.cancelAnimationFrame(frame);
-      frame = null;
+    function clearOffsets() {
+      background!.style.removeProperty("--hero-background-offset");
+      hero!.style.removeProperty("--hero-letter-travel");
     }
 
-    function paint() {
-      frame = null;
-      const { top, height } = hero!.getBoundingClientRect();
-      // Keep the background slower and the headline's individual offsets small.
-      const distance = Math.max(0, Math.min(-top, height));
-      background!.style.setProperty(
-        "--hero-background-offset",
-        `${(distance * PARALLAX_RATIO).toFixed(2)}px`,
-      );
-      hero!.style.setProperty(
-        "--hero-letter-travel",
-        `${(12 * Math.tanh(distance / 180)).toFixed(3)}px`,
-      );
-    }
+    function configureMotion() {
+      stopTracking();
+      clearOffsets();
+      // Native touch scrolling stays free of per-frame geometry and letter updates.
+      if (reducedMotion.matches || touchDevice.matches) return;
 
-    function requestPaint() {
-      if (
-        visible &&
-        !document.hidden &&
-        !reducedMotion.matches &&
-        frame === null
-      ) {
-        frame = window.requestAnimationFrame(paint);
+      let visible = true;
+      let frame: number | null = null;
+
+      function cancelFrame() {
+        if (frame !== null) window.cancelAnimationFrame(frame);
+        frame = null;
       }
-    }
 
-    function motionChanged() {
-      cancelFrame();
-      if (reducedMotion.matches) {
-        background!.style.removeProperty("--hero-background-offset");
-        hero!.style.removeProperty("--hero-letter-travel");
-      } else {
-        requestPaint();
+      function paint() {
+        frame = null;
+        const { top, height } = hero!.getBoundingClientRect();
+        // Keep the background slower and the headline's individual offsets small.
+        const distance = Math.max(0, Math.min(-top, height));
+        background!.style.setProperty(
+          "--hero-background-offset",
+          `${(distance * PARALLAX_RATIO).toFixed(2)}px`,
+        );
+        hero!.style.setProperty(
+          "--hero-letter-travel",
+          `${(12 * Math.tanh(distance / 180)).toFixed(3)}px`,
+        );
       }
+
+      function requestPaint() {
+        if (visible && !document.hidden && frame === null) {
+          frame = window.requestAnimationFrame(paint);
+        }
+      }
+
+      function visibilityChanged() {
+        if (document.hidden) cancelFrame();
+        else requestPaint();
+      }
+
+      const intersectionObserver = new IntersectionObserver(([entry]) => {
+        visible = entry.isIntersecting;
+        if (visible) requestPaint();
+        else cancelFrame();
+      });
+      const resizeObserver = new ResizeObserver(requestPaint);
+      intersectionObserver.observe(hero!);
+      resizeObserver.observe(hero!);
+      requestPaint();
+
+      window.addEventListener("scroll", requestPaint, { passive: true });
+      window.addEventListener("resize", requestPaint, { passive: true });
+      document.addEventListener("visibilitychange", visibilityChanged);
+      stopTracking = () => {
+        cancelFrame();
+        intersectionObserver.disconnect();
+        resizeObserver.disconnect();
+        window.removeEventListener("scroll", requestPaint);
+        window.removeEventListener("resize", requestPaint);
+        document.removeEventListener("visibilitychange", visibilityChanged);
+      };
     }
 
-    function visibilityChanged() {
-      if (document.hidden) cancelFrame();
-      else requestPaint();
-    }
-
-    const intersectionObserver = new IntersectionObserver(([entry]) => {
-      visible = entry.isIntersecting;
-      if (visible) requestPaint();
-      else cancelFrame();
-    });
-    const resizeObserver = new ResizeObserver(requestPaint);
-    intersectionObserver.observe(hero);
-    resizeObserver.observe(hero);
-    requestPaint();
-
-    window.addEventListener("scroll", requestPaint, { passive: true });
-    window.addEventListener("resize", requestPaint, { passive: true });
-    document.addEventListener("visibilitychange", visibilityChanged);
-    reducedMotion.addEventListener("change", motionChanged);
-
+    configureMotion();
+    reducedMotion.addEventListener("change", configureMotion);
+    touchDevice.addEventListener("change", configureMotion);
     return () => {
-      cancelFrame();
-      intersectionObserver.disconnect();
-      resizeObserver.disconnect();
-      window.removeEventListener("scroll", requestPaint);
-      window.removeEventListener("resize", requestPaint);
-      document.removeEventListener("visibilitychange", visibilityChanged);
-      reducedMotion.removeEventListener("change", motionChanged);
-      background.style.removeProperty("--hero-background-offset");
-      hero.style.removeProperty("--hero-letter-travel");
+      stopTracking();
+      clearOffsets();
+      reducedMotion.removeEventListener("change", configureMotion);
+      touchDevice.removeEventListener("change", configureMotion);
     };
   }, []);
 

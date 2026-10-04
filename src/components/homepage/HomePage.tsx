@@ -4,6 +4,7 @@ import { ArrowRight, ArrowUpRight } from "lucide-react";
 import Footer from "../Footer";
 import HeroBackground from "./HeroBackground";
 import HeroHeadline from "./HeroHeadline";
+import PageEntrance from "../PageEntrance";
 import styles from "./Homepage.module.css";
 
 const capabilities = [
@@ -77,7 +78,7 @@ export default function HomePage({ className }: { className: string }) {
           />
         </HeroBackground>
         <div className={styles.heroFade} aria-hidden="true" />
-        <div className={styles.heroContent}>
+        <PageEntrance className={styles.heroContent}>
           <HeroHeadline />
           <p className={styles.heroCopy}>
             We build custom software, connect your tools, and put AI to work so
@@ -98,7 +99,7 @@ export default function HomePage({ className }: { className: string }) {
           <p className={styles.heroLocal}>
             Family-run. Based in North Georgia.
           </p>
-        </div>
+        </PageEntrance>
       </section>
 
       <section

@@ -44,7 +44,7 @@ export default function ContactPage() {
                   </dt>
                   <dd className="mt-2">
                     <a
-                      className="text-charcoal underline decoration-foothill underline-offset-4"
+                      className="inline-flex min-h-11 max-w-full items-center text-charcoal underline decoration-foothill underline-offset-4 [overflow-wrap:anywhere]"
                       href={`mailto:${site.email}`}
                     >
                       {site.email}

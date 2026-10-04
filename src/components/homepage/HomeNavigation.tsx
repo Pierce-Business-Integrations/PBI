@@ -3,7 +3,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
 import { Menu, UserRound, X } from "lucide-react";
 import clsx from "clsx";
 import { site } from "@/lib/site";
@@ -30,10 +36,14 @@ export default function HomeNavigation() {
 
   useEffect(() => {
     const update = () => {
-      const next = floating.current ? window.scrollY > 0 : window.scrollY > 24;
+      const scrollY = Math.max(0, window.scrollY);
+      const next = floating.current ? scrollY > 8 : scrollY > 24;
       if (next === floating.current) return;
 
-      if (next) {
+      if (
+        next &&
+        !window.matchMedia("(max-width: 1100px), (pointer: coarse)").matches
+      ) {
         const bounds = navigation.current?.getBoundingClientRect();
         // Start where the visible header is, rather than resetting it offscreen.
         setEntryOffset(
@@ -55,12 +65,51 @@ export default function HomeNavigation() {
       pathname.startsWith("/services/") &&
       pathname !== "/services/automation");
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!open) return;
+    const root = document.documentElement;
+    const body = document.body;
+    const content = document.getElementById("main-content");
+    const rootOverflow = root.style.overflow;
+    const bodyOverflow = body.style.overflow;
+    const contentWasInert = content?.inert ?? false;
+    // Lock without changing body position, so closing cannot restore an old route's scroll.
+    root.style.overflow = "hidden";
+    body.style.overflow = "hidden";
+    if (content) content.inert = true;
+
     const close = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         setOpen(false);
         toggle.current?.focus();
+      }
+      if (event.key === "Tab") {
+        const controls = [
+          toggle.current,
+          ...Array.from(
+            menu.current?.querySelectorAll<HTMLAnchorElement>("a") ?? [],
+          ),
+        ].filter(
+          (element): element is HTMLButtonElement | HTMLAnchorElement =>
+            element !== null,
+        );
+        const first = controls[0];
+        const last = controls.at(-1);
+        if (
+          event.shiftKey &&
+          (document.activeElement === first ||
+            !navigation.current?.contains(document.activeElement))
+        ) {
+          event.preventDefault();
+          last?.focus();
+        } else if (
+          !event.shiftKey &&
+          (document.activeElement === last ||
+            !navigation.current?.contains(document.activeElement))
+        ) {
+          event.preventDefault();
+          first?.focus();
+        }
       }
     };
     const outside = (event: PointerEvent) => {
@@ -79,6 +128,9 @@ export default function HomeNavigation() {
     };
     query.addEventListener("change", resize);
     return () => {
+      root.style.overflow = rootOverflow;
+      body.style.overflow = bodyOverflow;
+      if (content) content.inert = contentWasInert;
       document.removeEventListener("keydown", close);
       document.removeEventListener("pointerdown", outside);
       query.removeEventListener("change", resize);
@@ -102,6 +154,7 @@ export default function HomeNavigation() {
           href="/"
           className={styles.logo}
           aria-label="Pierce Business Integrations home"
+          onClick={() => setOpen(false)}
         >
           <Image
             src="/logos/pbi-half-lockup.png"
